@@ -15,7 +15,7 @@ def get_prologue(person):
     if hot > .75:
         hot_adj = random.choice(def_hot)
     elif hot > .5:
-        hot_adj = random.choice(not_hot)
+        hot_adj = random.choice(med_hot)
     else:
         hot_adj = random.choice(not_hot)
 
