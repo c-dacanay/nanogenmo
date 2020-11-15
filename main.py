@@ -34,7 +34,8 @@ def generate_person():
 
 
 def generate_book():
-    for _ in range(10):
+    for i in range(10):
+        print('Chapter ' + str(i + 1))
         new_person = generate_person()
         print(prologue.get_prologue(new_person))
         print(relationship.get_relationship(protagonist, new_person))
