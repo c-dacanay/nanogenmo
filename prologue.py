@@ -1,8 +1,16 @@
 import random
 
+# This is a little too mad-lib-y right now.
+# Could pull some language from a corpus.
+# Would this flow better after "They met at a x"?
+
+# Sylvan: could we get a protagonist argument in get_prologue? Or should that be handled elsewhere
+# I just think using protag's name in these strings could add better variation
+
 
 def get_prologue(person):
     # properties
+    # not currently using neuro or libido
     name = person.get("name")
     hot = person.get("hot")
     openness = person.get("open")
@@ -49,12 +57,13 @@ def get_prologue(person):
     hi_agree = ["altruistic", "cooperative", "empathetic"]
 
     # pull from strings
+    # there must be a better way
     if hot > .75:
-        hot_adj = random.choice(hi_hot)
+        hot_str = random.choice(hi_hot)
     elif hot > .5:
-        hot_adj = random.choice(med_hot)
+        hot_str = random.choice(med_hot)
     else:
-        hot_adj = random.choice(lo_hot)
+        hot_str = random.choice(lo_hot)
 
     if openness > .66:
         open_str = random.choice(hi_open)
@@ -71,11 +80,11 @@ def get_prologue(person):
         extra_str = random.choice(lo_extra)
 
     if exp > .66:
-        exp_adj = random.choice(hi_exp)
+        exp_str = random.choice(hi_exp)
     elif exp > .3:
-        exp_adj = random.choice(med_exp)
+        exp_str = random.choice(med_exp)
     else:
-        exp_adj = random.choice(lo_exp)
+        exp_str = random.choice(lo_exp)
 
     if commit > .66:
         commit_str = random.choice(hi_commit)
@@ -98,8 +107,8 @@ def get_prologue(person):
     else:
         agree_str = random.choice(lo_agree)
 
-    str1 = name + ' was a ' + hot_adj + ' person with ' + extra_str + ". "
-    str2 = name + ' initially seemed ' + exp_adj + \
+    str1 = name + ' was a ' + hot_str + ' person with ' + extra_str + ". "
+    str2 = name + ' initially seemed ' + exp_str + \
         ' romantic relationships and ' + commit_str + ". "
     str3 = name + ' was ' + con_str + ' and ' + agree_str + ". " + open_str + ". "
 
