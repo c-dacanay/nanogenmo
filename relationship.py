@@ -8,6 +8,17 @@ CONFLICT_TARGETS = [
     'hot', 'open', 'extra', 'agree', 'neuro', 'commit', 'libido', 'exp'
 ]
 
+PROP_NAMES = {
+    'hot': 'hot',
+    'open': 'open',
+    'extra': 'extroverted',
+    'agree': 'nice',
+    'neuro': 'neurotic',
+    'commit': 'serious about the relationship',
+    'libido': 'interested in sex',
+    'exp': 'mature for their age',
+}
+
 
 class Event(Enum):
     MEETING = 'meeting'
@@ -176,7 +187,8 @@ def get_interest_sentence(name, interest):
     interested = ['intrigued', 'interested',
                   'smitten', 'obsessed', 'lovestruck']
     adverb = adverbs[int(interest * len(adverbs))]
-    interested_w = interested[int(interest * len(interested))]
+    interested_w = interested[util.clamp(
+        int(interest * len(interested)), 0, len(interested) - 1)]
     return f"{name} was {adverb} {interested_w}. "
 
 
@@ -190,7 +202,7 @@ def narrate_events(events):
         elif event['type'] == Event.DEVELOPMENT:
             text += narrate_development(event)
         elif event['type'] == Event.CONFLICT:
-            text += "They fought. "
+            text += narrate_conflict(event)
         else:
             text += time_passed(event)
     text += "They broke up.\n\n"
@@ -206,7 +218,27 @@ def narrate_development(event):
         return f"{character} decided to stop by the grocery store to pick up some flowers. {characterb} was delighted. "
 
 
+def narrate_conflict(event):
+    # TODO EMILY
+    # The conflict event has a lot of properties that we can use to influence the generated text.
+    # You can view how they are constructed in the function process_conflict
+    # The most interesting ones are probably:
+    # target_property: the conflict is based around this property. the closer the team's two scores,
+    # the more easily they can navigate the conflict.
+    # team_score, handicap, target. team_score represents how much effort the couple put in to
+    # resolving the problem. target - handicap is the required level of effort. if they fall short, the relationship
+    # is damaged.
+    target_p = event['target_property']
+    prop_name = PROP_NAMES[target_p]
+    if (target_p == 'extra'):
+        return f"{event['protagonist']['name']} and {event['person']['name']} had a disagreement about whether to go to a party or stay in. "
+    character_a = event['protagonist']['name'] if event['protagonist'][
+        target_p] > event['person'][target_p] else event['person']['name']
+    return f"They fought because {character_a} was too {prop_name}. "
+
+
 def time_passed(event):
+    return ""
     if event['duration'] == 1:
         days = 'day'
     else:
