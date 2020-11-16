@@ -99,12 +99,18 @@ def get_prologue(person):
         agree_str = random.choice(lo_agree)
 
     str1 = name + ' was a ' + hot_adj + ' person with ' + extra_str + ". "
-    str2 = 'They initially seemed ' + exp_adj + \
+    str2 = name + ' initially seemed ' + exp_adj + \
         ' romantic relationships and ' + commit_str + ". "
     str3 = name + ' was ' + con_str + ' and ' + agree_str + ". " + open_str + ". "
 
-    result = str1 + str2 + str3
+    strings = random.sample([str1, str2, str3], k=2)
+    result = listToString(strings)
     return result
+
+
+def listToString(s):
+    str0 = " "
+    return (str0.join(s))
 
 
 if __name__ == '__main__':
