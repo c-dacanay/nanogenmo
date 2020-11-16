@@ -52,14 +52,7 @@ def get_events(protagonist, person):
         chance_development = 0.33
         if (random.random() < chance_development):
             # A development occurred!
-            delta = random.random() / 2
-            event = {
-                'type': Event.DEVELOPMENT,
-                'relationship_health': relationship_health,
-                'delta': delta,
-                'protagonist': protagonist,
-                'person': person,
-            }
+            event = process_development(protagonist, person, events)
         elif (random.random() < chance_conflict):
             event = process_conflict(protagonist, person, events)
         else:
@@ -85,26 +78,29 @@ def process_development(protagonist, person, events):
         variance = (1.05 - p['exp']) / 4
         return random.gauss(p['interest'], variance) / 2 + random.gauss(p['commit'], variance) / 2
     delta = 0
+    score = 0
     protagonist_initiated = False
+    intensity = random.random()
     if random.random() < 0.5:
         protagonist_initiated = True
         # Give the protag a chance to do something nice for person:
         score = get_rolls(protagonist)
-        if score > 0.8:
+        if score > intensity:
             # Protag decides to invest into the relationship
-            person['interest'] += (score - 0.8) / 2
-            delta = score - 0.5
+            person['interest'] += intensity / 2
+            delta = intensity / 4
     else:
         # Give the person a chance to do something nice for protag:
         score = get_rolls(person)
-        if score > 0.8:
+        if score > intensity:
             # Protag decides to invest into the relationship
-            protagonist['interest'] += (score - 0.8) / 2
-            delta = score - 0.5
+            protagonist['interest'] += intensity / 2
+            delta = intensity / 4
     return {
         'type': Event.DEVELOPMENT,
         'delta': delta,
         'score': score,
+        'intensity': intensity,
         'protagonist_initiated': protagonist_initiated,
         'protagonist': protagonist,
         'person': person,
@@ -192,7 +188,7 @@ def narrate_events(events):
             text += get_interest_sentence('Alex',
                                           event['protagonist']['interest'])
         elif event['type'] == Event.DEVELOPMENT:
-            text += "They developed. "
+            text += narrate_development(event)
         elif event['type'] == Event.CONFLICT:
             text += "They fought. "
         else:
@@ -201,9 +197,16 @@ def narrate_events(events):
     return text
 
 
+def narrate_development(event):
+    character = event['protagonist']['name'] if event['protagonist_initiated'] else event['person']['name']
+    characterb = event['person']['name'] if event['protagonist_initiated'] else event['protagonist']['name']
+    if (event['delta'] == 0):
+        return f"{character} thought about doing something nice for {characterb}, but just couldn't muster up the energy today. Maybe next time. "
+    else:
+        return f"{character} decided to stop by the grocery store to pick up some flowers. {characterb} was delighted. "
+
+
 def time_passed(event):
-    # "It was X days before Alex heard from Person again
-    return "\n"
     if event['duration'] == 1:
         days = 'day'
     else:

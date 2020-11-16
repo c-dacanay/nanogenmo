@@ -5,8 +5,8 @@ import epilogue
 import names
 
 protagonist = {
-    "name": "Lover",
-    "hot": 1,
+    "name": "Alex",
+    "hot": 0.8,
     "open": .5,
     "con": .5,
     "extra": .5,
