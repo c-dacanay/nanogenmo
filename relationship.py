@@ -4,6 +4,10 @@ from enum import Enum
 
 LOCATIONS = ['bar', 'pool', 'school', 'subway station']
 
+CONFLICT_TARGETS = [
+    'hot', 'open', 'extra', 'agree', 'neuro', 'commit', 'libido', 'exp'
+]
+
 
 class Event(Enum):
     MEETING = 'meeting'
@@ -31,14 +35,14 @@ def get_events(protagonist, person):
     # Then use separate code to turn the array of events into text
     events = []
     relationship_health = 1
-    protag_interest = get_interest(protagonist, person)
-    person_interest = get_interest(person, protagonist)
+    protagonist['interest'] = get_interest(protagonist, person)
+    person['interest'] = get_interest(person, protagonist)
 
     events.append({
         'type': Event.MEETING,
         'location': random.choice(LOCATIONS),
-        'protag_interest': protag_interest,
-        'person_interest': person_interest,
+        'protagonist': protagonist,
+        'person': person,
     })
 
     while relationship_health > 0:
@@ -49,51 +53,148 @@ def get_events(protagonist, person):
         if (random.random() < chance_development):
             # A development occurred!
             delta = random.random() / 2
-            events.append({
+            event = {
                 'type': Event.DEVELOPMENT,
                 'relationship_health': relationship_health,
                 'delta': delta,
-                'protag_interest': protag_interest,
-                'person_interest': person_interest,
-            })
+                'protagonist': protagonist,
+                'person': person,
+            }
         elif (random.random() < chance_conflict):
-            # Roll dice for resolution quality
-            resolution_quality = random.random()
-            delta = 0.1 - resolution_quality
-            events.append({
-                'type': Event.CONFLICT,
-                'relationship_health': relationship_health,
-                'delta': delta,
-                'protag_interest': protag_interest,
-                'person_interest': person_interest,
-            })
+            event = process_conflict(protagonist, person, events)
         else:
-            delta = -0.1
-            if events[len(events) - 1]['type'] == Event.NOTHING:
-                events[len(events) - 1]['duration'] += 1
-                events[len(events) - 1]['delta'] += delta
-            else:
-                events.append({
-                    'type': Event.NOTHING,
-                    'duration': 1,
-                    'delta': delta,
-                    'person': person,
-                })
-        relationship_health += delta
+            event = {
+                'type': Event.NOTHING,
+                'duration': 1,
+                'delta': -0.1,
+                'protagonist': protagonist,
+                'person': person,
+            }
+
+        events.append(event)
+        relationship_health += event['delta']
+        protagonist = event['protagonist']
+        person = event['person']
 
     # Collapse NOTHING events together
     return events
+
+
+def process_development(protagonist, person, events):
+    def get_rolls(p):
+        variance = (1.05 - p['exp']) / 4
+        return random.gauss(p['interest'], variance) / 2 + random.gauss(p['commit'], variance) / 2
+    delta = 0
+    protagonist_initiated = False
+    if random.random() < 0.5:
+        protagonist_initiated = True
+        # Give the protag a chance to do something nice for person:
+        score = get_rolls(protagonist)
+        if score > 0.8:
+            # Protag decides to invest into the relationship
+            person['interest'] += (score - 0.8) / 2
+            delta = score - 0.5
+    else:
+        # Give the person a chance to do something nice for protag:
+        score = get_rolls(person)
+        if score > 0.8:
+            # Protag decides to invest into the relationship
+            protagonist['interest'] += (score - 0.8) / 2
+            delta = score - 0.5
+    return {
+        'type': Event.DEVELOPMENT,
+        'delta': delta,
+        'score': score,
+        'protagonist_initiated': protagonist_initiated,
+        'protagonist': protagonist,
+        'person': person,
+    }
+
+
+def process_conflict(protagonist, person, events):
+    # In order for the pair to successfully navigate
+    # the conflict, they must have close to the same value
+    # for the conflict_target property. Eg, if the conflict
+    # is about "libido", the pair has a better chance of navigating
+    # the issue if their libido properties are closely matched.
+
+    # Of course, this isn't the only thing that goes into it!
+    # The "difficulty" or "stakes" of the conflict determine
+    # how close together their properties must be for "success"
+    # The other personality traits can play a role as well.
+
+    # Ultimately, a conflict results in a delta to the overall relationship health,
+    # and a delta in both partners' interest scores. It also can end in
+    # a resolved, or unresolved state. If the conflict is unresolved,
+    # the delta to the relationship health in the short term is usually lower
+    # but in the future a similar conflict will be more difficult to overcome.
+    def get_rolls(p):
+        variance = (1.05 - p['exp']) / 4
+        rolls = {
+            'open': random.gauss(p['open'], variance),
+            'agree': random.gauss(p['agree'], variance),
+            'neuro': random.gauss(p['neuro'], variance),
+            'commit': random.gauss(p['commit'], variance),
+            'interest': random.gauss(p['interest'], variance)
+        }
+        rolls['score'] = rolls['open'] * 0.25 + rolls['agree'] * 0.25 + \
+            rolls['commit'] * 0.25 + rolls['interest'] * 0.25 - rolls['neuro']
+        return rolls
+
+    target_property = random.choice(CONFLICT_TARGETS)
+    target = abs(person[target_property] - protagonist[target_property])
+    handicap = random.random() / 4 - 0.5
+    protag_rolls = get_rolls(protagonist)
+    person_rolls = get_rolls(person)
+    team_score = (protag_rolls['score'] + person_rolls['score']) / 2
+
+    # calculate relationship health delta:
+    # if the team met the goal: benefit accordingly. But punish more than reward.
+    if (team_score + handicap < target):
+        # the team fell short of the goal: punish proportionally.
+        delta = team_score + handicap - target
+        if protag_rolls['score'] < person_rolls['score']:
+            protagonist['interest'] *= 0.8
+        else:
+            person['interest'] *= 0.8
+    else:
+        delta = (team_score + handicap - target) / 2
+
+    return {
+        'type': Event.CONFLICT,
+        'target_property': target_property,
+        'team_score': team_score,
+        'handicap': handicap,
+        'target': target,
+        'protag_rolls': protag_rolls,
+        'person_rolls': person_rolls,
+        'delta': delta,
+        'protagonist': protagonist,
+        'person': person
+    }
+
+
+def get_interest_sentence(name, interest):
+    adverbs = ['only vaguely', 'only somewhat', 'kind of', 'moderately', 'very',
+               'strongly', 'immediately', 'violently']
+    interested = ['intrigued', 'interested',
+                  'smitten', 'obsessed', 'lovestruck']
+    adverb = adverbs[int(interest * len(adverbs))]
+    interested_w = interested[int(interest * len(interested))]
+    return f"{name} was {adverb} {interested_w}. "
 
 
 def narrate_events(events):
     text = ""
     for event in events:
         if event['type'] == Event.MEETING:
-            text += "They met in a " + event['location'] + ".\n"
+            text += "They met in a " + event['location'] + ". "
+            text += get_interest_sentence('Alex',
+                                          event['protagonist']['interest'])
         elif event['type'] == Event.DEVELOPMENT:
-            text += "They developed.\n"
+            text += "They developed. "
         elif event['type'] == Event.CONFLICT:
-            text += "They fought.\n"
+            text += "They fought. "
         else:
             text += time_passed(event)
     text += "They broke up.\n\n"
@@ -102,8 +203,12 @@ def narrate_events(events):
 
 def time_passed(event):
     # "It was X days before Alex heard from Person again
+    return "\n"
     if event['duration'] == 1:
         days = 'day'
     else:
         days = 'days'
-    return f"It was {event['duration']} {days} before Alex heard from {event['person']['name']} again.\n"
+    if (event['protagonist']['interest'] < event['person']['interest']):
+        return f"Alex didn't text {event['person']['name']} for {event['duration']} {days}. \n"
+    else:
+        return f"It was {event['duration']} {days} before Alex heard from {event['person']['name']} again.\n"
