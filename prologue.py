@@ -73,8 +73,6 @@ def get_prologue(person):
         else:
             stringArray.append(random.choice(properties[key]['lo']))
 
-        print(stringArray)
-
     # in strArray: [0]hot, [1]open, [2]con, [3]extra, [4]agree, [5]neuro, [6]commit, [7]exp
     str1 = name + " was a " + stringArray[0] + \
         " person with " + stringArray[3] + ". "
