@@ -62,7 +62,7 @@ def get_interest(protagonist, person):
 
 class Relationship:
     phase = Phase.COURTING
-    health = 0.1
+    health = 0
     intimacy = 0
     passion = 0
     commitment = 0

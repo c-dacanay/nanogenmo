@@ -11,10 +11,11 @@ def get_business():
     noun = random.choice(['climbing gym', 'restaurant', 'watering hole', 'stomping ground', 'fitness club', 'place', 'social club', 'lounge', 'salon',
                           'axe throwing bar', 'pottery studio', 'warehouse', 'coworking space', 'cafe', 'coffee shop', 'abandoned lot', 'talk of the town'])
     num = random.randrange(100)
-    adj2 = random.choice(
-        ['young', 'restless', 'adventurous', 'bold', 'single', 'urban dweller'])
+    adjs = ['young', 'restless', 'adventurous', 'bold',
+            'single', 'urban dweller', 'disaffected']
     detail = random.choice([
-        f', the {adj} {noun} for the {adj2}',
+        f', that {adj} {noun} for the {random.choice(adjs)}',
+        f', that {adj} {noun} for the {random.choice(adjs)} and {random.choice(adjs)}',
         f', the {adj} {noun}',
         f'',
         f', the {adj} {noun} on {num} St',
