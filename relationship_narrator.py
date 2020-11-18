@@ -1,7 +1,7 @@
 import util
 import random
 import conflict_dialogue
-from relationship import Event, PROP_NAMES, Relationship
+from relationship import Event, PROP_NAMES, Relationship, Phase
 
 
 def narrate(r: Relationship):
@@ -9,41 +9,91 @@ def narrate(r: Relationship):
 
 
 def get_interest_sentence(name, interest):
-    adverbs = ['only vaguely', 'only somewhat', 'kind of', 'moderately', 'very',
-               'strongly', 'immediately', 'violently']
+    adverbs = ['vaguely', 'somewhat', 'kind of', 'moderately', 'very',
+               'strangely', 'immediately', 'violently']
     interested = ['intrigued', 'interested',
                   'smitten', 'obsessed', 'lovestruck']
-    adverb = adverbs[int(interest * len(adverbs))]
-    interested_w = interested[util.clamp(
-        int(interest * len(interested)), 0, len(interested) - 1)]
+    adverb = util.rank(adverbs, interest)
+    interested_w = util.rank(interested, interest)
     return f"{name} was {adverb} {interested_w}. "
 
 
-def narrate_events(events):
+def narrate_meeting(event):
+    if event['delta'] == -1:
+        return ""
     text = ""
+    a = event['protagonist'] if event['protagonist_initiated'] else event['person']
+    b = event['person'] if event['protagonist_initiated'] else event['protagonist']
+    if event['protagonist_initiated']:
+        text += get_interest_sentence('Alex', event['protagonist']['interest'])
+    else:
+        text += get_interest_sentence(event['person']
+                                      ['name'], event['person']['interest'])
+    adverb = util.rank(['nervously', 'shyly', 'quietly', '',
+                        'gently', 'intently', 'boldly'], a['interest'])
+
+    if event['delta'] <= 0:
+        REJECTIONS = [
+            f", but {b['name']} averted {b['their']} eyes. ",
+            f", but {b['name']} did not respond. ",
+            f", but {b['name']} quickly turned away. ",
+        ]
+        followup = random.choice(REJECTIONS)
+    else:
+        ACCEPTS = [
+            f". {b['name']} returned a flirtatious glance. Soon, they got to talking. ",
+            f". {b['name']} waved in return. Alex left with {b['name']}'s phone number. ",
+            f". {b['name']} smiled back. They exchanged several friendly words. "
+        ]
+        followup = random.choice(ACCEPTS)
+    time = random.choice([
+        'After a few moments, ',
+        '',
+        'After several minutes, ',
+        'Eventually, ',
+    ])
+    APPROACHES = [
+        f"{time}{a['name']} waved {adverb}{followup}",
+        f"{time}{a['name']} smiled {adverb}{followup}",
+        f"{time}{a['name']} gazed {adverb} at {b['name']}{followup}",
+        f"{time}{a['name']} giggled {adverb}{followup}",
+        f"{time}{a['name']} walked {adverb}toward {b['name']}{followup}"
+    ]
+    return text + random.choice(APPROACHES)
+
+
+def narrate_events(events):
+    text = "They met " + events[0]['location'] + ". "
     for event in events:
+        if event is None:
+            continue
         if event['type'] == Event.MEETING:
-            text += "They met in a " + event['location'] + ". "
-            text += get_interest_sentence('Alex',
-                                          event['protagonist']['interest'])
+            text += narrate_meeting(event)
         elif event['type'] == Event.DEVELOPMENT:
             text += narrate_development(event)
         elif event['type'] == Event.CONFLICT:
             text += narrate_conflict(event)
         else:
             text += time_passed(event)
-    text += "They broke up.\n\n"
+    text += "They never saw each other again.\n\n"
     return text
 
 
+def narrate_courting_development(event, a, b):
+    if (event['delta'] == 0):
+        return f"Out of the corner of Alex's eye, {a['name']} tried to work up the courage to say something, but failed."
+    else:
+        return f"{a['name']} sidled up next to {b['name']} and asked about {b['their']} "
+
+
 def narrate_development(event):
-    character_a = event['protagonist']['name'] if event['protagonist_initiated'] else event['person']['name']
-    character_b = event['person']['name'] if event['protagonist_initiated'] else event['protagonist']['name']
+    a = event['protagonist'] if event['protagonist_initiated'] else event['person']
+    b = event['person'] if event['protagonist_initiated'] else event['protagonist']
 
     if (event['delta'] == 0):
-        return f"{character_a} thought about doing something nice for {character_b}, but just couldn't muster up the energy today. Maybe next time. "
+        return f"{a['name']} thought about doing something nice for {b['name']}, but just couldn't muster up the energy today. Maybe next time. "
     else:
-        return f"{character_a} decided to stop by the grocery store to pick up some flowers. {character_b} was delighted. "
+        return f"{a['name']} decided to stop by the grocery store to pick up some flowers. {b['name']} was delighted. "
 
 
 def narrate_conflict(event):

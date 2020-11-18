@@ -15,7 +15,9 @@ protagonist = {
     "neuro": .5,
     "commit": .5,
     "libido": .5,
-    "exp": .5
+    "exp": .5,
+    'confidence': 0.7,
+    'their': 'their'
 }
 
 
@@ -30,7 +32,9 @@ def generate_person():
         "neuro": random.random(),
         "commit": random.random(),
         "libido": random.random(),
-        "exp": random.random()
+        "exp": random.random(),
+        "confidence": random.random(),
+        'their': 'their'
     }
 
 
