@@ -1,6 +1,7 @@
 import prologue
 import random
-import relationship
+from relationship import Relationship
+import relationship_narrator
 import epilogue
 import names
 
@@ -38,8 +39,10 @@ def generate_book():
         print('Chapter ' + str(i + 1))
         new_person = generate_person()
         print(prologue.get_prologue(new_person))
-        print(relationship.get_relationship(protagonist, new_person))
-        print(epilogue.get_epilogue(relationship, new_person))
+        r = Relationship(protagonist, new_person)
+        r.simulate()
+        print(relationship_narrator.narrate(r))
+        print(epilogue.get_epilogue(r, new_person))
 
 
 if __name__ == "__main__":
