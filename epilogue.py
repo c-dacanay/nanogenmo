@@ -16,7 +16,7 @@ def get_epilogue(rel, person):
 
     r = rel
     l = dir(r.simulate_development)
-    print(l)
+    # print(l)
     return ""
 
 
