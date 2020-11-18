@@ -2,7 +2,7 @@ import random
 
 # This is a little too mad-lib-y right now.
 # Could pull some language from a corpus.
-# Would this flow better after "They met at a x"?
+# Would this flow better after 'They met at a x'?
 
 # Sylvan: could we get a protagonist argument in get_prologue? Or should that be handled elsewhere
 # I just think using protag's name in these strings could add better variation
@@ -11,106 +11,75 @@ import random
 def get_prologue(person):
     # properties
     # not currently using neuro or libido
-    name = person.get("name")
-    hot = person.get("hot")
-    openness = person.get("open")
-    con = person.get("con")
-    extra = person.get("extra")
-    agree = person.get("agree")
-    # neuro = person.get("neuro")
-    commit = person.get("commit")
-    exp = person.get("exp")
+    name = person.get('name')
 
-    # strings
-    lo_hot = ["homely", "plain looking", "typical", "unremarkable"]
-    med_hot = ["charming", "attractive", "sweet-faced", "kind-eyed"]
-    hi_hot = ["beautiful", "lovely", "gorgeous", "stunning"]
+    properties = {
+        'hot': {
+            'lo': ['homely', 'plain looking', 'typical', 'unremarkable'],
+            'med': ['charming', 'attractive', 'sweet-faced', 'kind-eyed'],
+            'hi': ['beautiful', 'lovely', 'gorgeous', 'stunning']
+        },
+        'open': {
+            'lo': ['They always invented new games and inside jokes',
+                   'They constantly sought new hobbies and experiences',
+                   'They were impulsive in ways, always sensation-seeking'],
+            'med': ['They never made suggestions for dates', 'They always stuck to what felt comfortable',
+                    'They enjoyed trying new things but were still quite skeptical'],
+            'hi': ['They were a picky eater and could not be convinced to try new food', 'They were a creature of habit—inflexible, but reliable',
+                   'They were cautious and hated surprises']
+        },
+        'con': {
+            'lo': ['chaotic', 'messy', 'disorganized'],
+            'med': ['careless', 'meandering', 'detail-oriented'],
+            'hi': ['diligent', 'exacting', 'dutiful']
+        },
+        'extra': {
+            'lo': ['a boisterous laugh',
+                   'a gregarious personality', 'an enthusiastic charm'],
+            'med': ['an easy smile',
+                    'a laid-back demeanor', 'a relaxed personality'],
+            'hi': ['a quiet demeanor',
+                   'a reserved manner', 'a cat-like personality']
+        },
+        'agree': {
+            'lo': ['argumentative', 'callous', 'combative'],
+            'med': ['stubborn', 'independent', 'affectionate'],
+            'hi': ['altruistic', 'cooperative', 'empathetic']
+        },
+        'neuro': {
+            'lo': ['stable'],
+            'med': ['empathetic'],
+            'hi': ['volatile']
+        },
+        'commit': {
+            'lo': ['wanted something casual'],
+            'med': ['up for anything'],
+            'hi': ['were ready for something serious']
+        },
+        'exp': {
+            'lo': ['insecure about', 'nervous about', 'timid in'],
+            'med': ['unsure of', 'open to', 'relaxed about'],
+            'hi': ['secure in', 'well versed in', 'experienced in']
+        }
+    }
 
-    lo_open = ["They always invented new games and inside jokes",
-               "They constantly sought new hobbies and experiences",
-               "They were impulsive in ways, always sensation-seeking"]
-    med_open = ["They never made suggestions for dates", "They always stuck to what felt comfortable",
-                "They enjoyed trying new things but were still quite skeptical"]
-    hi_open = ["They were a picky eater and would lo be convinced to try new food", "They were a creature of habit—inflexible, but reliable",
-               "They were cautious and hated surprises"]
-    lo_extra = ["a boisterous laugh",
-                "a gregarious personality", "an enthusiastic charm"]
-    med_extra = ["an easy smile",
-                 "a laid-back demeanor", "a relaxed personality"]
-    hi_extra = ["a quiet demeanor",
-                "a reserved manner", "a cat-like personality"]
+    stringArray = []
+    for key in properties:
+        prop = person.get(key)
+        if prop > .66:
+            stringArray.append(random.choice(properties[key]['hi']))
+        elif prop > .33:
+            stringArray.append(random.choice(properties[key]['med']))
+        else:
+            stringArray.append(random.choice(properties[key]['lo']))
 
-    lo_exp = ["insecure about", "nervous about", "timid in"]
-    med_exp = ["unsure of", "open to", "relaxed about"]
-    hi_exp = ["secure in", "well versed in", "experienced in"]
-
-    lo_commit = ["wanted something casual"]
-    med_commit = ["up for anything"]
-    hi_commit = ["were ready for something serious"]
-
-    lo_con = ["chaotic", "messy", "disorganized"]
-    med_con = ["careless", "meandering", "detail-oriented"]
-    hi_con = ["diligent", "exacting", "dutiful"]
-
-    lo_agree = ["argumentative", "callous", "combative"]
-    med_agree = ["stubborn", "independent", "affectionate"]
-    hi_agree = ["altruistic", "cooperative", "empathetic"]
-
-    # pull from strings
-    # there must be a better way
-    if hot > .75:
-        hot_str = random.choice(hi_hot)
-    elif hot > .5:
-        hot_str = random.choice(med_hot)
-    else:
-        hot_str = random.choice(lo_hot)
-
-    if openness > .66:
-        open_str = random.choice(hi_open)
-    elif openness > .33:
-        open_str = random.choice(med_open)
-    else:
-        open_str = random.choice(lo_open)
-
-    if extra > .66:
-        extra_str = random.choice(hi_extra)
-    elif extra > .33:
-        extra_str = random.choice(med_extra)
-    else:
-        extra_str = random.choice(lo_extra)
-
-    if exp > .66:
-        exp_str = random.choice(hi_exp)
-    elif exp > .3:
-        exp_str = random.choice(med_exp)
-    else:
-        exp_str = random.choice(lo_exp)
-
-    if commit > .66:
-        commit_str = random.choice(hi_commit)
-    elif commit > .3:
-        commit_str = random.choice(med_commit)
-    else:
-        commit_str = random.choice(lo_commit)
-
-    if con > .66:
-        con_str = random.choice(hi_con)
-    elif con > .3:
-        con_str = random.choice(med_con)
-    else:
-        con_str = random.choice(lo_con)
-
-    if agree > .66:
-        agree_str = random.choice(hi_agree)
-    elif agree > .33:
-        agree_str = random.choice(med_agree)
-    else:
-        agree_str = random.choice(lo_agree)
-
-    str1 = name + ' was a ' + hot_str + ' person with ' + extra_str + ". "
-    str2 = name + ' initially seemed ' + exp_str + \
-        ' romantic relationships and ' + commit_str + ". "
-    str3 = name + ' was ' + con_str + ' and ' + agree_str + ". " + open_str + ". "
+    # in strArray: [0]hot, [1]open, [2]con, [3]extra, [4]agree, [5]neuro, [6]commit, [7]exp
+    str1 = name + " was a " + stringArray[0] + \
+        " person with " + stringArray[3] + ". "
+    str2 = name + " initially seemed " + stringArray[4] + \
+        " romantic relationships and " + stringArray[6] + ". "
+    str3 = name + " was " + stringArray[2] + " and " + \
+        stringArray[7] + ". " + stringArray[1] + ". "
 
     strings = random.sample([str1, str2, str3], k=2)
     result = listToString(strings)
@@ -124,15 +93,15 @@ def listToString(s):
 
 if __name__ == '__main__':
     test_person = {
-        "name": "Lover",
-        "hot": 1,
-        "open": .5,
-        "con": .5,
-        "extra": .5,
-        "agree": .5,
-        "neuro": .5,
-        "commit": .5,
-        "libido": .5,
-        "exp": .5
+        'name': 'Lover',
+        'hot': 1,
+        'open': .5,
+        'con': .5,
+        'extra': .5,
+        'agree': .5,
+        'neuro': .5,
+        'commit': .5,
+        'libido': .5,
+        'exp': .5
     }
     print(get_prologue(test_person))
