@@ -113,8 +113,7 @@ def narrate_meeting(event):
 
 def narrate_events(events):
 
-    text = f"Alex met {events[0]['person']['name']} " + \
-        events[0]['location'] + ". "
+    text = f"Alex met {events[0]['person']['name']} {events[0]['location']}. "
     for event in events:
         if event is None:
             continue
@@ -140,13 +139,6 @@ def narrate_experience(event):
     else:
         result = f"The relationship health improved by {round(event['delta'], 2)} and progressed by {round(event['bonding'], 2)}. "
     return f"{a['name']} invited {b['name']} to do a {round(event['threshold'], 2)}-{event['target_property']} activity together. {result}\n"
-
-
-def narrate_courting_development(event, a, b):
-    if (event['delta'] == 0):
-        return f"Out of the corner of Alex's eye, {a['name']} tried to work up the courage to say something, but failed."
-    else:
-        return f"{a['name']} sidled up next to {b['name']} and asked about {b['their']} "
 
 
 def narrate_development(event):

@@ -89,6 +89,8 @@ class Relationship:
             - type (open, extra, commit, libido)
             - threshold (0-1 value)
         '''
+        # decide who has an opportunity to initiate the experience
+        # a is always the initiator, b responds
         a = self.a
         b = self.b
         if random.random() < 0.5:
@@ -113,6 +115,7 @@ class Relationship:
             # Calcualte concession threshold and reject if this experience
             # would put b's concession score over the threshold.
             # TODO allow other person to reject for other reasons
+            # TODO account for agreeableness
             concession_threshold = b['interest'] + b['commit']
             delta = abs(b[exp_type] - thresh)
             if b['concessions'][exp_type] + delta > concession_threshold:
@@ -233,7 +236,7 @@ class Relationship:
         }
 
     def simulate_meeting(self):
-        if binary_roll([self.a['confidence'], self.b['interest']]):
+        if binary_roll([self.a['confidence'], self.a['interest']]):
             delta = random.gauss(self.b['interest'], 0.3) - 0.5
             return {
                 'type': Event.MEETING,
@@ -243,7 +246,7 @@ class Relationship:
                 'protagonist_initiated': True,
                 'delta': delta,
             }
-        if binary_roll([self.b['confidence'], self.a['interest']]):
+        if binary_roll([self.b['confidence'], self.b['interest']]):
             delta = random.gauss(self.a['interest'], 0.3) - 0.5
             return {
                 'type': Event.MEETING,
@@ -258,6 +261,7 @@ class Relationship:
             'location': get_location(),
             'protagonist': self.a,
             'person': self.b,
+            # Hardcode delta to -1 to represent neither party approaching the other
             'delta': -1
         }
 
@@ -265,14 +269,15 @@ class Relationship:
         # Given a pair of people, simulate a relatonship between them
         # We represent a relationship as an array of events represented by dictionaries / objects
         # Then use separate code to turn the array of events into text
-        events = []
+        self.events = []
         self.a['interest'] = get_interest(self.a, self.b)
         self.b['interest'] = get_interest(self.b, self.a)
 
         # simulate attempt to ask out person:
         meeting = self.simulate_meeting()
-        events.append(meeting)
+        self.events.append(meeting)
         self.health += meeting['delta']
+
         event = {}
 
         while self.health > 0:
@@ -298,10 +303,9 @@ class Relationship:
                     'person': self.b,
                 }
 
-            events.append(event)
+            self.events.append(event)
             self.health += event['delta']
             self.a = event['protagonist']
             self.b = event['person']
 
-        self.events = events
-        return events
+        return self.events

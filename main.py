@@ -22,7 +22,6 @@ protagonist = {
 
 
 def generate_person():
-
     if random.random() > .5:
         gender = "male"
     else:
