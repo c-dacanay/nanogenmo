@@ -91,7 +91,7 @@ def narrate_meeting(event):
         ])
         ACCEPTS = [
             f". {b['name']} returned a flirtatious glance. {follow2}{follow3}",
-            f". {b['name']} waved in return. {follow2}{follow2}",
+            f". {b['name']} waved in return. {follow2}{follow3}",
             f". {b['name']} smiled back. {follow2}{follow3}"
         ]
         followup = random.choice(ACCEPTS)
@@ -106,7 +106,7 @@ def narrate_meeting(event):
         f"{time}{a['name']} smiled {adverb}{followup}",
         f"{time}{a['name']} began to gaze {adverb} at {b['name']}{followup}",
         f"{time}{a['name']} giggled {adverb}{followup}",
-        f"{time}{a['name']} walked {adverb}toward {b['name']}{followup}"
+        f"{time}{a['name']} walked {adverb} toward {b['name']}{followup}"
     ]
     return text + random.choice(APPROACHES) + "\n\n"
 
