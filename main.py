@@ -22,8 +22,23 @@ protagonist = {
 
 
 def generate_person():
+    
+    if random.random() > .5:
+        gender = "male"
+    else:
+        gender = "female"
+
+    if gender == "male":  
+        they = "he"
+        their = "his"
+        them = "him"
+    else:
+        they = "she"
+        their = "her"
+        them = "her"
+
     return {
-        "name": names.get_first_name(),
+        "name": names.get_first_name(gender=gender),
         "hot": random.random(),
         "open": random.random(),
         "con": random.random(),
@@ -34,7 +49,9 @@ def generate_person():
         "libido": random.random(),
         "exp": random.random(),
         "confidence": random.random(),
-        'their': 'their'
+        'they': they,
+        'their': their,
+        'them': them
     }
 
 

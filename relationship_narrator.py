@@ -112,7 +112,8 @@ def narrate_meeting(event):
 
 
 def narrate_events(events):
-    text = "They met " + events[0]['location'] + ". "
+    
+    text = f"Alex met {events[0]['person']['name']} " + events[0]['location'] + ". "
     for event in events:
         if event is None:
             continue

@@ -196,6 +196,8 @@ class Relationship:
         return {
             'type': Event.MEETING,
             'location': get_location(),
+            'protagonist': self.a,
+            'person': self.b,
             'delta': -1
         }
 
