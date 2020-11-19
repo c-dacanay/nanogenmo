@@ -41,6 +41,7 @@ PROP_NAMES = {
 class Event(Enum):
     MEETING = 'meeting'
     CONFLICT = 'conflict'
+    EXPERIENCE = 'experience'
     DEVELOPMENT = 'development'
     NOTHING = 'nothing'
 
@@ -63,17 +64,77 @@ def get_interest(protagonist, person):
 class Relationship:
     phase = Phase.COURTING
     health = 0
-    intimacy = 0
-    passion = 0
-    commitment = 0
+    progress = 0
 
     def __init__(self, a, b):
         self.a = a
         self.b = b
+        self.a['concessions'] = {
+            'open': 0,
+            'extra': 0,
+            'libido': 0,
+            'commit': 0,
+        }
+        self.b['concessions'] = {
+            'open': 0,
+            'extra': 0,
+            'libido': 0,
+            'commit': 0,
+        }
+
+    def simulate_experience(self):
+        '''
+        Simulate an experience event based on the current state
+        An experience has the following properties:
+            - type (open, extra, commit, libido)
+            - threshold (0-1 value)
+        '''
+        a = self.a
+        b = self.b
+        if random.random() < 0.5:
+            a = self.b
+            b = self.a
+
+        # roll for odds of the person actually initiating the experience
+        if binary_roll([a['interest'], a['commit']]):
+            exp_type = random.choice(['open', 'extra', 'commit', 'libido'])
+            thresh = random.gauss(a[exp_type], 0.15)
+            experience = {
+                'type': Event.EXPERIENCE,
+                'target_property': exp_type,
+                'threshold': thresh,
+                'rejected': False,
+                'bonding': 0,
+                'delta': 0,
+                'protagonist': self.a,
+                'person': self.b,
+                'protagonist_initiated': a == self.a
+            }
+            # Calcualte concession threshold and reject if this experience
+            # would put b's concession score over the threshold.
+            # TODO allow other person to reject for other reasons
+            concession_threshold = b['interest'] + b['commit']
+            delta = abs(b[exp_type] - thresh)
+            if b['concessions'][exp_type] + delta > concession_threshold:
+                # reject experience
+                experience['rejected'] = True
+                return experience
+            b['concessions'][exp_type] += delta
+            # Increase relatinonship health and progress by random value
+            experience['delta'] = random.random()
+            experience['bonding'] = random.random()
+            return experience
+        return {
+            'type': Event.NOTHING,
+            'health': self.health,
+            'delta': -0.1,
+            'protagonist': self.a,
+            'person': self.b,
+        }
 
     def simulate_development(self):
         '''
-        Simulate a development event based on the current state of the 
+        Simulate a development event based on the current state of the
         relationship
         '''
         def get_rolls(p):
@@ -108,7 +169,7 @@ class Relationship:
             'person': self.b,
         }
 
-    def simulate_conflict(self):
+    def simulate_conflict(self, target_property=random.choice(CONFLICT_TARGETS)):
         # In order for the pair to successfully navigate
         # the conflict, they must have close to the same value
         # for the conflict_target property. Eg, if the conflict
@@ -139,7 +200,6 @@ class Relationship:
                 rolls['interest'] * 0.25 - rolls['neuro']
             return rolls
 
-        target_property = random.choice(CONFLICT_TARGETS)
         target = abs(self.b[target_property] - self.a[target_property])
         handicap = random.random() / 4 - 0.5
         protag_rolls = get_rolls(self.a)
@@ -213,20 +273,25 @@ class Relationship:
         meeting = self.simulate_meeting()
         events.append(meeting)
         self.health += meeting['delta']
+        event = {}
 
         while self.health > 0:
             # Determine the random chance of some event occuring:
             # TODO: adjust based on character properties
-            chance_conflict = 0.5
-            chance_development = 0.33
-            if (random.random() < chance_development):
+            chance_conflict = 0.1
+            chance_development = 0.9
+            if event and event.get('rejected'):
+                # FIGHT!
+                event = self.simulate_conflict(event['target_property'])
+            elif (random.random() < chance_development):
                 # A development occurred!
-                event = self.simulate_development()
+                event = self.simulate_experience()
             elif (random.random() < chance_conflict):
                 event = self.simulate_conflict()
             else:
                 event = {
                     'type': Event.NOTHING,
+                    'health': self.health,
                     'duration': 1,
                     'delta': -0.1,
                     'protagonist': self.a,

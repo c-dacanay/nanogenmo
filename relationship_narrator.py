@@ -112,8 +112,9 @@ def narrate_meeting(event):
 
 
 def narrate_events(events):
-    
-    text = f"Alex met {events[0]['person']['name']} " + events[0]['location'] + ". "
+
+    text = f"Alex met {events[0]['person']['name']} " + \
+        events[0]['location'] + ". "
     for event in events:
         if event is None:
             continue
@@ -121,12 +122,24 @@ def narrate_events(events):
             text += narrate_meeting(event)
         elif event['type'] == Event.DEVELOPMENT:
             text += narrate_development(event)
+        elif event['type'] == Event.EXPERIENCE:
+            text += narrate_experience(event)
         elif event['type'] == Event.CONFLICT:
             text += narrate_conflict(event)
         else:
             text += time_passed(event)
     text += "They never saw each other again.\n\n"
     return text
+
+
+def narrate_experience(event):
+    a = event['protagonist'] if event['protagonist_initiated'] else event['person']
+    b = event['person'] if event['protagonist_initiated'] else event['protagonist']
+    if event['rejected']:
+        result = f"{b['name']} refused. "
+    else:
+        result = f"The relationship health improved by {round(event['delta'], 2)} and progressed by {round(event['bonding'], 2)}. "
+    return f"{a['name']} invited {b['name']} to do a {round(event['threshold'], 2)}-{event['target_property']} activity together. {result}\n"
 
 
 def narrate_courting_development(event, a, b):
@@ -168,7 +181,7 @@ def narrate_conflict(event):
 
 
 def time_passed(event):
-    return ""
+    return f"1 day passed. The relationship health is {round(event['health'], 2)}. \n"
     if event['duration'] == 1:
         days = 'day'
     else:

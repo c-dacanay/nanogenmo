@@ -22,13 +22,13 @@ protagonist = {
 
 
 def generate_person():
-    
+
     if random.random() > .5:
         gender = "male"
     else:
         gender = "female"
 
-    if gender == "male":  
+    if gender == "male":
         they = "he"
         their = "his"
         them = "him"
