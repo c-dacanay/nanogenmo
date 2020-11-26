@@ -53,7 +53,7 @@ class Phase(Enum):
     COMMITTED = 'committed'
 
 PHASE_COMMIT_THRESHOLDS = {
-    Phase.COURTING: 1,
+    Phase.COURTING: 2,
     Phase.DATING: 5,
     Phase.COMMITTED: 10,
 }
@@ -110,7 +110,7 @@ class Relationship:
 
         # roll for odds of the person actually initiating the experience
         if binary_roll([a['interest'], a['commit']]):
-            exp_type = random.choice(['open', 'extra', 'commit', 'libido'])
+            exp_type = random.choice(['open', 'extra', 'libido'])
             thresh = random.gauss(a[exp_type], 0.15)
             experience = {
                 'type': Event.EXPERIENCE,
@@ -317,7 +317,7 @@ class Relationship:
             b['interest'] *= 0.8 + random.random() * 0.2
             a['neuro'] *= 1 + random.random() * 0.1
 
-        event['delta'] = 0
+        event['delta'] = (ratio - 1) / 2
 
         if ratio > 1 and self.phase == Phase.COURTING:
             self.phase = Phase.DATING
@@ -343,7 +343,7 @@ class Relationship:
         chance_development = 0.9
         chance_conflict = 0.1
         
-        if self.health > PHASE_COMMIT_THRESHOLDS[self.phase] and event.get('delta', 0) > 0.5:
+        if self.health > PHASE_COMMIT_THRESHOLDS[self.phase] and event.get('delta', 0) > 0.25 and event.get('type') != Event.COMMIT:
             event = self.simulate_commit(event)
         elif event.get('rejected'):
             # FIGHT!
@@ -385,4 +385,12 @@ class Relationship:
             self.a = event['protagonist']
             self.b = event['person']
 
+        # compress all NOTHING events together
+        events = []
+        for event in self.events:
+            if event['type'] == Event.NOTHING and events[len(events) - 1]['type'] == Event.NOTHING:
+                events[len(events) - 1]['delta'] += event['delta']
+                continue
+            events.append(event)
+        self.events = events
         return self.events

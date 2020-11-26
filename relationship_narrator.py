@@ -163,13 +163,21 @@ def narrate_events(events):
 
 
 def narrate_experience(event):
-    a = event['protagonist'] if event['protagonist_initiated'] else event['person']
-    b = event['person'] if event['protagonist_initiated'] else event['protagonist']
+    a, b = get_ab(event)
     if event['rejected']:
         result = f"{b['name']} refused. "
     else:
-        result = f"The relationship health improved by {round(event['delta'], 2)} and progressed by {round(event['bonding'], 2)}. "
-    return f"{a['name']} invited {b['name']} to do a {round(event['threshold'], 2)}-{event['target_property']} activity together. {result}\n"
+        result = f"The relationship health improved by {round(event['delta'], 2)}. "
+        #" and progressed by {round(event['bonding'], 2)}. "
+    
+    experiences = {
+        'open': [f'go on an adventure'],
+        'libido': [f'have sex'],
+        'extra': [f'hang out with their friends'],
+    }
+    activity = util.rank(experiences[event['target_property']], event['threshold'])
+    return f"{a['name']} invited {b['name']} to {activity}. {result}\n"
+    #do a {round(event['threshold'], 2)}-{event['target_property']} activity together. {result}\n"
 
 
 def narrate_development(event):
@@ -204,7 +212,11 @@ def narrate_conflict(event):
 
 
 def time_passed(event):
-    return f"1 day passed. The relationship health is {round(event['health'], 2)}. \n"
+    #return f"1 day passed. The relationship health is {round(event['health'], 2)}. \n"
+    return random.choice([
+        "A week passed quietly. \n"
+        "A week went by. \n"
+    ])
     if event['duration'] == 1:
         days = 'day'
     else:
