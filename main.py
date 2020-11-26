@@ -17,7 +17,8 @@ protagonist = {
     "libido": .5,
     "exp": .5,
     'confidence': 0.7,
-    'their': 'their'
+    'their': 'their',
+    'they': 'they'
 }
 
 

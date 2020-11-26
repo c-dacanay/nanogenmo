@@ -40,6 +40,7 @@ PROP_NAMES = {
 
 class Event(Enum):
     MEETING = 'meeting'
+    COMMIT = 'commit'
     CONFLICT = 'conflict'
     EXPERIENCE = 'experience'
     DEVELOPMENT = 'development'
@@ -48,10 +49,20 @@ class Event(Enum):
 
 class Phase(Enum):
     COURTING = 'courting'
-    HONEYMOON = 'honeymoon'
     DATING = 'dating'
     COMMITTED = 'committed'
 
+PHASE_COMMIT_THRESHOLDS = {
+    Phase.COURTING: 1,
+    Phase.DATING: 5,
+    Phase.COMMITTED: 10,
+}
+
+PHASE_SCORE_THRESHOLDS = {
+    Phase.COURTING: 0.5,
+    Phase.DATING: 1,
+    Phase.COMMITTED: 1.5,
+}
 
 def get_interest(protagonist, person):
     # For now only use hotness
@@ -264,6 +275,89 @@ class Relationship:
             # Hardcode delta to -1 to represent neither party approaching the other
             'delta': -1
         }
+    
+    def simulate_commit(self, event):
+        # Person only has the opportunity to commit event if conditions are met
+       
+        # Simulate a commitment event
+        a = self.a
+        b = self.b
+        protag_init = random.random() > 0.5
+        if protag_init:
+            a = self.b
+            b = self.a
+        # Roll for whether or not they actually do it
+        if not binary_roll([a['confidence'], a['interest'], a['commit']]):
+            return self.simulate_nothing()
+
+        event = {
+            'type': Event.COMMIT,
+            'protagonist': self.a,
+            'person': self.b,
+            'protagonist_initiated': protag_init,
+        }
+
+        # Roll for whether commit event succeeds:
+        # TODO add concession damage?
+        score = random.gauss(b['interest'], 0.1) + random.gauss(b['commit'], 0.1)
+        ratio = score / PHASE_SCORE_THRESHOLDS[self.phase]
+        event['success_ratio'] = ratio
+        if ratio > 1.2:
+            # Random increase to interest + commitment if the response was enthusiastic
+            a['commit'] *= 1 + random.random() * 0.1
+            a['interest'] *= 1 + random.random() * 0.2
+            a['commit'] *= 1 + random.random() * 0.1
+            b['interest'] *= 1 + random.random() * 0.2
+            a['neuro'] *= 0.9 + random.random() * 0.1
+        elif ratio < 0.8:
+            # Debuffs if response was not enthusiastic:
+            a['commit'] *= 0.9 + random.random() * 0.1
+            a['interest'] *= 0.8 + random.random() * 0.2
+            a['commit'] *= 0.9 + random.random() * 0.1
+            b['interest'] *= 0.8 + random.random() * 0.2
+            a['neuro'] *= 1 + random.random() * 0.1
+
+        event['delta'] = 0
+
+        if ratio > 1 and self.phase == Phase.COURTING:
+            self.phase = Phase.DATING
+            event['phase'] = self.phase
+        # TODO: actually make it 2 commit events happen first
+        elif ratio > 1 and self.phase == Phase.DATING:
+            self.phase = Phase.COMMITTED
+            event['phase'] = self.phase
+        
+        return event
+
+    def simulate_nothing(self):
+        return {
+            'type': Event.NOTHING,
+            'health': self.health,
+            'duration': 1,
+            'delta': -0.1,
+            'protagonist': self.a,
+            'person': self.b,
+        }
+
+    def next_event(self, event):
+        chance_development = 0.9
+        chance_conflict = 0.1
+        
+        if self.health > PHASE_COMMIT_THRESHOLDS[self.phase] and event.get('delta', 0) > 0.5:
+            event = self.simulate_commit(event)
+        elif event.get('rejected'):
+            # FIGHT!
+            event = self.simulate_conflict(event['target_property'])
+        elif (random.random() < chance_development):
+            # A development occurred!
+            event = self.simulate_experience()
+        elif (random.random() < chance_conflict):
+            event = self.simulate_conflict()
+        else:
+            event = self.simulate_nothing()
+            
+        return event
+
 
     def simulate(self):
         # Given a pair of people, simulate a relatonship between them
@@ -283,26 +377,9 @@ class Relationship:
         while self.health > 0:
             # Determine the random chance of some event occuring:
             # TODO: adjust based on character properties
-            chance_conflict = 0.1
-            chance_development = 0.9
-            if event and event.get('rejected'):
-                # FIGHT!
-                event = self.simulate_conflict(event['target_property'])
-            elif (random.random() < chance_development):
-                # A development occurred!
-                event = self.simulate_experience()
-            elif (random.random() < chance_conflict):
-                event = self.simulate_conflict()
-            else:
-                event = {
-                    'type': Event.NOTHING,
-                    'health': self.health,
-                    'duration': 1,
-                    'delta': -0.1,
-                    'protagonist': self.a,
-                    'person': self.b,
-                }
-
+            event = self.next_event(event)
+            if not event:
+                continue;
             self.events.append(event)
             self.health += event['delta']
             self.a = event['protagonist']

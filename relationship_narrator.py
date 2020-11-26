@@ -7,6 +7,10 @@ from relationship import Event, PROP_NAMES, Relationship, Phase
 def narrate(r: Relationship):
     return narrate_events(r.events)
 
+def get_ab(event):
+  a = event['protagonist'] if event['protagonist_initiated'] else event['person']
+  b = event['person'] if event['protagonist_initiated'] else event['protagonist']
+  return a,b
 
 def get_salient_property(person):
     m = 0
@@ -44,13 +48,38 @@ def get_interest_sentence(a, b, interest):
                   'smitten', 'obsessed', 'lovestruck']
     return f"{a['name']} {random.choice(adjective)} {prop}. "
 
-
+def narrate_commit(event):
+    a, b = get_ab(event)
+    text = f"{a['name']} asks {b['name']} for more commitment in the relationship. "
+    if event['success_ratio'] > 1 and event['success_ratio'] < 2:
+        text += random.choice([
+            f"{b['name']} felt unsure, but agreed.",
+            f"{b['name']} hesitated, but agreed.",
+            f"{b['name']} agreed somewhat carefully."
+        ])
+    elif event['success_ratio'] > 2:
+        text += random.choice([
+            f"{b['name']} beamed in response. No more words were needed.",
+            f"{b['name']} enthusiastically agreed.",
+            f"{b['name']} agreed happily.",
+        ])
+    elif event['success_ratio'] < 0.5:
+        text += random.choice([
+            f"{b['name']} refused quickly.",
+            f"{b['name']} was silent."
+        ])
+    else:
+        text += random.choice([
+            f"{b['name']} said {b['they']} needed some time to think about it."
+        ])
+    phase_text = f" The couple is now {event['phase']}.\n" if 'phase' in event else "\n"
+    return text + phase_text
+  
 def narrate_meeting(event):
     if event['delta'] == -1:
         return ""
     text = ""
-    a = event['protagonist'] if event['protagonist_initiated'] else event['person']
-    b = event['person'] if event['protagonist_initiated'] else event['protagonist']
+    a, b = get_ab(event)
     if event['protagonist_initiated']:
         text += get_interest_sentence(event['protagonist'],
                                       event['person'], event['protagonist']['interest'])
@@ -119,6 +148,8 @@ def narrate_events(events):
             continue
         if event['type'] == Event.MEETING:
             text += narrate_meeting(event)
+        elif event['type'] == Event.COMMIT:
+            text += narrate_commit(event)
         elif event['type'] == Event.DEVELOPMENT:
             text += narrate_development(event)
         elif event['type'] == Event.EXPERIENCE:
