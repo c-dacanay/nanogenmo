@@ -59,10 +59,9 @@ def generate_book():
     for i in range(10):
         print('Chapter ' + str(i + 1))
         new_person = generate_person()
-        print(prologue.get_prologue(new_person))
         r = Relationship(protagonist, new_person)
         r.simulate()
-        print(relationship_narrator.narrate(r))
+        relationship_narrator.narrate(r)
         print(epilogue.get_epilogue(r, new_person))
 
 
