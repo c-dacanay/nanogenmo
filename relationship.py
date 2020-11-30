@@ -110,7 +110,7 @@ class Relationship:
 
         # roll for odds of the person actually initiating the experience
         if binary_roll([a['interest'], a['commit']]):
-            exp_type = random.choice(['open', 'extra', 'libido'])
+            exp_type = random.choice(['open', 'open', 'extra', 'libido'])
             thresh = random.gauss(a[exp_type], 0.1)
             experience = {
                 'type': Event.EXPERIENCE,
