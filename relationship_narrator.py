@@ -142,27 +142,36 @@ def narrate_meeting(event):
     ]
     print(text + random.choice(APPROACHES) + "\n\n")
 
-def narrate_experience_chunk(chunk):
-    # Narrate a chunk of EXPERIENCE and NOTHING events
-    protag = chunk[0]['protagonist']
-    person = chunk[0]['person']
-    q = util.rank(['a couple days', 'a week', 'a few weeks', 'a couple months'], len(chunk)/10)
-    # TODO make this more interesting
-    activity = "going on adventures together. "
-    print(f"{protag['name']} and {person['name']} passed {q} {activity}. ")
-
 def narrate_dating(events):
     if len(events) == 0:
         return
-    protag = events[0]['protagonist']
-    # Given a chunk of events, narrate them with the DATING style.
-    experiences = [ e for e in events if e['type'] == Event.EXPERIENCE]
-    conflicts = [ e for e in events if e['type'] == Event.CONFLICT]
+    logging.debug(events[0]['protagonist'])
     # First the phase change event:
-    narrate_commit(events[0])
+    narrate_commit(events.pop(0))
     # Then the prologue OG code:
     print(prologue.get_prologue(events[0]['person']))
+    chunks = list(util.divide_chunks(events, 1))
+    for chunk in chunks:
+        narrate_dating_chunk(chunk)
+
+def narrate_committed(events):
+    if len(events) == 0:
+        return
+    # First the phase change event:
+    narrate_commit(events.pop(0))
+    chunks = list(util.divide_chunks(events, 8))
+    # For now it's the same as dating :(
+    for chunk in chunks:
+        narrate_dating_chunk(chunk)
+
+def narrate_dating_chunk(events):
+    protag = events[0]['protagonist']
     # Then describe their experiences:
+    experiences = [ e for e in events if e['type'] == Event.EXPERIENCE]
+    conflicts = [ e for e in events if e['type'] == Event.CONFLICT]
+    commits = [ e for e in events if e['type'] == Event.COMMIT]
+    if (len(commits) > 0):
+        narrate_commit(commits[0])
     counts = {'open': 0, 'extra': 0, 'libido': 0}
     for e in experiences:
         counts[e['target_property']] += e['delta']
@@ -177,11 +186,11 @@ def narrate_dating(events):
     delta = sum([e['delta'] for e in experiences])
     logging.debug(f"experience delta: {delta}")
     desc = util.rank([
-        f"{protag['name']} found it moderately engaging.",
+        f"{protag['name']} found it moderately engaging",
         f"{protag['name']} was enthralled",
     ], delta/2)
     print(f"{they} {loved} {E_DESC[common_exp_type]}, {desc}.")
-    counts = {'open': 0, 'extra': 0, 'libido': 0, 'neuro': 0, 'commit': 0, 'con': 0}
+    counts = {'open': 0, 'extra': 0, 'libido': 0, 'neuro': 0, 'commit': 0, 'con': 0, 'exp': 0}
     for e in conflicts:
         counts[e['target_property']] += e['delta']
     common_exp_type = min(counts, key=lambda k: counts[k])
@@ -191,7 +200,8 @@ def narrate_dating(events):
         'libido': 'They found their varying sex drive to be a challenge.',
         'neuro': 'They found nervous breakdowns to be a challenge.',
         'con': 'They found messiness to be a challenge.',
-        'hot': 'They found hotness to be a challenge.'
+        'hot': 'They found hotness to be a challenge.',
+        'exp': 'They fought about experience'
     }
     delta = sum([e['delta'] for e in conflicts])
     logging.debug(f"conflict delta: {delta}")
@@ -215,28 +225,34 @@ def narrate_events(events):
         narrate_phase(chunk, phase)
     print("They never saw each other again.\n\n")
 
+def narrate_event(event):
+    if event is None:
+        return
+    if event['type'] == Event.MEETING:
+        narrate_meeting(event)
+    elif event['type'] == Event.COMMIT:
+        narrate_commit(event)
+    elif event['type'] == Event.DEVELOPMENT:
+        narrate_development(event)
+    elif event['type'] == Event.EXPERIENCE:
+        narrate_experience(event)
+    elif event['type'] == Event.CONFLICT:
+        narrate_conflict(event)
+    else:
+        time_passed(event)
+
 def narrate_phase(events, phase):
-    logging.debug(f'Narrating {len(events)} events in phase {phase}\n')
+    if events:
+        logging.debug(f'Narrating {len(events)} events in phase {phase}\n')
     if phase == Phase.COURTING:
         for event in events:
-            if event is None:
-                continue
-            if event['type'] == Event.MEETING:
-                narrate_meeting(event)
-            elif event['type'] == Event.COMMIT:
-                narrate_commit(event)
-            elif event['type'] == Event.DEVELOPMENT:
-                narrate_development(event)
-            elif event['type'] == Event.EXPERIENCE:
-                narrate_experience(event)
-            elif event['type'] == Event.CONFLICT:
-                narrate_conflict(event)
-            else:
-                time_passed(event)
-    elif phase == Phase.DATING:
-        narrate_dating(events)
+            narrate_event(event)
+    elif phase == Phase.DATING and events:
+        print(prologue.get_prologue(events[0]['person']))
+        for event in events:
+            narrate_event(event)
     elif phase == Phase.COMMITTED:
-        narrate_dating(events)
+        narrate_committed(events)
        
 
 def narrate_experience(event):
@@ -244,16 +260,27 @@ def narrate_experience(event):
     if event['rejected']:
         result = f"{b['name']} refused. "
     else:
-        result = f"It was great"
-        #" and progressed by {round(event['bonding'], 2)}. "
+        lower_dict = {
+            'libido': f'{b["name"]} generally preferred less adventurous sex',
+            'extra': f'{b["name"]} generally preferred a quieter evening',
+            'open': f'{b["name"]} generally preferred to do something they were used to.',
+        }
+        higher_dict = {
+            'libido': f'{b["name"]} generally preferred more adventurous sex',
+            'extra': f'{b["name"]} generally preferred to socialize',
+            'open': f'{b["name"]} generally preferred to do something new',
+        }
+        concession = lower_dict[event['target_property']] if event['concession'] < 0 else higher_dict[event['target_property']]
+        logging.debug(f"Concession damage for {event['target_property']} is {round(event['concession'], 2)}")
+        result = f"{concession}, but agreed anyway. "
     
     experiences = {
-        'open': [f'go on an adventure'],
-        'libido': [f'have sex'],
-        'extra': [f'hang out with their friends'],
+        'open': [f'go on a boring date', 'go on an exciting date'],
+        'libido': [f'have vanilla sex', f'have kinky sex'],
+        'extra': [f'stay in and watch Netflix', 'go to a big party'],
     }
     activity = util.rank(experiences[event['target_property']], event['threshold'])
-    print(f"{a['name']} invited {b['name']} to {activity}. {result}\n")
+    print(f"{a['name']} invited {b['name']} to {activity} [{round(event['threshold'], 2)}]. {result}")
     logging.debug(f"The relationship health changed by {round(event['delta'], 2)}. ")
 
 
@@ -281,6 +308,6 @@ def narrate_conflict(event):
 def time_passed(event):
     #return f"1 day passed. The relationship health is {round(event['health'], 2)}. \n"
     print(random.choice([
-        "A week passed quietly. \n"
+        "A week passed quietly. \n",
         "A week went by. \n"
     ]))

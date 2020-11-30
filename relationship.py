@@ -111,7 +111,7 @@ class Relationship:
         # roll for odds of the person actually initiating the experience
         if binary_roll([a['interest'], a['commit']]):
             exp_type = random.choice(['open', 'extra', 'libido'])
-            thresh = random.gauss(a[exp_type], 0.15)
+            thresh = random.gauss(a[exp_type], 0.1)
             experience = {
                 'type': Event.EXPERIENCE,
                 'target_property': exp_type,
@@ -126,17 +126,16 @@ class Relationship:
             # Calcualte concession threshold and reject if this experience
             # would put b's concession score over the threshold.
             # TODO allow other person to reject for other reasons
-            # TODO account for agreeableness
-            concession_threshold = b['interest'] + b['commit']
+            concession_threshold = b['interest'] + b['commit'] + b['agree']
             delta = abs(b[exp_type] - thresh)
             if b['concessions'][exp_type] + delta > concession_threshold:
                 # reject experience
                 experience['rejected'] = True
                 return experience
             b['concessions'][exp_type] += delta
+            experience['concession'] = b[exp_type] - thresh 
             # Increase relatinonship health and progress by random value
             experience['delta'] = random.random()
-            experience['bonding'] = random.random()
             return experience
         return {
             'type': Event.NOTHING,
@@ -340,18 +339,22 @@ class Relationship:
         }
 
     def next_event(self, event):
-        chance_development = 0.9
-        chance_conflict = 0.1
+        chance_experience = .9
+        PHASE_CONFLICT_CHANCES = {
+            Phase.COURTING: 0,
+            Phase.DATING: 0.1,
+            Phase.COMMITTED: 0.2,
+        }
         
         if self.health > PHASE_COMMIT_THRESHOLDS[self.phase] and event.get('delta', 0) > 0.25 and event.get('type') != Event.COMMIT:
             event = self.simulate_commit(event)
-        elif event.get('rejected'):
-            # FIGHT!
+        elif event.get('rejected') and self.phase != Phase.COURTING:
+            # only trigger a fight if they are in DATING phase
             event = self.simulate_conflict(event['target_property'])
-        elif (random.random() < chance_development):
+        elif (random.random() < chance_experience):
             # A development occurred!
             event = self.simulate_experience()
-        elif (random.random() < chance_conflict):
+        elif (random.random() < PHASE_CONFLICT_CHANCES[self.phase]):
             event = self.simulate_conflict()
         else:
             event = self.simulate_nothing()
@@ -386,11 +389,13 @@ class Relationship:
             self.b = event['person']
 
         # compress all NOTHING events together
-        events = []
-        for event in self.events:
-            if event['type'] == Event.NOTHING and events[len(events) - 1]['type'] == Event.NOTHING:
-                events[len(events) - 1]['delta'] += event['delta']
-                continue
-            events.append(event)
+        events = [self.events.pop(0)]
+        while len(self.events) > 0:
+            event = self.events.pop(0)
+            last_event = events[len(events) - 1]
+            if last_event['type'] == Event.NOTHING and event['type'] == Event.NOTHING:
+                last_event['delta'] += event['delta']
+            else:
+                events.append(event)
         self.events = events
         return self.events
