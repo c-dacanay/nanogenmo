@@ -272,7 +272,10 @@ def narrate_experience(event):
         }
         concession = lower_dict[event['target_property']] if event['concession'] < 0 else higher_dict[event['target_property']]
         logging.debug(f"Concession damage for {event['target_property']} is {round(event['concession'], 2)}")
-        result = f"{concession}, but agreed anyway. "
+        if abs(event['concession']) > 0.2:
+            result = f"{concession}, but agreed anyway. "
+        else:
+            result = f"{b['name']} agreed happily. "
     
     experiences = {
         'open': [f'go on a boring date', 'go on an exciting date'],
