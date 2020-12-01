@@ -230,6 +230,11 @@ class Relationship:
                 self.b['interest'] *= 0.8
         else:
             delta = (team_score + handicap - target) / 2
+        
+        if delta > 0:
+            # They resolved the argument!
+            self.b['concessions'][target_property] *= 0.5
+            self.a['concessions'][target_property] *= 0.5
 
         return {
             'type': Event.CONFLICT,

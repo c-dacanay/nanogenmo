@@ -51,7 +51,7 @@ def generate_person():
         "confidence": random.random(),
         'they': they,
         'their': their,
-        'them': them
+        'them': them,
     }
 
 

@@ -248,6 +248,7 @@ def narrate_phase(events, phase):
         for event in events:
             narrate_event(event)
     elif phase == Phase.DATING and events:
+        narrate_commit(events.pop(0))
         print(prologue.get_prologue(events[0]['person']))
         for event in events:
             narrate_event(event)
@@ -306,6 +307,8 @@ def narrate_conflict(event):
     character_a = event['protagonist']['name'] if event['protagonist'][
         target_p] > event['person'][target_p] else event['person']['name']
     print(f"They fought because {character_a} was too {prop_name}. ")
+    logging.debug(event['delta'])
+
 
 
 def time_passed(event):
