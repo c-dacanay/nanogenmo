@@ -4,6 +4,7 @@ from relationship import Relationship
 import relationship_narrator
 import epilogue
 import names
+import argparse
 
 protagonist = {
     "name": "Alex",
@@ -55,8 +56,8 @@ def generate_person():
     }
 
 
-def generate_book():
-    for i in range(10):
+def generate_book(num):
+    for i in range(num):
         print('Chapter ' + str(i + 1))
         new_person = generate_person()
         r = Relationship(protagonist, new_person)
@@ -66,4 +67,9 @@ def generate_book():
 
 
 if __name__ == "__main__":
-    generate_book()
+    parser = argparse.ArgumentParser(description="nanogenmo")
+    parser.add_argument('-n', dest='num_chaps', type=int,
+                        help='the number of chapters to generate',
+                        default=10)
+    args = parser.parse_args()
+    generate_book(args.num_chaps)

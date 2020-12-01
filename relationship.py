@@ -86,12 +86,14 @@ class Relationship:
             'extra': 0,
             'libido': 0,
             'commit': 0,
+            'con': 0,
         }
         self.b['concessions'] = {
             'open': 0,
             'extra': 0,
             'libido': 0,
             'commit': 0,
+            'con': 0,
         }
 
     def simulate_experience(self):
