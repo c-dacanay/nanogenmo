@@ -3,6 +3,7 @@ import prologue
 import random
 import logging
 import conflict_dialogue
+import artifacts
 from relationship import Event, PROP_NAMES, Relationship, Phase
 
 logging.basicConfig(level=logging.DEBUG)
@@ -11,10 +12,14 @@ logging.basicConfig(level=logging.DEBUG)
 def narrate(r: Relationship):
     return narrate_events(r.events)
 
+
 def get_ab(event):
-  a = event['protagonist'] if event['protagonist_initiated'] else event['person']
-  b = event['person'] if event['protagonist_initiated'] else event['protagonist']
-  return a,b
+    a = event['protagonist'] if event['protagonist_initiated'] else event[
+        'person']
+    b = event['person'] if event['protagonist_initiated'] else event[
+        'protagonist']
+    return a, b
+
 
 def get_salient_property(person):
     m = 0
@@ -27,10 +32,16 @@ def get_salient_property(person):
         except:
             pass
     props = {
-        'hot': [f"{person['name']}'s {random.choice(['lithe', 'well-defined', 'striking'])} {random.choice(['features', 'body', 'muscles'])}"],
-        'open': [f"{person['name']}'s {random.choice(['pealing laughter', 'earnest expression'])}"],
+        'hot': [
+            f"{person['name']}'s {random.choice(['lithe', 'well-defined', 'striking'])} {random.choice(['features', 'body', 'muscles'])}"
+        ],
+        'open': [
+            f"{person['name']}'s {random.choice(['pealing laughter', 'earnest expression'])}"
+        ],
         'con': [f"{person['name']}'s intense focus"],
-        'extra': [f"{person['name']}'s friendly {random.choice(['disposition', 'demeanor', 'attitude'])}"],
+        'extra': [
+            f"{person['name']}'s friendly {random.choice(['disposition', 'demeanor', 'attitude'])}"
+        ],
         'agree': [f"a quiet kindness in {person['name']}'s movements"],
         'neuro': [f"a raw intensity in {person['name']}'s articulations"],
         'libido': [f"{person['name']}'s deep sexual energy"],
@@ -43,14 +54,20 @@ def get_salient_property(person):
 
 
 def get_interest_sentence(a, b, interest):
-    adjective = ['noticed', 'was struck by',
-                 'was fascinated by', "couldn't help but notice"]
+    adjective = [
+        'noticed', 'was struck by', 'was fascinated by',
+        "couldn't help but notice"
+    ]
     prop = get_salient_property(b)
-    adverbs = ['vaguely', 'somewhat', 'kind of', 'moderately', 'very',
-               'strangely', 'immediately', 'violently']
-    interested = ['intrigued', 'interested',
-                  'smitten', 'obsessed', 'lovestruck']
+    adverbs = [
+        'vaguely', 'somewhat', 'kind of', 'moderately', 'very', 'strangely',
+        'immediately', 'violently'
+    ]
+    interested = [
+        'intrigued', 'interested', 'smitten', 'obsessed', 'lovestruck'
+    ]
     return f"{a['name']} {random.choice(adjective)} {prop}. "
+
 
 def narrate_commit(event):
     a, b = get_ab(event)
@@ -68,30 +85,29 @@ def narrate_commit(event):
             f"{b['name']} agreed happily.",
         ])
     elif event['success_ratio'] < 0.5:
-        text += random.choice([
-            f"{b['name']} refused quickly.",
-            f"{b['name']} was silent."
-        ])
+        text += random.choice(
+            [f"{b['name']} refused quickly.", f"{b['name']} was silent."])
     else:
         text += random.choice([
             f"{b['name']} said {b['they']} needed some time to think about it."
         ])
     print(text)
-  
+
+
 def narrate_meeting(event):
     if event['delta'] == -1:
         return
     text = ""
     a, b = get_ab(event)
     if event['protagonist_initiated']:
-        text += get_interest_sentence(event['protagonist'],
-                                      event['person'], event['protagonist']['interest'])
+        text += get_interest_sentence(event['protagonist'], event['person'],
+                                      event['protagonist']['interest'])
     else:
-        text += get_interest_sentence(event['person'],
-                                      event['protagonist'],
+        text += get_interest_sentence(event['person'], event['protagonist'],
                                       event['person']['interest'])
-    adverb = util.rank(['nervously', 'shyly', 'quietly', '',
-                        'gently', 'intently', 'boldly'], a['interest'])
+    adverb = util.rank(
+        ['nervously', 'shyly', 'quietly', '', 'gently', 'intently', 'boldly'],
+        a['interest'])
 
     if event['delta'] <= 0:
         REJECTIONS = [
@@ -106,16 +122,12 @@ def narrate_meeting(event):
             f"They exchanged several friendly words, before agreeing to meet again sometime soon. "
         ])
         contact = random.choice([
-            'phone number',
-            'email',
-            'contact',
+            'phone number', 'email', 'contact',
             'phone number scrawled onto a crumpled piece of paper',
             'phone number hastily scribbled on a napkin',
             'email address dashed onto a post-it note',
-            'Discord server invite',
-            'laughter echoing in their ears',
-            'smile etched into their memory',
-            'Instagram handle'
+            'Discord server invite', 'laughter echoing in their ears',
+            'smile etched into their memory', 'Instagram handle'
         ])
         follow3 = random.choice([
             f"{a['name']} left with {b['name']}'s {contact}. ",
@@ -142,22 +154,26 @@ def narrate_meeting(event):
     ]
     print(text + random.choice(APPROACHES) + "\n\n")
 
+
 def narrate_experience_chunk(chunk):
     # Narrate a chunk of EXPERIENCE and NOTHING events
     protag = chunk[0]['protagonist']
     person = chunk[0]['person']
-    q = util.rank(['a couple days', 'a week', 'a few weeks', 'a couple months'], len(chunk)/10)
+    q = util.rank(
+        ['a couple days', 'a week', 'a few weeks', 'a couple months'],
+        len(chunk) / 10)
     # TODO make this more interesting
     activity = "going on adventures together. "
     print(f"{protag['name']} and {person['name']} passed {q} {activity}. ")
+
 
 def narrate_dating(events):
     if len(events) == 0:
         return
     protag = events[0]['protagonist']
     # Given a chunk of events, narrate them with the DATING style.
-    experiences = [ e for e in events if e['type'] == Event.EXPERIENCE]
-    conflicts = [ e for e in events if e['type'] == Event.CONFLICT]
+    experiences = [e for e in events if e['type'] == Event.EXPERIENCE]
+    conflicts = [e for e in events if e['type'] == Event.CONFLICT]
     # First the phase change event:
     narrate_commit(events[0])
     # Then the prologue OG code:
@@ -179,9 +195,16 @@ def narrate_dating(events):
     desc = util.rank([
         f"{protag['name']} found it moderately engaging.",
         f"{protag['name']} was enthralled",
-    ], delta/2)
+    ], delta / 2)
     print(f"{they} {loved} {E_DESC[common_exp_type]}, {desc}.")
-    counts = {'open': 0, 'extra': 0, 'libido': 0, 'neuro': 0, 'commit': 0, 'con': 0}
+    counts = {
+        'open': 0,
+        'extra': 0,
+        'libido': 0,
+        'neuro': 0,
+        'commit': 0,
+        'con': 0
+    }
     for e in conflicts:
         counts[e['target_property']] += e['delta']
     common_exp_type = min(counts, key=lambda k: counts[k])
@@ -198,22 +221,21 @@ def narrate_dating(events):
     print(C_DESC[common_exp_type])
 
 
-
-
 def narrate_events(events):
     print(f"Alex met {events[0]['person']['name']} {events[0]['location']}. ")
     for phase in [Phase.COURTING, Phase.DATING, Phase.COMMITTED]:
         chunk = []
         while True:
             if len(events) == 0:
-                break;
+                break
             if events[0].get('phase', phase) != phase:
                 # Move on to next phase
-                break;
+                break
             event = events.pop(0)
             chunk.append(event)
         narrate_phase(chunk, phase)
     print("They never saw each other again.\n\n")
+
 
 def narrate_phase(events, phase):
     logging.debug(f'Narrating {len(events)} events in phase {phase}\n')
@@ -237,7 +259,7 @@ def narrate_phase(events, phase):
         narrate_dating(events)
     elif phase == Phase.COMMITTED:
         narrate_dating(events)
-       
+
 
 def narrate_experience(event):
     a, b = get_ab(event)
@@ -246,15 +268,21 @@ def narrate_experience(event):
     else:
         result = f"It was great"
         #" and progressed by {round(event['bonding'], 2)}. "
-    
+
     experiences = {
         'open': [f'go on an adventure'],
         'libido': [f'have sex'],
         'extra': [f'hang out with their friends'],
     }
-    activity = util.rank(experiences[event['target_property']], event['threshold'])
+    activity = util.rank(experiences[event['target_property']],
+                         event['threshold'])
     print(f"{a['name']} invited {b['name']} to {activity}. {result}\n")
-    logging.debug(f"The relationship health changed by {round(event['delta'], 2)}. ")
+    logging.debug(
+        f"The relationship health changed by {round(event['delta'], 2)}. ")
+
+
+def narrate_artifact(event):
+    return artifacts.get(event)
 
 
 def narrate_conflict(event):
@@ -272,7 +300,9 @@ def narrate_conflict(event):
     target_p = event['target_property']
     prop_name = PROP_NAMES[target_p]
     if (target_p == 'extra'):
-        print(f"{event['protagonist']['name']} and {event['person']['name']} had a disagreement about whether to go to a party or stay in. ")
+        print(
+            f"{event['protagonist']['name']} and {event['person']['name']} had a disagreement about whether to go to a party or stay in. "
+        )
     character_a = event['protagonist']['name'] if event['protagonist'][
         target_p] > event['person'][target_p] else event['person']['name']
     print(f"They fought because {character_a} was too {prop_name}. ")
@@ -280,7 +310,4 @@ def narrate_conflict(event):
 
 def time_passed(event):
     #return f"1 day passed. The relationship health is {round(event['health'], 2)}. \n"
-    print(random.choice([
-        "A week passed quietly. \n"
-        "A week went by. \n"
-    ]))
+    print(random.choice(["A week passed quietly. \n" "A week went by. \n"]))
