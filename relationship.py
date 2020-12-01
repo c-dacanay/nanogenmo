@@ -23,7 +23,7 @@ def get_location():
 
 
 CONFLICT_TARGETS = [
-    'hot', 'open', 'extra', 'agree', 'neuro', 'commit', 'libido', 'exp'
+    'hot', 'open', 'extra', 'agree', 'neuro', 'commit', 'libido', 'exp', 'con'
 ]
 
 PROP_NAMES = {
@@ -35,6 +35,7 @@ PROP_NAMES = {
     'commit': 'serious about the relationship',
     'libido': 'interested in sex',
     'exp': 'mature for their age',
+    'con': 'messy'
 }
 
 
@@ -123,10 +124,10 @@ class Relationship:
                 'person': self.b,
                 'protagonist_initiated': a == self.a
             }
-            # Calcualte concession threshold and reject if this experience
+            # Calculate concession threshold and reject if this experience
             # would put b's concession score over the threshold.
             # TODO allow other person to reject for other reasons
-            concession_threshold = b['interest'] + b['commit'] + b['agree']
+            concession_threshold = (b['interest'] + b['commit'] + b['agree']) / 1.2
             delta = abs(b[exp_type] - thresh)
             if b['concessions'][exp_type] + delta > concession_threshold:
                 # reject experience
@@ -182,7 +183,7 @@ class Relationship:
             'person': self.b,
         }
 
-    def simulate_conflict(self, target_property=random.choice(CONFLICT_TARGETS)):
+    def simulate_conflict(self, person_initiated, target_property=random.choice(CONFLICT_TARGETS)):
         # In order for the pair to successfully navigate
         # the conflict, they must have close to the same value
         # for the conflict_target property. Eg, if the conflict
@@ -202,15 +203,14 @@ class Relationship:
         def get_rolls(p):
             variance = (1.05 - p['exp']) / 4
             rolls = {
-                'open': random.gauss(p['open'], variance),
                 'agree': random.gauss(p['agree'], variance),
                 'neuro': random.gauss(p['neuro'], variance),
                 'commit': random.gauss(p['commit'], variance),
                 'interest': random.gauss(p['interest'], variance)
             }
-            rolls['score'] = rolls['open'] * 0.25 + rolls['agree'] * 0.25 + \
-                rolls['commit'] * 0.25 + \
-                rolls['interest'] * 0.25 - rolls['neuro']
+            rolls['score'] = rolls['agree'] * 0.33 + \
+                rolls['commit'] * 0.33 + \
+                rolls['interest'] * 0.33 - rolls['neuro']
             return rolls
 
         target = abs(self.b[target_property] - self.a[target_property])
@@ -224,17 +224,21 @@ class Relationship:
         if (team_score + handicap < target):
             # the team fell short of the goal: punish proportionally.
             delta = team_score + handicap - target
-            if protag_rolls['score'] < person_rolls['score']:
-                self.a['interest'] *= 0.8
-            else:
-                self.b['interest'] *= 0.8
         else:
             delta = (team_score + handicap - target) / 2
         
+        # Now do concession modifiers:
         if delta > 0:
             # They resolved the argument!
             self.b['concessions'][target_property] *= 0.5
             self.a['concessions'][target_property] *= 0.5
+        else:
+            # The person who gave more to the conflict is disappointed.
+            loser = self.a
+            if protag_rolls['score'] < person_rolls['score']:
+                loser = self.b
+            loser['interest'] *= 0.9
+
 
         return {
             'type': Event.CONFLICT,
@@ -247,7 +251,7 @@ class Relationship:
             'delta': delta,
             'protagonist': self.a,
             'person': self.b,
-            'protagonist_initiated': random.random() < 0.5
+            'protagonist_initiated': not person_initiated
         }
 
     def simulate_meeting(self):
@@ -350,17 +354,20 @@ class Relationship:
             Phase.DATING: 0.1,
             Phase.COMMITTED: 0.2,
         }
+        # odds of conflict increase based on neuro
+        neuro_mod = util.scale((self.a['neuro'] + self.b['neuro']) / 2, 0, 1, 0.7, 1.3)
+        chance_conflict = PHASE_CONFLICT_CHANCES[self.phase] * neuro_mod
         
         if self.health > PHASE_COMMIT_THRESHOLDS[self.phase] and event.get('delta', 0) > 0.25 and event.get('type') != Event.COMMIT:
             event = self.simulate_commit(event)
         elif event.get('rejected') and self.phase != Phase.COURTING:
             # only trigger a fight if they are in DATING phase
-            event = self.simulate_conflict(event['target_property'])
+            event = self.simulate_conflict(event['protagonist_initiated'], event['target_property'])
         elif (random.random() < chance_experience):
             # A development occurred!
             event = self.simulate_experience()
-        elif (random.random() < PHASE_CONFLICT_CHANCES[self.phase]):
-            event = self.simulate_conflict()
+        elif (random.random() < chance_conflict):
+            event = self.simulate_conflict(random.random() < 0.5)
         else:
             event = self.simulate_nothing()
             

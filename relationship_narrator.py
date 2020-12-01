@@ -1,11 +1,12 @@
 import util
+import business_gen
 import prologue
 import random
 import logging
 import conflict_dialogue
 from relationship import Event, PROP_NAMES, Relationship, Phase
 
-logging.basicConfig(level=logging.DEBUG)
+#logging.basicConfig(level=logging.DEBUG)
 
 
 def narrate(r: Relationship):
@@ -54,7 +55,7 @@ def get_interest_sentence(a, b, interest):
 
 def narrate_commit(event):
     a, b = get_ab(event)
-    text = f"{a['name']} asks {b['name']} for more commitment in the relationship. "
+    text = f"{a['name']} asked {b['name']} for more commitment in the relationship. "
     if event['success_ratio'] > 1 and event['success_ratio'] < 2:
         text += random.choice([
             f"{b['name']} felt unsure, but agreed.",
@@ -77,6 +78,7 @@ def narrate_commit(event):
             f"{b['name']} said {b['they']} needed some time to think about it."
         ])
     print(text)
+    print('\n')
   
 def narrate_meeting(event):
     if event['delta'] == -1:
@@ -142,30 +144,20 @@ def narrate_meeting(event):
     ]
     print(text + random.choice(APPROACHES) + "\n\n")
 
-def narrate_dating(events):
-    if len(events) == 0:
-        return
-    logging.debug(events[0]['protagonist'])
-    # First the phase change event:
-    narrate_commit(events.pop(0))
-    # Then the prologue OG code:
-    print(prologue.get_prologue(events[0]['person']))
-    chunks = list(util.divide_chunks(events, 1))
-    for chunk in chunks:
-        narrate_dating_chunk(chunk)
+CHUNK_SIZE = 12
 
 def narrate_committed(events):
     if len(events) == 0:
         return
     # First the phase change event:
-    narrate_commit(events.pop(0))
-    chunks = list(util.divide_chunks(events, 8))
+    chunks = list(util.divide_chunks(events, CHUNK_SIZE))
     # For now it's the same as dating :(
     for chunk in chunks:
         narrate_dating_chunk(chunk)
 
 def narrate_dating_chunk(events):
     protag = events[0]['protagonist']
+    person = events[0]['person']
     # Then describe their experiences:
     experiences = [ e for e in events if e['type'] == Event.EXPERIENCE]
     conflicts = [ e for e in events if e['type'] == Event.CONFLICT]
@@ -177,36 +169,110 @@ def narrate_dating_chunk(events):
         counts[e['target_property']] += e['delta']
     common_exp_type = max(counts, key=lambda k: counts[k])
     they = random.choice(['The two of them', 'The couple', 'They'])
-    loved = random.choice(['often liked to', 'loved to', 'tended to'])
+    pre = random.choice(['found that they ', '', ''])
+    loved = random.choice(['continued', 'liked', 'loved', 'enjoyed', 'spent much time', 'continued to bond by'])
     E_DESC = {
-        'open': 'go on adventures together',
-        'extra': 'socialize as a couple',
-        'libido': 'have sex',
+        'open': 'going on adventures together',
+        # TODO: with hobbies, we can do something interesting
+        'extra': 'socializing with friends and colleagues',
+        'libido': 'having tons of sex',
     }
-    delta = sum([e['delta'] for e in experiences])
-    logging.debug(f"experience delta: {delta}")
-    desc = util.rank([
-        f"{protag['name']} found it moderately engaging",
-        f"{protag['name']} was enthralled",
-    ], delta/2)
-    print(f"{they} {loved} {E_DESC[common_exp_type]}, {desc}.")
-    counts = {'open': 0, 'extra': 0, 'libido': 0, 'neuro': 0, 'commit': 0, 'con': 0, 'exp': 0}
+    e_delta = sum([e['delta'] for e in experiences])
+    c_delta = sum([e['delta'] for e in conflicts])
+    logging.debug(f"experience delta: {e_delta}")
+   
+    print("\nOne month passed.")
+    print(f"{they} {pre}{loved} {E_DESC[common_exp_type]}.")
+    if conflicts:
+        narrate_conflicts_texture(conflicts, e_delta)
+    else:
+        adj = util.rank([
+            f"felt moderately engaged with the relationship.",
+            f"was content with how things were",
+            f"felt their eyes light up when looking at {person['name']}.",
+            f"was enthralled with the relationship.",
+        ], e_delta + c_delta / 2)
+        print(f"{protag['name']} {adj}.")
+
+def narrate_conflicts_texture(conflicts, e_delta):
+    protag = conflicts[0]['protagonist']
+    person = conflicts[0]['person']
+    delta = sum([e['delta'] for e in conflicts])
+    counts = {'open': 0, 'extra': 0, 'libido': 0, 'neuro': 0, 'commit': 0, 'con': 0, 'exp': 0, 'agree': 0, 'hot': 0}
     for e in conflicts:
         counts[e['target_property']] += e['delta']
     common_exp_type = min(counts, key=lambda k: counts[k])
+    a_higher = protag[common_exp_type] > person[common_exp_type]
+    a = protag
+    b = person
+    if not a_higher:
+        a = person
+        b = protag
+    they = random.choice(['The two of them', 'The couple', 'They'])
+    often = util.rank(['rarely fought, but when they did they', 'occasionally', 'sometimes', 'often', 'always'], len(conflicts) / CHUNK_SIZE * 1.5)
+    fought = random.choice(['disagreed', 'fought', 'quarrelled', 'had spats', 'argued'])
+    about = random.choice(['about', 'over'])
     C_DESC = {
-        'open': 'They often disagreed about what to do on date nights.',
-        'extra': 'They often fought about whether to stay in or go out.',
-        'libido': 'They found their varying sex drive to be a challenge.',
-        'neuro': 'They found nervous breakdowns to be a challenge.',
-        'con': 'They found messiness to be a challenge.',
-        'hot': 'They found hotness to be a challenge.',
-        'exp': 'They fought about experience'
+        'open': [f"{b['name']}'s reluctance to try new things", f"{a['name']} pushing {b['name']} out of {b['their']} comfort zone"],
+        'extra': [f"{b['name']}'s lack of social energy", f"{a['name']}'s overly gregarious spirit"],
+        'libido': [f"{b['name']}'s aggressive sex drive", f"{a['name']}'s lack of interest in sex"],
+        'neuro': [f"{a['name']}'s anxiety"],
+        'con': [f"{b['name']}'s messiness", f"{a['name']}'s preference for cleanliness"],
+        'hot': [f"{b['name']}'s insecurity about their appearance"],
+        'exp': [f"{b['name']}'s lack of experience with relationships"],
+        'agree': [f"{b['name']}'s lack of agreeability"],
+        'commit': [f"{b['name']}'s lack of commitment to the relationship"]
     }
-    delta = sum([e['delta'] for e in conflicts])
-    logging.debug(f"conflict delta: {delta}")
-    print(C_DESC[common_exp_type])
+    print(f"{they} {often} {fought} {about} {random.choice(C_DESC[common_exp_type])}. ")
 
+    logging.debug(f"conflict delta: {delta}")
+    scaled_delta = util.scale(delta, -3, 1, 1, 0)
+    expansion = util.rank([
+        "usually forgotten about the next day",
+        "quick to resolve",
+        "barely cause for concern",
+        "minor",
+        "somewhat virulent",
+        "draining",
+        "explosive",], scaled_delta)
+    fights = random.choice(['scuffles', 'disagreements', 'fights', 'arguments', 'spats'])
+    if delta + e_delta > 0:
+        conj = ", but" if scaled_delta > 0.5 else ";"
+        connect = random.choice([
+            f"{conj} {b['name']} was often willing to apologize and make things right. ",
+            f"{conj} {b['name']} was open to coming up with new solutions.",
+            f"{conj} {b['name']} was happy to adapt for {a['name']}.",
+            f"{conj} {b['name']} was willing to sacrifice for the good of the relationship."
+        ])
+        # Insert apology artifact here!
+        adverb = util.rank([
+            "somewhat",
+            "more or less",
+            "really quite",
+            "absolutely",
+            "incredibly"
+        ], util.scale(delta + e_delta, 0, 3, 0, 1))
+        adjective = random.choice(['happy', 'content', 'satisfied', 'pleased'])
+        rel = random.choice(['with how things were going', 'with the relationship', 'despite the arguments'])
+        overall = f"Alex was {adverb} {adjective} {rel}"
+    else:
+        conj = ", but" if scaled_delta < 0.5 else ";"
+        connect = random.choice([
+            f"{conj} {b['name']} was rarely willing to give {a['name']} the benefit of the doubt. ",
+            f"{conj} {b['name']} didn't apologize easily.",
+            f"{conj} {b['name']} didn't seem to want to make any changes. ",
+            f"{conj} {b['name']} didnt care to work to come up with a good solution.",
+        ])
+        clause = random.choice([
+            'began to feel disengaged',
+            f"started to feel their mind wandering when talking to {person['name']}",
+            f"found themselves ignoring messages from {person['name']} more and more often",
+            f"found themselves enjoying time spent with {person['name']} less and less",
+            f"began to feel like planning dates with {person['name']} was a chore",
+            f"found themselves going to {business_gen.get_business()} alone",
+        ])
+        overall = f"Alex {clause}"
+    print(f'These {fights} were {expansion}{connect} {overall}.')
 
 
 
@@ -250,9 +316,11 @@ def narrate_phase(events, phase):
     elif phase == Phase.DATING and events:
         narrate_commit(events.pop(0))
         print(prologue.get_prologue(events[0]['person']))
-        for event in events:
-            narrate_event(event)
-    elif phase == Phase.COMMITTED:
+        narrate_committed(events)
+        #for event in events:
+        #    narrate_event(event)
+    elif phase == Phase.COMMITTED and events:
+        narrate_commit(events.pop(0))
         narrate_committed(events)
        
 
@@ -264,7 +332,7 @@ def narrate_experience(event):
         lower_dict = {
             'libido': f'{b["name"]} generally preferred less adventurous sex',
             'extra': f'{b["name"]} generally preferred a quieter evening',
-            'open': f'{b["name"]} generally preferred to do something they were used to.',
+            'open': f'{b["name"]} generally preferred to do something they were used to',
         }
         higher_dict = {
             'libido': f'{b["name"]} generally preferred more adventurous sex',
