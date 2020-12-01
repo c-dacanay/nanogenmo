@@ -191,7 +191,7 @@ def narrate_dating(events):
         'libido': 'have sex',
     }
     delta = sum([e['delta'] for e in experiences])
-    logging.debug(f"experience delta: {delta}")
+    # logging.debug(f"experience delta: {delta}")
     desc = util.rank([
         f"{protag['name']} found it moderately engaging.",
         f"{protag['name']} was enthralled",
@@ -217,7 +217,7 @@ def narrate_dating(events):
         'hot': 'They found hotness to be a challenge.'
     }
     delta = sum([e['delta'] for e in conflicts])
-    logging.debug(f"conflict delta: {delta}")
+    # logging.debug(f"conflict delta: {delta}")
     print(C_DESC[common_exp_type])
 
 
@@ -238,7 +238,7 @@ def narrate_events(events):
 
 
 def narrate_phase(events, phase):
-    logging.debug(f'Narrating {len(events)} events in phase {phase}\n')
+    # logging.debug(f'Narrating {len(events)} events in phase {phase}\n')
     if phase == Phase.COURTING:
         for event in events:
             if event is None:
@@ -277,8 +277,8 @@ def narrate_experience(event):
     activity = util.rank(experiences[event['target_property']],
                          event['threshold'])
     print(f"{a['name']} invited {b['name']} to {activity}. {result}\n")
-    logging.debug(
-        f"The relationship health changed by {round(event['delta'], 2)}. ")
+    # logging.debug(
+    # f"The relationship health changed by {round(event['delta'], 2)}. ")
 
 
 def narrate_artifact(event):
@@ -295,17 +295,17 @@ def narrate_conflict(event):
     # team_score, handicap, target. team_score represents how much effort the couple put in to
     # resolving the problem. target - handicap is the required level of effort. if they fall short, the relationship
     # is damaged.
-    # if (random.random() < 1):
-    #    return conflict_dialogue.get(event)
-    target_p = event['target_property']
-    prop_name = PROP_NAMES[target_p]
-    if (target_p == 'extra'):
-        print(
-            f"{event['protagonist']['name']} and {event['person']['name']} had a disagreement about whether to go to a party or stay in. "
-        )
-    character_a = event['protagonist']['name'] if event['protagonist'][
-        target_p] > event['person'][target_p] else event['person']['name']
-    print(f"They fought because {character_a} was too {prop_name}. ")
+    if (random.random() < 1):
+        return conflict_dialogue.get(event)
+    # target_p = event['target_property']
+    # prop_name = PROP_NAMES[target_p]
+    # if (target_p == 'extra'):
+    #     print(
+    #         f"{event['protagonist']['name']} and {event['person']['name']} had a disagreement about whether to go to a party or stay in. "
+    #     )
+    # character_a = event['protagonist']['name'] if event['protagonist'][
+    #     target_p] > event['person'][target_p] else event['person']['name']
+    # print(f"They fought because {character_a} was too {prop_name}. ")
 
 
 def time_passed(event):
