@@ -184,7 +184,7 @@ class Relationship:
             'person': self.b,
         }
 
-    def simulate_conflict(self, person_initiated, target_property=random.choice(CONFLICT_TARGETS)):
+    def simulate_conflict(self):
         # decide who has an opportunity to initiate the conflict
         # a is always the initiator, b responds
         a = self.a
@@ -202,10 +202,11 @@ class Relationship:
 
         # A chooses a thing to conflict about. Weighted sample based on concession damage,
         # so A more likely to choose 'libido' if a high level of existing libido concession.
-        e['target_property'] = random.choices(
+        target_property = random.choices(
             population=list(a['concessions'].keys()),
             weights=list(a['concessions'].values())
         )[0]
+        e['target_property'] = target_property
 
         # A chooses whether or not to actually fight about it.
         # Fighting is more likely if concession damage is high or
@@ -378,15 +379,11 @@ class Relationship:
 
         if self.health > PHASE_COMMIT_THRESHOLDS[self.phase] and event.get('delta', 0) > 0.25 and event.get('type') != Event.COMMIT:
             event = self.simulate_commit(event)
-        elif event.get('rejected') and self.phase != Phase.COURTING:
-            # only trigger a fight if they are in DATING phase
-            event = self.simulate_conflict(
-                event['protagonist_initiated'], event['target_property'])
         elif (random.random() < PHASE_EXPERIENCE_CHANCES[self.phase]):
             # A development occurred!
             event = self.simulate_experience()
         elif (random.random() < chance_conflict):
-            event = self.simulate_conflict(random.random() < 0.5)
+            event = self.simulate_conflict()
         else:
             event = self.simulate_nothing()
 
