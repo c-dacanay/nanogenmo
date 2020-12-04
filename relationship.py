@@ -10,7 +10,8 @@ def binary_roll(stats):
     # Given array of values 0-1, roll for a true or false outcome
     # that is true an average of the average of the input values
     # eg [0,1] => 50% [0.25, 0.5, 0.75] => 50%
-    return random.random() < statistics.mean(stats)
+    mean = sum(stats) / len(stats)
+    return random.random() < mean 
 
 
 def get_location():
@@ -87,6 +88,9 @@ class Relationship:
             'libido': 0,
             'commit': 0,
             'con': 0,
+            'hot': 0,
+            'neuro': 0,
+            'agree': 0,
         }
         self.b['concessions'] = {
             'open': 0,
@@ -94,6 +98,9 @@ class Relationship:
             'libido': 0,
             'commit': 0,
             'con': 0,
+            'hot': 0,
+            'neuro': 0,
+            'agree': 0,
         }
 
     def simulate_experience(self):
@@ -216,7 +223,7 @@ class Relationship:
             return rolls
 
         target = abs(self.b[target_property] - self.a[target_property])
-        handicap = random.random() / 4 - 0.5
+        handicap = util.scale(random.random(),0,1,-0.25, 0.25)
         protag_rolls = get_rolls(self.a)
         person_rolls = get_rolls(self.b)
         team_score = (protag_rolls['score'] + person_rolls['score']) / 2
@@ -350,11 +357,15 @@ class Relationship:
         }
 
     def next_event(self, event):
-        chance_experience = .9
+        PHASE_EXPERIENCE_CHANCES = {
+            Phase.COURTING: 0.9,
+            Phase.DATING: 0.8,
+            Phase.COMMITTED: 0.5,
+        }
         PHASE_CONFLICT_CHANCES = {
             Phase.COURTING: 0,
-            Phase.DATING: 0.1,
-            Phase.COMMITTED: 0.2,
+            Phase.DATING: 0.2,
+            Phase.COMMITTED: 0.5,
         }
         # odds of conflict increase based on neuro
         neuro_mod = util.scale((self.a['neuro'] + self.b['neuro']) / 2, 0, 1, 0.7, 1.3)
@@ -365,7 +376,7 @@ class Relationship:
         elif event.get('rejected') and self.phase != Phase.COURTING:
             # only trigger a fight if they are in DATING phase
             event = self.simulate_conflict(event['protagonist_initiated'], event['target_property'])
-        elif (random.random() < chance_experience):
+        elif (random.random() < PHASE_EXPERIENCE_CHANCES[self.phase]):
             # A development occurred!
             event = self.simulate_experience()
         elif (random.random() < chance_conflict):

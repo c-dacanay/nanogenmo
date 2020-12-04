@@ -47,8 +47,6 @@ def get_interest_sentence(a, b, interest):
     adjective = ['noticed', 'was struck by',
                  'was fascinated by', "couldn't help but notice"]
     prop = get_salient_property(b)
-    adverbs = ['vaguely', 'somewhat', 'kind of', 'moderately', 'very',
-               'strangely', 'immediately', 'violently']
     interested = ['intrigued', 'interested',
                   'smitten', 'obsessed', 'lovestruck']
     return f"{a['name']} {random.choice(adjective)} {prop}. "
@@ -245,13 +243,7 @@ def narrate_conflicts_texture(conflicts, e_delta):
             f"{conj} {b['name']} was willing to sacrifice for the good of the relationship."
         ])
         # Insert apology artifact here!
-        adverb = util.rank([
-            "somewhat",
-            "more or less",
-            "really quite",
-            "absolutely",
-            "incredibly"
-        ], util.scale(delta + e_delta, 0, 3, 0, 1))
+        adverb = util.adverb(util.scale(delta + e_delta, 0, 3, 0, 1))
         adjective = random.choice(['happy', 'content', 'satisfied', 'pleased'])
         rel = random.choice(['with how things were going', 'with the relationship', 'despite the arguments'])
         overall = f"Alex was {adverb} {adjective} {rel}"
