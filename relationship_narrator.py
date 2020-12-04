@@ -8,7 +8,7 @@ from relationship import Event, PROP_NAMES, Relationship, Phase
 import tracery
 from tracery.modifiers import base_english
 
-#logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.DEBUG)
 
 
 def narrate(r: Relationship):
@@ -318,7 +318,7 @@ def narrate_experience_preface(a, b):
         'origin': ['#time.capitalize#, #phrase#.', ''],
         'phrase': ['#a# #action#', '#b# #passive#'],
         'action': ['sent #b# a text message', 'gave #b# a call'],
-        'passive': ['noticed a message from #a#', 'received a call from #b#'],
+        'passive': ['noticed a message from #a#', 'received a call from #a#'],
         'time': ['the next day', 'the next morning', 'the next evening', 'the next afternoon', 'the next night', 'at dawn the next day', 'at dusk the next day', 'at twilight the next day', 'at #num# the next morning', 'at #num# the next afternoon'],
         'num': ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'],
         'a': f'{a["name"]}',
@@ -350,6 +350,17 @@ def narrate_experience(event):
             result = f"{concession}, but agreed anyway. "
         else:
             result = f"{b['name']} agreed {util.enthusiastically(1.5 - abs(event['concession']) / 0.2)}. "
+        result += util.rank([
+            f"Unfortunately, {b['name']} ended up wishing {b['they']} had done something else instead. ",
+            "Unfortunately, it was just so-so. ",
+            f"{b['name']} found {b['their']} mind wandering. ",
+            "They had a moderately entertaining time. ",
+            "It was moderately entertaining. ",
+            "They had a wonderful evening. ",
+            "They had a mindblowing evening. ",
+            "They had an incredible time. ",
+            f"It was the most enjoyable time Alex had spent with anyone in a while. ",
+        ], event['delta'])
     
     experiences = {
         'open': [f'go on a boring date', 'go on an exciting date'],

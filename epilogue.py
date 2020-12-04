@@ -15,7 +15,6 @@ def get_epilogue(rel, person):
     # [eventually] reflect the phase of rel and alex's changed props
 
     r = rel
-    l = dir(r.simulate_development)
     # print(l)
     return ""
 
