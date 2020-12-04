@@ -58,7 +58,7 @@ def generate_person():
 
 def generate_book(num):
     for i in range(num):
-        print('Chapter ' + str(i + 1))
+        print('# Chapter ' + str(i + 1))
         new_person = generate_person()
         r = Relationship(protagonist, new_person)
         r.simulate()

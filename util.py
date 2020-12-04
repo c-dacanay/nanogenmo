@@ -16,7 +16,7 @@ def divide_chunks(l, n):
 def scale(old_value, old_min, old_max, new_min, new_max):
     return( (old_value - old_min) / (old_max - old_min) ) * (new_max - new_min) + new_min
 
-def adverb_rank(val):
+def adverb(val):
     return rank([
         "scarcely",
         "barely",
@@ -53,4 +53,26 @@ def adverb_rank(val):
         "utterly",
         "absolutely",
         "completely",
+    ], val)
+
+
+def enthusiastically(val):
+    return rank([
+        'apprehensively',
+        'hesitantly',
+        'nervously',
+        'carefully',
+        'somewhat apprehensively',
+        'somewhat hesitantly',
+        'somewhat nervously',
+        'somewhat carefully',
+        '',
+        'willingly',
+        'happily',
+        'joyfully',
+        'enthusiastically',
+        'very willingly',
+        'very happily',
+        'very joyfully',
+        'very enthusiastically',
     ], val)

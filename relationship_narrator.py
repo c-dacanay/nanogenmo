@@ -5,6 +5,8 @@ import random
 import logging
 import conflict_dialogue
 from relationship import Event, PROP_NAMES, Relationship, Phase
+import tracery
+from tracery.modifiers import base_english
 
 #logging.basicConfig(level=logging.DEBUG)
 
@@ -47,24 +49,16 @@ def get_interest_sentence(a, b, interest):
     adjective = ['noticed', 'was struck by',
                  'was fascinated by', "couldn't help but notice"]
     prop = get_salient_property(b)
-    interested = ['intrigued', 'interested',
-                  'smitten', 'obsessed', 'lovestruck']
     return f"{a['name']} {random.choice(adjective)} {prop}. "
 
 def narrate_commit(event):
     a, b = get_ab(event)
     text = f"{a['name']} asked {b['name']} for more commitment in the relationship. "
-    if event['success_ratio'] > 1 and event['success_ratio'] < 2:
+    if event['success_ratio'] > 1:
+        adv = util.enthusiastically(util.scale(event['success_ratio'], 1, 3, 0, 1))
         text += random.choice([
-            f"{b['name']} felt unsure, but agreed.",
-            f"{b['name']} hesitated, but agreed.",
-            f"{b['name']} agreed somewhat carefully."
-        ])
-    elif event['success_ratio'] > 2:
-        text += random.choice([
-            f"{b['name']} beamed in response. No more words were needed.",
-            f"{b['name']} enthusiastically agreed.",
-            f"{b['name']} agreed happily.",
+            f"{b['name']} {adv} agreed.",
+            f"{b['name']} agreed {adv}.",
         ])
     elif event['success_ratio'] < 0.5:
         text += random.choice([
@@ -314,6 +308,21 @@ def narrate_phase(events, phase):
     elif phase == Phase.COMMITTED and events:
         narrate_commit(events.pop(0))
         narrate_committed(events)
+
+def narrate_experience_preface(a, b):
+    rules = {
+        'origin': ['#time.capitalize#, #phrase#.', ''],
+        'phrase': ['#a# #action#', '#b# #passive#'],
+        'action': ['sent #b# a text message', 'gave #b# a call'],
+        'passive': ['noticed a message from #a#', 'received a call from #b#'],
+        'time': ['the next day', 'the next morning', 'the next evening', 'the next afternoon', 'the next night', 'at dawn the next day', 'at dusk the next day', 'at twilight the next day', 'at #num# the next morning', 'at #num# the next afternoon'],
+        'num': ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'],
+        'a': f'{a["name"]}',
+        'b': f'{b["name"]}',
+    }
+    grammar = tracery.Grammar(rules)
+    grammar.add_modifiers(base_english)
+    print(grammar.flatten("#origin#"))
        
 
 def narrate_experience(event):
@@ -336,15 +345,26 @@ def narrate_experience(event):
         if abs(event['concession']) > 0.2:
             result = f"{concession}, but agreed anyway. "
         else:
-            result = f"{b['name']} agreed happily. "
+            result = f"{b['name']} agreed {util.enthusiastically(1.5 - abs(event['concession']) / 0.2)}. "
     
     experiences = {
         'open': [f'go on a boring date', 'go on an exciting date'],
         'libido': [f'have vanilla sex', f'have kinky sex'],
-        'extra': [f'stay in and watch Netflix', 'go to a big party'],
+        'extra': [f'come over and watch Netflix', 'go out to the club', 'go to a big party'],
     }
     activity = util.rank(experiences[event['target_property']], event['threshold'])
-    print(f"{a['name']} invited {b['name']} to {activity} [{round(event['threshold'], 2)}]. {result}")
+    rules = {
+        'origin': ['#a# #invited# #activity#. #result#'],
+        'invited': ['invited #b# to', 'asked #b# to', 'suggested that they'],
+        'activity': activity,
+        'result': result,
+        'a': f'{a["name"]}',
+        'b': f'{b["name"]}',
+    }
+    narrate_experience_preface(a, b)
+    grammar = tracery.Grammar(rules)
+    grammar.add_modifiers(base_english)
+    print(grammar.flatten("#origin#"))
     logging.debug(f"The relationship health changed by {round(event['delta'], 2)}. ")
 
 

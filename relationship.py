@@ -91,6 +91,7 @@ class Relationship:
             'hot': 0,
             'neuro': 0,
             'agree': 0,
+            'exp': 0,
         }
         self.b['concessions'] = {
             'open': 0,
@@ -101,6 +102,7 @@ class Relationship:
             'hot': 0,
             'neuro': 0,
             'agree': 0,
+            'exp': 0,
         }
 
     def simulate_experience(self):
