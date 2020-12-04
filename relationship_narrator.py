@@ -173,7 +173,7 @@ def narrate_dating_chunk(events):
     c_delta = sum([e['delta'] for e in conflicts])
     logging.debug(f"experience delta: {e_delta}")
    
-    print("\nOne month passed.")
+    print("\n")
     print(f"{they} {pre}{loved} {E_DESC[common_exp_type]}.")
     if conflicts:
         narrate_conflicts_texture(conflicts, e_delta)
@@ -301,8 +301,12 @@ def narrate_phase(events, phase):
             narrate_event(event)
     elif phase == Phase.DATING and events:
         narrate_commit(events.pop(0))
+
         print(prologue.get_prologue(events[0]['person']))
-        narrate_committed(events)
+        for event in events:
+            narrate_event(event)
+
+        #narrate_committed(events)
         #for event in events:
         #    narrate_event(event)
     elif phase == Phase.COMMITTED and events:
