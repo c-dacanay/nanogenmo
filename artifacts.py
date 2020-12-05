@@ -1,5 +1,6 @@
 import random
 import util
+from util import get_ab
 import math
 from relationship import EventType, PROP_NAMES, Relationship, Phase
 import relationship_narrator
@@ -36,17 +37,21 @@ def get_message_intro(a, b):
     }
     grammar = tracery.Grammar(rules)
     grammar.add_modifiers(base_english)
-    return grammar.flatten('#origin#')
+    return grammar.flatten('#origin#\n')
 
 
 def get_first_date(event):
-    a, b = relationship_narrator.get_ab(event)
+    a, b = get_ab(event)
     a_nick = a['nickname']
     b_nick = b['nickname']
     a_interest = a['interest']
     b_interest = b['interest']
     time = event['date']
+
     preface = get_message_intro(a, b)
+    response = 'resp'
+    if event['rejected']:
+        response = 'rej'
 
     rules = {
         'a': [
@@ -56,8 +61,11 @@ def get_first_date(event):
             f'{preface} #b_msg#', '#b_msg#'
         ],
         'a_msg': [
-            '#a_pre##a_start##punc#\n#b_pre##b_start##b_ask#'],
-        'b_msg': ['#b_pre##b_start##b_resp#\n#a_pre##a_start##punc##a_ask#'],
+            f'#a_pre##a_start##punc##a_ask#\n#b_pre##b_{response}#'
+        ],
+        'b_msg': [
+            f'#b_pre##b_start##b_start2##b_ask#\n#a_pre##a_{response}#'
+        ],
         'a_pre': f"{a_nick} ({time}): ",
         'b_pre': f"{b_nick} ({time}): ",
         'punc': ['. ', '! ', '... '],
@@ -76,6 +84,7 @@ def get_first_date(event):
             'when can i see you again?',
             'when are u free next?',
             'again sometime?'
+            'again?'
         ],
         'b_start': [
             'Hey! ',
@@ -91,12 +100,50 @@ def get_first_date(event):
             'When are you free next?',
             "Let's do it again sometime",
         ],
-        'b_resp': [
+        'b_start2': [
             f'I had a {util.adverb(b_interest)} wonderful time.',
             f'I had a {util.adverb(b_interest)} awesome time.',
             f'I had a {util.adverb(b_interest)} fantastic time.',
             "You're cute.",
             "You're a cutie.",
+        ],
+        'a_rej': [
+            'uhhh let me take a look at my calendar',
+            'im kinda busy rn but ill text u',
+        ],
+        'b_rej': [
+            'Maybe in a bit, I\'m busy this week',
+            'Yeah...',
+        ],
+        'a_resp': [
+            ":) #suggest#?",
+            "yeah id love to! #suggest#?",
+            "yes!! #suggest#?",
+        ],
+        'b_resp': [
+            'Looking forward to it #suggest#',
+            'I\'d love to #suggest#',
+            'Of course! #suggest#',
+            'Absolutely! #suggest#',
+            'For sure! #suggest#',
+        ],
+        'suggest': [
+            'what about #day#?',
+            'im free on #day#',
+            'i can do #day#',
+            'i could do #day#',
+            '#day#?'
+        ],
+        'day': [
+            'tomorrow',
+            'day after tomorrow',
+            'monday',
+            'some time next week',
+            'tuesday',
+            'after work on thursday',
+            'wednesday',
+            'this weekend',
+            'friday',
         ]
     }
     grammar = tracery.Grammar(rules)
@@ -107,13 +154,13 @@ def get_first_date(event):
 
 
 def get_fight_trigger(event):
-    a, b = relationship_narrator.get_ab(event)
+    a, b = get_ab(event)
     a_nick = a['nickname']
     b_nick = b['nickname']
     time = event['date']
     rules = {
         'origin': ['#preface#\n#a#\n'],
-        'preface': f'{get_message_intro(b, a)}',
+        'preface': f'{get_message_intro(a, b)}',
         'a_lines': [
             'Hey, there\'s something I want to talk to you about',
             'Hey can we talk?',

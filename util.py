@@ -19,6 +19,12 @@ def scale(old_value, old_min, old_max, new_min, new_max):
     return((old_value - old_min) / (old_max - old_min)) * (new_max - new_min) + new_min
 
 
+def get_ab(event):
+    a = event['protagonist'] if event['protagonist_initiated'] else event['person']
+    b = event['person'] if event['protagonist_initiated'] else event['protagonist']
+    return a, b
+
+
 def adverb(val):
     return rank([
         "scarcely",
