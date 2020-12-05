@@ -87,9 +87,9 @@ def get_prologue(person):
 
     # in strArray: [0]hot, [1]open, g[2]con, [3]extra, [4]agree, [5]neuro, [6]commit, [7]exp
     str0 = "Over time, Alex realized that "
-    str1 = name + " was a " + stringArray[0] + \
+    str1 = f'{person["they"].capitalize()}' + " was a " + stringArray[0] + \
         " person with " + stringArray[3] + "."
-    str2 = name + " initially seemed " + stringArray[7] + \
+    str2 = name + " seemed " + stringArray[7] + \
         " romantic relationships and " + stringArray[6] + "."
     str3 = name + " was " + stringArray[2] + " and " + \
         stringArray[4] + ". " + stringArray[1] + "."
@@ -115,6 +115,9 @@ if __name__ == '__main__':
         'neuro': .5,
         'commit': .5,
         'libido': .5,
-        'exp': .5
+        'exp': .5,
+        'they': "she",
+        'their': "her",
+        'them': "her"
     }
     print(get_prologue(test_person))
