@@ -76,8 +76,6 @@ def generate_person():
         'hobbies': personHobbies
     }
 
-import pdb
-pdb.set_trace()
 
 def generate_book(num):
     date = datetime.date.fromisoformat('2010-12-01')
