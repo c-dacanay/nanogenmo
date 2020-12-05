@@ -49,7 +49,7 @@ PROP_NAMES = {
 }
 
 
-class Event(Enum):
+class EventType(Enum):
     MEETING = 'meeting'
     COMMIT = 'commit'
     CONFLICT = 'conflict'
@@ -134,7 +134,7 @@ class Relationship:
             exp_type = random.choice(['open', 'open', 'extra', 'libido'])
             thresh = random.gauss(a[exp_type], 0.1)
             experience = {
-                'type': Event.EXPERIENCE,
+                'type': EventType.EXPERIENCE,
                 'target_property': exp_type,
                 'threshold': thresh,
                 'rejected': False,
@@ -177,7 +177,7 @@ class Relationship:
             experience['delta'] = gauss(1 - concession_roll, 0.2)
             return experience
         return {
-            'type': Event.NOTHING,
+            'type': EventType.NOTHING,
             'health': self.health,
             'delta': -0.1,
             'protagonist': self.a,
@@ -194,7 +194,7 @@ class Relationship:
             b = self.a
 
         e = {
-            'type': Event.CONFLICT,
+            'type': EventType.CONFLICT,
             'protagonist': self.a,
             'person': self.b,
             'protagonist_initiated': a == self.a
@@ -271,7 +271,7 @@ class Relationship:
         if binary_roll([self.a['confidence'], self.a['interest']]):
             delta = random.gauss(self.b['interest'], 0.3) - 0.5
             return {
-                'type': Event.MEETING,
+                'type': EventType.MEETING,
                 'location': get_location(),
                 'protagonist': self.a,
                 'person': self.b,
@@ -281,7 +281,7 @@ class Relationship:
         if binary_roll([self.b['confidence'], self.b['interest']]):
             delta = random.gauss(self.a['interest'], 0.3) - 0.5
             return {
-                'type': Event.MEETING,
+                'type': EventType.MEETING,
                 'location': get_location(),
                 'protagonist': self.a,
                 'person': self.b,
@@ -289,7 +289,7 @@ class Relationship:
                 'delta': delta,
             }
         return {
-            'type': Event.MEETING,
+            'type': EventType.MEETING,
             'location': get_location(),
             'protagonist': self.a,
             'person': self.b,
@@ -312,7 +312,7 @@ class Relationship:
             return self.simulate_nothing()
 
         event = {
-            'type': Event.COMMIT,
+            'type': EventType.COMMIT,
             'protagonist': self.a,
             'person': self.b,
             'protagonist_initiated': protag_init,
@@ -353,7 +353,7 @@ class Relationship:
 
     def simulate_nothing(self):
         return {
-            'type': Event.NOTHING,
+            'type': EventType.NOTHING,
             'health': self.health,
             'duration': 1,
             'delta': -0.1,
@@ -369,15 +369,15 @@ class Relationship:
         }
         PHASE_CONFLICT_CHANCES = {
             Phase.COURTING: 0,
-            Phase.DATING: 0.2,
-            Phase.COMMITTED: 0.5,
+            Phase.DATING: 0.4,
+            Phase.COMMITTED: 0.8,
         }
         # odds of conflict increase based on neuro
         neuro_mod = util.scale(
             (self.a['neuro'] + self.b['neuro']) / 2, 0, 1, 0.7, 1.3)
         chance_conflict = PHASE_CONFLICT_CHANCES[self.phase] * neuro_mod
 
-        if self.health > PHASE_COMMIT_THRESHOLDS[self.phase] and event.get('delta', 0) > 0.25 and event.get('type') != Event.COMMIT:
+        if self.health > PHASE_COMMIT_THRESHOLDS[self.phase] and event.get('delta', 0) > 0.25 and event.get('type') != EventType.COMMIT:
             event = self.simulate_commit(event)
         elif (random.random() < PHASE_EXPERIENCE_CHANCES[self.phase]):
             # A development occurred!
@@ -420,7 +420,7 @@ class Relationship:
         while len(self.events) > 0:
             event = self.events.pop(0)
             last_event = events[len(events) - 1]
-            if last_event['type'] == Event.NOTHING and event['type'] == Event.NOTHING:
+            if last_event['type'] == EventType.NOTHING and event['type'] == EventType.NOTHING:
                 last_event['delta'] += event['delta']
             else:
                 events.append(event)

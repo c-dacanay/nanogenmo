@@ -1,4 +1,5 @@
 import prologue
+import artifacts
 import random
 from relationship import Relationship
 import relationship_narrator
@@ -19,7 +20,8 @@ protagonist = {
     "exp": .5,
     'confidence': 0.7,
     'their': 'their',
-    'they': 'they'
+    'they': 'they',
+    'nickname': 'xXx_Alex_xXx'
 }
 
 
@@ -38,8 +40,9 @@ def generate_person():
         their = "her"
         them = "her"
 
+    name = names.get_first_name(gender=gender)
     return {
-        "name": names.get_first_name(gender=gender),
+        "name": name,
         "hot": random.random(),
         "open": random.random(),
         "con": random.random(),
@@ -53,6 +56,7 @@ def generate_person():
         'they': they,
         'their': their,
         'them': them,
+        'nickname': artifacts.get_nickname(name)
     }
 
 

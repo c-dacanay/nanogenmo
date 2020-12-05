@@ -5,8 +5,9 @@ import prologue
 import random
 import logging
 import conflict_dialogue
-from relationship import Event, PROP_NAMES, Relationship, Phase
+from relationship import EventType, PROP_NAMES, Relationship, Phase
 import tracery
+import artifacts
 from tracery.modifiers import base_english
 
 logging.basicConfig(level=logging.DEBUG)
@@ -131,7 +132,7 @@ def narrate_meeting(event):
         'After a few moments, ',
         '',
         'After several minutes, ',
-        'Eventually, ',
+        'EventTypeually, ',
     ])
     APPROACHES = [
         f"{time}{a['name']} waved {adverb}{followup}",
@@ -160,9 +161,9 @@ def narrate_dating_chunk(events):
     protag = events[0]['protagonist']
     person = events[0]['person']
     # Then describe their experiences:
-    experiences = [e for e in events if e['type'] == Event.EXPERIENCE]
-    conflicts = [e for e in events if e['type'] == Event.CONFLICT]
-    commits = [e for e in events if e['type'] == Event.COMMIT]
+    experiences = [e for e in events if e['type'] == EventType.EXPERIENCE]
+    conflicts = [e for e in events if e['type'] == EventType.CONFLICT]
+    commits = [e for e in events if e['type'] == EventType.COMMIT]
     if (len(commits) > 0):
         narrate_commit(commits[0])
     counts = {'open': 0, 'extra': 0, 'libido': 0}
@@ -298,15 +299,15 @@ def narrate_event(event):
     # logging.debug(pprint.pformat(event))
     if event is None:
         return
-    if event['type'] == Event.MEETING:
+    if event['type'] == EventType.MEETING:
         narrate_meeting(event)
-    elif event['type'] == Event.COMMIT:
+    elif event['type'] == EventType.COMMIT:
         narrate_commit(event)
-    elif event['type'] == Event.DEVELOPMENT:
+    elif event['type'] == EventType.DEVELOPMENT:
         narrate_development(event)
-    elif event['type'] == Event.EXPERIENCE:
+    elif event['type'] == EventType.EXPERIENCE:
         narrate_experience(event)
-    elif event['type'] == Event.CONFLICT:
+    elif event['type'] == EventType.CONFLICT:
         narrate_conflict(event)
     else:
         time_passed(event)
@@ -347,6 +348,9 @@ def narrate_experience_preface(a, b):
     grammar = tracery.Grammar(rules)
     grammar.add_modifiers(base_english)
     print(grammar.flatten("#origin#"))
+    texts = artifacts.get_first_date(
+        a['nickname'], b['nickname'], a['interest'], b['interest'])
+    print(texts)
 
 
 def narrate_experience(event):
@@ -408,17 +412,6 @@ def narrate_experience(event):
 
 
 def narrate_conflict(event):
-    # TODO EMILY
-    # The conflict event has a lot of properties that we can use to influence the generated text.
-    # You can view how they are constructed in the function process_conflict
-    # The most interesting ones are probably:
-    # target_property: the conflict is based around this property. the closer the team's two scores,
-    # the more easily they can navigate the conflict.
-    # team_score, handicap, target. team_score represents how much effort the couple put in to
-    # resolving the problem. target - handicap is the required level of effort. if they fall short, the relationship
-    # is damaged.
-    # if (random.random() < 1):
-    #    return conflict_dialogue.get(event)
     target_p = event['target_property']
     prop_name = PROP_NAMES[target_p]
     if (target_p == 'extra'):
