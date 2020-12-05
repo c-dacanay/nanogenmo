@@ -37,7 +37,7 @@ def get_message_intro(a, b):
     }
     grammar = tracery.Grammar(rules)
     grammar.add_modifiers(base_english)
-    return grammar.flatten('#origin#')
+    return grammar.flatten('#origin#\n')
 
 
 def get_first_date(event):
@@ -57,8 +57,8 @@ def get_first_date(event):
             f'{preface} #b_msg#', '#b_msg#'
         ],
         'a_msg': [
-            '#a_pre##a_start##punc#\n#b_pre##b_start##b_ask#'],
-        'b_msg': ['#b_pre##b_start##b_resp#\n#a_pre##a_start##punc##a_ask#'],
+            '#a_pre##a_start##punc##a_ask#\n#b_pre##b_resp#'],
+        'b_msg': ['#b_pre##b_start##b_start2##b_ask#\n#a_pre##a_resp#'],
         'a_pre': f"{a_nick} ({time}): ",
         'b_pre': f"{b_nick} ({time}): ",
         'punc': ['. ', '! ', '... '],
@@ -92,12 +92,42 @@ def get_first_date(event):
             'When are you free next?',
             "Let's do it again sometime",
         ],
-        'b_resp': [
+        'b_start2': [
             f'I had a {util.adverb(b_interest)} wonderful time.',
             f'I had a {util.adverb(b_interest)} awesome time.',
             f'I had a {util.adverb(b_interest)} fantastic time.',
             "You're cute.",
             "You're a cutie.",
+        ],
+        'a_resp': [
+            ":) #suggest#?",
+            "yeah id love to! #suggest#?",
+            "yes!! #suggest#?",
+        ],
+        'b_resp': [
+            'Looking forward to it #suggest#',
+            'I\'d love to #suggest#',
+            'Of course! #suggest#',
+            'Absolutely! #suggest#',
+            'For sure! #suggest#',
+        ],
+        'suggest': [
+            'what about #day#?',
+            'im free on #day#',
+            'i can do #day#',
+            'i could do #day#',
+            '#day#?'
+        ],
+        'day': [
+            'tomorrow',
+            'day after tomorrow',
+            'monday',
+            'some time next week',
+            'tuesday',
+            'after work on thursday',
+            'wednesday',
+            'this weekend',
+            'friday',
         ]
     }
     grammar = tracery.Grammar(rules)

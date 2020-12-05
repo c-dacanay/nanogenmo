@@ -6,6 +6,7 @@ import random
 import logging
 import conflict_narrator
 from relationship import EventType, PROP_NAMES, Relationship, Phase
+from narrate_time import narrate_time
 import tracery
 import artifacts
 from tracery.modifiers import base_english
@@ -343,8 +344,11 @@ def narrate_phase(events, phase):
         narrate_commit(events.pop(0))
 
         print(prologue.get_prologue(events[0]['person']))
+        last_event = None
         for event in events:
             narrate_event(event)
+            narrate_time(last_event, event)
+            last_event = event
 
         # narrate_committed(events)
         # for event in events:
@@ -419,8 +423,4 @@ def narrate_conflict(event):
 
 
 def time_passed(event):
-    # return f"1 day passed. The relationship health is {round(event['health'], 2)}. \n"
-    print(random.choice([
-        "A week passed quietly. \n",
-        "A week went by. \n"
-    ]))
+    return ""

@@ -71,9 +71,9 @@ PHASE_COMMIT_THRESHOLDS = {
 }
 
 PHASE_SCORE_THRESHOLDS = {
-    Phase.COURTING: 0.5,
-    Phase.DATING: 1,
-    Phase.COMMITTED: 1.5,
+    Phase.COURTING: 1,
+    Phase.DATING: 3,
+    Phase.COMMITTED: 6,
 }
 
 
@@ -140,7 +140,7 @@ class Relationship:
                 'threshold': thresh,
                 'rejected': False,
                 'bonding': 0,
-                'delta': 0,
+                'delta': -0.2,
                 'protagonist': self.a,
                 'person': self.b,
                 'protagonist_initiated': a == self.a
@@ -314,7 +314,7 @@ class Relationship:
         # Roll for whether commit event succeeds:
         # TODO add concession damage?
         score = random.gauss(b['interest'], 0.1) + \
-            random.gauss(b['commit'], 0.1)
+            random.gauss(b['commit'], 0.1) * 2
         ratio = score / PHASE_SCORE_THRESHOLDS[self.phase]
         event['success_ratio'] = ratio
         if ratio > 1.2:
@@ -395,8 +395,13 @@ class Relationship:
         self.events.append(meeting)
         self.health += meeting['delta']
 
-        event = {}
+        PHASE_TIMEDELTA = {
+            Phase.COURTING: datetime.timedelta(days=1),
+            Phase.DATING: datetime.timedelta(days=3),
+            Phase.COMMITTED: datetime.timedelta(days=7),
+        }
 
+        event = {}
         while self.health > 0:
             # Determine the random chance of some event occuring:
             # TODO: adjust based on character properties
@@ -406,20 +411,10 @@ class Relationship:
             event['date'] = self.date
             event['health'] = self.health
             event['phase'] = self.phase
-            self.date += datetime.timedelta(days=1)
+            self.date += PHASE_TIMEDELTA[self.phase]
             self.events.append(event)
             self.health += event['delta']
             self.a = event['protagonist']
             self.b = event['person']
 
-        # compress all NOTHING events together
-        #events = [self.events.pop(0)]
-        # while len(self.events) > 0:
-        #    event = self.events.pop(0)
-            #last_event = events[len(events) - 1]
-            # if last_event['type'] == EventType.NOTHING and event['type'] == EventType.NOTHING:
-            #    last_event['delta'] += event['delta']
-            # else:
-            #    events.append(event)
-        #self.events = events
         return self.events
