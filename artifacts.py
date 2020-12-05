@@ -1,5 +1,6 @@
 import random
 import util
+from util import get_ab
 import math
 from relationship import EventType, PROP_NAMES, Relationship, Phase
 import relationship_narrator
@@ -40,7 +41,7 @@ def get_message_intro(a, b):
 
 
 def get_first_date(event):
-    a, b = relationship_narrator.get_ab(event)
+    a, b = get_ab(event)
     a_nick = a['nickname']
     b_nick = b['nickname']
     a_interest = a['interest']
@@ -107,13 +108,13 @@ def get_first_date(event):
 
 
 def get_fight_trigger(event):
-    a, b = relationship_narrator.get_ab(event)
+    a, b = get_ab(event)
     a_nick = a['nickname']
     b_nick = b['nickname']
     time = event['date']
     rules = {
         'origin': ['#preface#\n#a#\n'],
-        'preface': f'{get_message_intro(b, a)}',
+        'preface': f'{get_message_intro(a, b)}',
         'a_lines': [
             'Hey, there\'s something I want to talk to you about',
             'Hey can we talk?',

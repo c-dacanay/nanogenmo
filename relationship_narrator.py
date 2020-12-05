@@ -4,23 +4,18 @@ import business_gen
 import prologue
 import random
 import logging
-import conflict_dialogue
+import conflict_narrator
 from relationship import EventType, PROP_NAMES, Relationship, Phase
 import tracery
 import artifacts
 from tracery.modifiers import base_english
+from util import get_ab
 
 logging.basicConfig(level=logging.DEBUG)
 
 
 def narrate(r: Relationship):
     return narrate_events(r.events)
-
-
-def get_ab(event):
-    a = event['protagonist'] if event['protagonist_initiated'] else event['person']
-    b = event['person'] if event['protagonist_initiated'] else event['protagonist']
-    return a, b
 
 
 def get_salient_property(person):
@@ -420,44 +415,7 @@ def narrate_experience(event):
 
 
 def narrate_conflict(event):
-    a, b = get_ab(event)
-    print(artifacts.get_fight_trigger(event))
-
-    reaction = util.rank([
-        '#b_they# did not have time for this today. ',
-        '#b_they# pocketed #b_their# phone. This could wait for later.',
-        '',
-        '#b_they# hoped that #a_name# wasn\'t too upset. ',
-        '#b_they# quickly responded.',
-    ], b['interest'])
-    rules = {
-        'origin': f'#texture# {reaction} \n#they# #met# #discuss#.',
-        'they': ['They', 'The couple'],
-        'met': ['later met up at #location#', 'later got on the phone'],
-        'location': business_gen.get_business(),
-        'discuss': ['to discuss', 'to talk', 'to chat'],
-        'texture': [
-            '#b_name# blinked slowly.',
-            '#b_name# rubbed their eyes.',
-            '#b_name# sighed, and swiped the message away.',
-            '#b_name# took a deep breath.',
-        ],
-        'b_name': b['name'],
-        'b_they': b['they'],
-        'b_their': b['their'],
-        'a_name': a['name'],
-    }
-    grammar = tracery.Grammar(rules)
-    print(grammar.flatten('#origin#'))
-
-    [
-        f'I wanted to talk to you '
-    ]
-
-    target_p = event['target_property']
-    prop_name = PROP_NAMES[target_p]
-    print(f"They fought because {a['name']} was too {prop_name}. ")
-    logging.debug(event['delta'])
+    conflict_narrator.narrate_conflict(event)
 
 
 def time_passed(event):

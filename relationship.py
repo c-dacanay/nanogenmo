@@ -223,47 +223,39 @@ class Relationship:
 
         e['initiated'] = True
 
-        # Now the conflict has begun. The team must work together to assuage
+        # Now the conflict has begun. B must assuage
         # A's concession damage.
         e['target'] = a['concessions'][e['target_property']]
         e['handicap'] = util.scale(random.random(), 0, 1, -0.25, 0.25)
 
-        def get_rolls(p):
-            variance = (1.05 - p['exp']) / 4
-            rolls = {
-                'agree': random.gauss(p['agree'], variance),
-                'neuro': random.gauss(p['neuro'], variance),
-                'commit': random.gauss(p['commit'], variance),
-                'interest': random.gauss(p['interest'], variance)
-            }
-            rolls['score'] = rolls['agree'] * 0.33 + \
-                rolls['commit'] * 0.33 + \
-                rolls['interest'] * 0.33 - rolls['neuro']
-            return rolls
+        variance = (1.05 - b['exp']) / 4
+        rolls = {
+            'agree': random.gauss(b['agree'], variance) * 0.5,
+            'neuro': random.gauss(b['neuro'], variance) * -1,
+            'commit': random.gauss(b['commit'], variance) * 0.5,
+            'interest': random.gauss(b['interest'], variance) * 0.5,
+        }
+        e['rolls'] = rolls
 
-        e['a_rolls'] = get_rolls(a)
-        e['b_rolls'] = get_rolls(b)
-
-        team_score = (e['a_rolls']['score'] + e['b_rolls']['score']) / 2
+        score = rolls['agree'] + rolls['commit'] + \
+            rolls['interest'] + rolls['neuro']
 
         # calculate relationship health delta:
-        # if the team met the goal: benefit accordingly. But punish more than reward.
-        if (team_score + e['handicap'] < e['target']):
-            # the team fell short of the goal: punish proportionally.
-            delta = team_score + e['handicap'] - e['target'] * 2
+        # if b met the goal: benefit accordingly. But punish more than reward.
+        if (score + e['handicap'] < e['target']):
+            # b fell short of the goal: punish proportionally.
+            delta = score + e['handicap'] - e['target'] * 2
         else:
-            delta = (team_score + e['handicap'] - e['target']) / 2
+            delta = (score + e['handicap'] - e['target']) / 2
 
         # Now do concession modifiers:
         if delta > 0:
             # They resolved the argument!
+            # A feels better and recovers some concession damage
             a['concessions'][target_property] *= 0.5
         else:
-            # The person who gave more to the conflict is disappointed.
-            loser = a
-            if e['a_rolls']['score'] < e['b_rolls']['score']:
-                loser = b
-            loser['interest'] *= 0.9
+            # b is pissed and loses interest in the relationship
+            b['interest'] *= 0.9
         e['delta'] = delta
 
         return e
