@@ -47,7 +47,11 @@ def get_first_date(event):
     a_interest = a['interest']
     b_interest = b['interest']
     time = event['date']
+
     preface = get_message_intro(a, b)
+    response = 'resp'
+    if event['rejected']:
+        response = 'rej'
 
     rules = {
         'a': [
@@ -57,8 +61,11 @@ def get_first_date(event):
             f'{preface} #b_msg#', '#b_msg#'
         ],
         'a_msg': [
-            '#a_pre##a_start##punc##a_ask#\n#b_pre##b_resp#'],
-        'b_msg': ['#b_pre##b_start##b_start2##b_ask#\n#a_pre##a_resp#'],
+            f'#a_pre##a_start##punc##a_ask#\n#b_pre##b_{response}#'
+        ],
+        'b_msg': [
+            f'#b_pre##b_start##b_start2##b_ask#\n#a_pre##a_{response}#'
+        ],
         'a_pre': f"{a_nick} ({time}): ",
         'b_pre': f"{b_nick} ({time}): ",
         'punc': ['. ', '! ', '... '],
@@ -77,6 +84,7 @@ def get_first_date(event):
             'when can i see you again?',
             'when are u free next?',
             'again sometime?'
+            'again?'
         ],
         'b_start': [
             'Hey! ',
@@ -98,6 +106,14 @@ def get_first_date(event):
             f'I had a {util.adverb(b_interest)} fantastic time.',
             "You're cute.",
             "You're a cutie.",
+        ],
+        'a_rej': [
+            'uhhh let me take a look at my calendar',
+            'im kinda busy rn but ill text u',
+        ],
+        'b_rej': [
+            'Maybe in a bit, I\'m busy this week',
+            'Yeah...',
         ],
         'a_resp': [
             ":) #suggest#?",
