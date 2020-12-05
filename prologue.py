@@ -85,7 +85,8 @@ def get_prologue(person):
         else:
             stringArray.append(random.choice(properties[key]['lo']))
 
-    # in strArray: [0]hot, [1]open, [2]con, [3]extra, [4]agree, [5]neuro, [6]commit, [7]exp
+    # in strArray: [0]hot, [1]open, g[2]con, [3]extra, [4]agree, [5]neuro, [6]commit, [7]exp
+    str0 = "Over time, Alex realized that "
     str1 = name + " was a " + stringArray[0] + \
         " person with " + stringArray[3] + "."
     str2 = name + " initially seemed " + stringArray[7] + \
@@ -94,7 +95,7 @@ def get_prologue(person):
         stringArray[4] + ". " + stringArray[1] + "."
 
     strings = random.sample([str1, str2, str3], k=2)
-    result = listToString(strings)
+    result = str0 + listToString(strings)
     return result
 
 
