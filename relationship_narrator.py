@@ -132,7 +132,7 @@ def narrate_meeting(event):
         'After a few moments, ',
         '',
         'After several minutes, ',
-        'EventTypeually, ',
+        'Eventually, ',
     ])
     APPROACHES = [
         f"{time}{a['name']} waved {adverb}{followup}",
@@ -348,9 +348,6 @@ def narrate_experience_preface(a, b):
     grammar = tracery.Grammar(rules)
     grammar.add_modifiers(base_english)
     print(grammar.flatten("#origin#"))
-    texts = artifacts.get_first_date(
-        a['nickname'], b['nickname'], a['interest'], b['interest'])
-    print(texts)
 
 
 def narrate_experience(event):
@@ -404,6 +401,9 @@ def narrate_experience(event):
         'b': f'{b["name"]}',
     }
     narrate_experience_preface(a, b)
+    if event.get('phase') == Phase.COURTING and random.random() < 0.6:
+        print(artifacts.get_first_date(event))
+
     grammar = tracery.Grammar(rules)
     grammar.add_modifiers(base_english)
     print(grammar.flatten("#origin#"))

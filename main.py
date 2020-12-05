@@ -1,6 +1,7 @@
 import prologue
 import artifacts
 import random
+import datetime
 from relationship import Relationship
 import relationship_narrator
 import epilogue
@@ -61,11 +62,13 @@ def generate_person():
 
 
 def generate_book(num):
+    date = datetime.date.fromisoformat('2010-12-01')
     for i in range(num):
         print('# Chapter ' + str(i + 1))
         new_person = generate_person()
-        r = Relationship(protagonist, new_person)
+        r = Relationship(protagonist, new_person, date)
         r.simulate()
+        date = r.events[len(r.events) - 1]['date']
         relationship_narrator.narrate(r)
         print(epilogue.get_epilogue(r, new_person))
 

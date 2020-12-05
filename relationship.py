@@ -1,4 +1,5 @@
 import random
+import datetime
 import util
 import conflict_dialogue
 import statistics
@@ -88,7 +89,8 @@ class Relationship:
     health = 0
     progress = 0
 
-    def __init__(self, a, b):
+    def __init__(self, a, b, date):
+        self.date = date
         self.a = a
         self.b = b
         self.a['concessions'] = {
@@ -399,6 +401,7 @@ class Relationship:
 
         # simulate attempt to ask out person:
         meeting = self.simulate_meeting()
+        meeting['date'] = self.date
         self.events.append(meeting)
         self.health += meeting['delta']
 
@@ -410,19 +413,23 @@ class Relationship:
             event = self.next_event(event)
             if not event:
                 continue
+            event['date'] = self.date
+            event['health'] = self.health
+            event['phase'] = self.phase
+            self.date += datetime.timedelta(days=1)
             self.events.append(event)
             self.health += event['delta']
             self.a = event['protagonist']
             self.b = event['person']
 
         # compress all NOTHING events together
-        events = [self.events.pop(0)]
-        while len(self.events) > 0:
-            event = self.events.pop(0)
-            last_event = events[len(events) - 1]
-            if last_event['type'] == EventType.NOTHING and event['type'] == EventType.NOTHING:
-                last_event['delta'] += event['delta']
-            else:
-                events.append(event)
-        self.events = events
+        #events = [self.events.pop(0)]
+        # while len(self.events) > 0:
+        #    event = self.events.pop(0)
+            #last_event = events[len(events) - 1]
+            # if last_event['type'] == EventType.NOTHING and event['type'] == EventType.NOTHING:
+            #    last_event['delta'] += event['delta']
+            # else:
+            #    events.append(event)
+        #self.events = events
         return self.events

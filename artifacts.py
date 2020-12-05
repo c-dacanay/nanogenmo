@@ -21,16 +21,22 @@ def get_nickname(name):
     return grammar.flatten("#origin#")
 
 
-def get_first_date(a_nick, b_nick, a_interest, b_interest):
+def get_first_date(event):
+    a_nick = event['protagonist']['nickname']
+    b_nick = event['person']['nickname']
+    a_interest = event['protagonist']['interest']
+    b_interest = event['person']['interest']
+    time = event['date']
+
     rules = {
         'origin': ['#a#\n'],
         'a': [
-            '#a_pre##a1_start##punc##a_ask#\n#b_pre##b2_start##b_resp#',
-            '#a_pre##a1_start##punc#\n#b_pre##b2_start##b_ask#'],
-        'a_pre': f"{a_nick}: ",
-        'b_pre': f"{b_nick}: ",
+            '#a_pre##a_start##punc#\n#b_pre##b_start##b_ask#'],
+        'b': ['#b_pre##b_start##b_resp#\n#a_pre##a_start##a_ask#'],
+        'a_pre': f"{a_nick} ({time}): ",
+        'b_pre': f"{b_nick} ({time}): ",
         'punc': ['. ', '! ', '... '],
-        'a1_start': [
+        'a_start': [
             'it was really nice to spend time with you',
             'i had fun tonight',
             f"{util.adverb(a_interest)} can’t stop thinking about you",
@@ -46,13 +52,12 @@ def get_first_date(a_nick, b_nick, a_interest, b_interest):
             'when are u free next?',
             'again sometime?'
         ],
-        'b2': ['#b2_start##b2_resp#'],
-        'b2_start': [
+        'b_start': [
             'Hey! ',
             'Heya! ',
             'Yo! ',
-            'Hello ',
-            'Whats up ',
+            'Hello! ',
+            'Whats up! ',
             '',
         ],
         'b_ask': [
@@ -70,4 +75,7 @@ def get_first_date(a_nick, b_nick, a_interest, b_interest):
         ]
     }
     grammar = tracery.Grammar(rules)
-    return grammar.flatten("#origin#")
+    if event['protagonist_initiated']:
+        return grammar.flatten("#a#\n")
+    else:
+        return grammar.flatten("#b#\n")
