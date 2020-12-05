@@ -55,7 +55,6 @@ class EventType(Enum):
     COMMIT = 'commit'
     CONFLICT = 'conflict'
     EXPERIENCE = 'experience'
-    DEVELOPMENT = 'development'
     NOTHING = 'nothing'
 
 
@@ -365,12 +364,12 @@ class Relationship:
     def next_event(self, event):
         PHASE_EXPERIENCE_CHANCES = {
             Phase.COURTING: 0.9,
-            Phase.DATING: 0.8,
+            Phase.DATING: 0.5,
             Phase.COMMITTED: 0.5,
         }
         PHASE_CONFLICT_CHANCES = {
             Phase.COURTING: 0,
-            Phase.DATING: 0.4,
+            Phase.DATING: 0.5,
             Phase.COMMITTED: 0.8,
         }
         # odds of conflict increase based on neuro

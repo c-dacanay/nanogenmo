@@ -77,12 +77,12 @@ def narrate_commit(event):
         'a': a['name'],
         'b': b['name'],
     }
-    g = tracery.Grammar(rules)
+    grammar = tracery.Grammar(rules)
     # TODO phase is off by one
     if event['phase'] == Phase.DATING:
-        print(g.flatten('#courting_phase#'))
-    elif event['phase'] == Phase.COMMIT:
-        print(g.flatten('#dating_phase#'))
+        print(grammar.flatten('#courting_phase#'))
+    elif event['phase'] == Phase.COMMITTED:
+        print(grammar.flatten('#dating_phase#'))
         '''
     text = f"{a['name']} asked {b['name']} for more commitment in the relationship. "
     if event['success_ratio'] > 1:
@@ -180,8 +180,8 @@ def narrate_committed(events):
     # First the phase change event:
     chunks = list(util.divide_chunks(events, CHUNK_SIZE))
     # For now it's the same as dating :(
-    for chunk in chunks:
-        narrate_dating_chunk(chunk)
+    # for chunk in chunks:
+    # narrate_dating_chunk(chunk)
 
 
 def narrate_dating_chunk(events):
@@ -330,8 +330,6 @@ def narrate_event(event):
         narrate_meeting(event)
     elif event['type'] == EventType.COMMIT:
         narrate_commit(event)
-    elif event['type'] == EventType.DEVELOPMENT:
-        narrate_development(event)
     elif event['type'] == EventType.EXPERIENCE:
         narrate_experience(event)
     elif event['type'] == EventType.CONFLICT:
@@ -359,22 +357,6 @@ def narrate_phase(events, phase):
     elif phase == Phase.COMMITTED and events:
         narrate_commit(events.pop(0))
         narrate_committed(events)
-
-
-def narrate_experience_preface(a, b):
-    rules = {
-        'origin': ['#time.capitalize#, #phrase#.', ''],
-        'phrase': ['#a# #action#', '#b# #passive#'],
-        'action': ['sent #b# a text message', 'gave #b# a call'],
-        'passive': ['noticed a message from #a#', 'received a call from #a#'],
-        'time': ['the next day', 'the next morning', 'the next evening', 'the next afternoon', 'the next night', 'at dawn the next day', 'at dusk the next day', 'at twilight the next day', 'at #num# the next morning', 'at #num# the next afternoon'],
-        'num': ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'],
-        'a': f'{a["name"]}',
-        'b': f'{b["name"]}',
-    }
-    grammar = tracery.Grammar(rules)
-    grammar.add_modifiers(base_english)
-    print(grammar.flatten("#origin#"))
 
 
 def narrate_experience(event):
@@ -427,7 +409,6 @@ def narrate_experience(event):
         'a': f'{a["name"]}',
         'b': f'{b["name"]}',
     }
-    narrate_experience_preface(a, b)
     if event.get('phase') == Phase.COURTING and random.random() < 0.6:
         print(artifacts.get_first_date(event))
 
@@ -439,13 +420,43 @@ def narrate_experience(event):
 
 
 def narrate_conflict(event):
+    a, b = get_ab(event)
+    print(artifacts.get_fight_trigger(event))
+
+    reaction = util.rank([
+        '#b_they# did not have time for this today. ',
+        '#b_they# pocketed #b_their# phone. This could wait for later.',
+        '',
+        '#b_they# hoped that #a_name# wasn\'t too upset. ',
+        '#b_they# quickly responded.',
+    ], b['interest'])
+    rules = {
+        'origin': f'#texture# {reaction} \n#they# #met# #discuss#.',
+        'they': ['They', 'The couple'],
+        'met': ['later met up at #location#', 'later got on the phone'],
+        'location': business_gen.get_business(),
+        'discuss': ['to discuss', 'to talk', 'to chat'],
+        'texture': [
+            '#b_name# blinked slowly.',
+            '#b_name# rubbed their eyes.',
+            '#b_name# sighed, and swiped the message away.',
+            '#b_name# took a deep breath.',
+        ],
+        'b_name': b['name'],
+        'b_they': b['they'],
+        'b_their': b['their'],
+        'a_name': a['name'],
+    }
+    grammar = tracery.Grammar(rules)
+    print(grammar.flatten('#origin#'))
+
+    [
+        f'I wanted to talk to you '
+    ]
+
     target_p = event['target_property']
     prop_name = PROP_NAMES[target_p]
-    if (target_p == 'extra'):
-        print(f"{event['protagonist']['name']} and {event['person']['name']} had a disagreement about whether to go to a party or stay in. ")
-    character_a = event['protagonist']['name'] if event['protagonist'][
-        target_p] > event['person'][target_p] else event['person']['name']
-    print(f"They fought because {character_a} was too {prop_name}. ")
+    print(f"They fought because {a['name']} was too {prop_name}. ")
     logging.debug(event['delta'])
 
 

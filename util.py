@@ -7,14 +7,17 @@ def rank(arr, val):
     val = clamp(val, 0, 0.99)
     return arr[int(val * len(arr))]
 
-def divide_chunks(l, n): 
-      
-    # looping till length l 
-    for i in range(0, len(l), n):  
-        yield l[i:i + n] 
+
+def divide_chunks(l, n):
+
+    # looping till length l
+    for i in range(0, len(l), n):
+        yield l[i:i + n]
+
 
 def scale(old_value, old_min, old_max, new_min, new_max):
-    return( (old_value - old_min) / (old_max - old_min) ) * (new_max - new_min) + new_min
+    return((old_value - old_min) / (old_max - old_min)) * (new_max - new_min) + new_min
+
 
 def adverb(val):
     return rank([
@@ -23,7 +26,7 @@ def adverb(val):
         "hardly",
         "imperceptiby",
         "faintly",
-        "sort oy",
+        "sort of",
         "more or less",
         "slightly",
         "moderately",
