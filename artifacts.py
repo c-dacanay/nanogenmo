@@ -32,7 +32,7 @@ def get_first_date(event):
         'origin': ['#a#\n'],
         'a': [
             '#a_pre##a_start##punc#\n#b_pre##b_start##b_ask#'],
-        'b': ['#b_pre##b_start##b_resp#\n#a_pre##a_start##a_ask#'],
+        'b': ['#b_pre##b_start##b_resp#\n#a_pre##a_start##punc##a_ask#'],
         'a_pre': f"{a_nick} ({time}): ",
         'b_pre': f"{b_nick} ({time}): ",
         'punc': ['. ', '! ', '... '],

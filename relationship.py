@@ -68,7 +68,7 @@ class Phase(Enum):
 PHASE_COMMIT_THRESHOLDS = {
     Phase.COURTING: 2,
     Phase.DATING: 5,
-    Phase.COMMITTED: 10,
+    Phase.COMMITTED: 100000000000,
 }
 
 PHASE_SCORE_THRESHOLDS = {
@@ -342,14 +342,13 @@ class Relationship:
             a['neuro'] *= 1 + random.random() * 0.1
 
         event['delta'] = (ratio - 1) / 2
+        event['phase'] = self.phase
 
         if ratio > 1 and self.phase == Phase.COURTING:
             self.phase = Phase.DATING
-            event['phase'] = self.phase
         # TODO: actually make it 2 commit events happen first
         elif ratio > 1 and self.phase == Phase.DATING:
             self.phase = Phase.COMMITTED
-            event['phase'] = self.phase
 
         return event
 

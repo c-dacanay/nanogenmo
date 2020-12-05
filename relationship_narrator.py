@@ -58,6 +58,32 @@ def get_interest_sentence(a, b, interest):
 
 def narrate_commit(event):
     a, b = get_ab(event)
+    enthusiasm = util.scale(event['success_ratio'], 1, 3, 0, 1)
+    rules = {
+        'courting_phase': ['#dating#'],
+        'dating_phase': ['#iloveyou#'],
+        'dating': ['#dating_challenge# #dating_result#'],
+        'iloveyou': ['#ily_challenge# #ily_result#'],
+        'dating_challenge': [
+            "#a# asked to start dating.",
+            "#a# asked if #b# would be interested in dating.",
+        ],
+        'dating_result': f"#b# agreed {util.enthusiastically(enthusiasm)}. ",
+        'ily_challenge': f"#a# says \"I love you\"",
+        'ily_result': [
+            '#b# could not say it back. #a# is hurt, but is understanding.' if event[
+                'success_ratio'] < 1 else f'#b# returns the words {util.enthusiastically(enthusiasm)}.'
+        ],
+        'a': a['name'],
+        'b': b['name'],
+    }
+    g = tracery.Grammar(rules)
+    # TODO phase is off by one
+    if event['phase'] == Phase.DATING:
+        print(g.flatten('#courting_phase#'))
+    elif event['phase'] == Phase.COMMIT:
+        print(g.flatten('#dating_phase#'))
+        '''
     text = f"{a['name']} asked {b['name']} for more commitment in the relationship. "
     if event['success_ratio'] > 1:
         adv = util.enthusiastically(util.scale(
@@ -76,6 +102,7 @@ def narrate_commit(event):
             f"{b['name']} said {b['they']} needed some time to think about it."
         ])
     print(text)
+    '''
     print('\n')
 
 
