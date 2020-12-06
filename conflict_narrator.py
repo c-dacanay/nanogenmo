@@ -1,4 +1,5 @@
 import tracery
+import random
 import business_gen
 from util import get_ab
 import util
@@ -184,17 +185,31 @@ def narrate_conflict(event):
         # A was grumpy, but didn't actually initiate a fight.
         logging.debug("FIGHT ABORTED")
         rules = {
-            'origin': '#sometimes# #a# #thought# that #b# was #problem#. #but#',
+            'origin': '#sometimes# #a# #thought# that #perhaps# #b# was #problem#. #but#',
             'a': a['name'],
             'b': b['name'],
-            'sometimes': ['Sometimes', 'Often', 'Occasionally', 'From time to time'],
+            'sometimes': ['Sometimes', 'Often', 'Occasionally', 'From time to time', 'Some nights', 'On rare occassion'],
+            'perhaps': ['perhaps', 'maybe', '', 'it was possible that', 'compared to previous partners at least, that'],
             'thought': ['thought', 'considered', 'wondered', 'felt concerned'],
             'problem': problem_phrase,
             'pushing': ['pushing', 'telling', 'convincing', 'nagging', 'dragging'],
             'but': [
-                '#a# pushed the thought away. ',
-                '#a# let the thought fade away. '
-            ]
+                '#a# pushed the thought the the back of #a_their# mind, and #return#',
+                'But the thought would fade, and #return#',
+                '#a# let the thought fade away, and #return#'
+            ],
+            'return': [
+                '#a# #returned# to #a_their# coffee.'
+                '#a# #returned# to #a_their# breakfast.'
+                '#a# #returned# to #a_their# work.'
+                f"#a# #returned# to reading about {random.choice(a['hobbies'])}" if a[
+                    'hobbies'] else '',
+                f"#a# #returned# to watching Youtube videos about {random.choice(a['hobbies'])}" if a[
+                    'hobbies'] else '',
+                '',
+            ],
+            'returned': ['returned', 'continued', 'went back to'],
+            'a_their': a['their'],
         }
         print(tracery.Grammar(rules).flatten('#origin#'))
         return
