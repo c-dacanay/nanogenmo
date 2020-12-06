@@ -13,11 +13,11 @@ from tracery.modifiers import base_english
 from util import get_ab
 from interests import INTERESTS
 
-logging.basicConfig(level=logging.WARN)
+logging.basicConfig(level=logging.DEBUG)
 
 
 def narrate(r: Relationship):
-    return narrate_events(r.events)
+    return narrate_events(r.a, r.events)
 
 
 def get_salient_property(person):
@@ -323,7 +323,8 @@ def narrate_conflicts_texture(conflicts, e_delta):
     print(f'These {fights} were {expansion}{connect} {overall}.')
 
 
-def narrate_events(events):
+def narrate_events(a, events):
+    a = a
     print(f"Alex met {events[0]['person']['name']} {events[0]['location']}. ")
     for phase in [Phase.COURTING, Phase.DATING, Phase.COMMITTED]:
         chunk = []
@@ -336,6 +337,11 @@ def narrate_events(events):
             event = events.pop(0)
             chunk.append(event)
         narrate_phase(chunk, phase)
+    
+    #knock alex's confidence just a touch
+    if a['confidence'] > 0.1:
+        a['confidence'] -= 0.5
+    logging.debug(a['confidence'])
     print("They never saw each other again.\n\n")
 
 

@@ -15,7 +15,7 @@ def get_nickname(name):
         'origin': '#nick#',
         'nick': ['#l#-#dog#', '#name##suffix#'],
         'l': name[0],
-        'dog': ['dog', 'dawg', 'cat', 'catz', 'star', 'Z', 'qt', 'babe', 'bob', 'mack'],
+        'dog': ['dog', 'dawg', 'cat', 'catz', 'star', 'Z', 'qt', 'babe', 'bob', 'mack', '💖'],
         'name': [name, '#l'],
         'num': ['420', '69'] + [str(n + 80) for n in range(20)],
         'suffix': ['#num#', '_#num#', '#dog##num#']

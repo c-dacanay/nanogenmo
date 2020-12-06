@@ -1,4 +1,4 @@
-from relationship import Relationship
+from relationship import Relationship, Phase
 import tracery
 import util
 import random
@@ -8,24 +8,22 @@ import datetime
 # {'prop': 'hot', 'old': 0.565142070087718, 'new': 0.4322991476397663, 'memory': ''}
 def get_epilogue(r, date):
     a = r.a
+    b = r.b
     interest = random.choice(r.a['interests'])
     hobbies = r.a['hobbies']
-    # partner = r.b['name']
     reflection = r.reflection
 
-    # if r.phase == Phase.COURTING:
+    if r.phase == Phase.DATING:
+        narrate_reflection(a, b, reflection)
+   
     get_outlook(a)
+
+    narrate_alex(a, interest, hobbies)
 
     if random.random() > 0.7:
         narrate_month(date)
-    narrate_alex(a, interest, hobbies)
 
-    # if reflection['old'] > reflection['new']:
-    #     print(reflection['prop'] + ' went down.')
-    # else:
-    #     print(reflection['prop'] + ' went up.')
 
-    # narrate_reflection(reflection)
     return ""
 
 
@@ -34,16 +32,15 @@ def narrate_alex(a, interest, hobbies):
     hobby = random.choice(hobbies)
     rules = {
         'origin':
-        f'#a# spent #modifer# time #doing# {hobby}, and #a_they# #started# {a_verb} #amount#.',
+        f'#a# took #modifer# time #doing# {hobby}, and #a_they# #started# {a_verb} #amount#.',
         'modifer':
-        ['a lot', 'a huge amount', 'some', 'a little', 'a small amount of'],
+        ['a lot', 'a huge amount of', 'some', 'a little', 'a small amount of'],
         'doing': [
             'practicing', 'watching YouTube videos about', 'enjoying',
-            'obsessing over'
+            'obsessing over', 'having fun while'
         ],
         'started': [
-            'began to', 'made time to', 'started to', 'went back to',
-            'went back to', 'prioritized going to', 'went to',
+            'began to', 'made plans to', 'started to', 'went back to', 'prioritized going to', 'went to',
             'chilled while #a_they#'
         ],
         'amount': [
@@ -59,18 +56,6 @@ def narrate_alex(a, interest, hobbies):
     grammar = tracery.Grammar(rules)
     print(grammar.flatten('#origin#'))
 
-
-def narrate_reflection(reflection):
-    # memory = reflection['memory']
-    rules = {
-        'origin': 'Alex felt #feeling# about the breakup.',
-        'feeling': ['bad', 'good', 'awful', 'relieved', 'confused']
-    }
-
-    grammar = tracery.Grammar(rules)
-    print(grammar.flatten('#origin#'))
-
-
 def get_outlook(a):
     if a['confidence'] > .6:
         rules = {
@@ -79,12 +64,13 @@ def get_outlook(a):
             'a_they': a['they'],
             'a_their': a['their'],
             'confident_statement': [
-                'Things had been going well for #a#',
-                '#a# invested time in #a_their# friendships',
+                'Overall, things had been going well for #a#',
+                '#a# invested time in #a_their# #nonromantic#',
                 '#a# felt #chill#',
                 '#a# felt #chill# regarding the encounter'
             ],
-            'chill': ['undeterred', 'unbothered', 'at ease', 'aloof', 'untroubled', 'nonchalant']
+            'chill': ['undeterred', 'unbothered', 'at ease', 'aloof', 'untroubled', 'nonchalant'],
+            'nonromantic': ['friendships', 'career', 'hobbies', 'stack of unread books']
         }
     else:
         rules = {
@@ -101,3 +87,79 @@ def get_outlook(a):
             'great': ['great', 'good', 'well', 'excited', 'confident', 'encouraged', '']
         }
     print(tracery.Grammar(rules).flatten('#origin#'))
+
+def narrate_reflection(a, b, reflection):
+    # memory = reflection['memory']
+    ref_statement = get_reflection(a, b, reflection)
+    # rules = {
+    #     'origin': 'Alex felt #feeling# about the breakup.',
+    #     'feeling': ['bad', 'good', 'awful', 'relieved', 'confused']
+    # }
+    rules = {
+        'origin': '#afterward# #realized# that #they# #might# #change#. #intent#.',
+        'afterward': ['Immediately after the break up,', 'Later', 'After the relationship ended', 'While the relationship fell apart'],
+        'realized': ['#a# realized', '#b# texted #a#', '#a# had the dawning realization'],
+        'change': ref_statement,
+        'a': a['name'],
+        'they': a['they'],
+        'their': a['their'],
+        'b': b['name'],
+        # 'them': a['them']
+    }
+    grammar = tracery.Grammar(rules)
+    print(grammar.flatten('#origin#'))
+
+def get_reflection(a, b, reflection):
+    if reflection['old'] > reflection['new']:
+        #if prop went down
+        PROP_CHANGE = {
+            'open': [
+                'obsessed with novely',
+                'overly interested in new activities all the time',
+                'too eccentric',
+                'excessively impulsive'
+            ],
+            'extra': [
+                'overly gregarious',
+                'too much of a social butterfly',
+                'insensitive to #their# partners social needs'
+            ],
+            'libido': [
+                'too overt about sex',
+                'asked for physical intimacy too much',
+                'too physically needy'
+            ],
+            'con': [
+                'excessively nitpicky',
+                'too critical of #their# partners work ethic',
+                'too particular about being clean'
+            ],
+            'agree': [
+                'a door mat in relationships',
+                'never stood up for #their# needs',
+                'too obliging to #their# romantic partners'
+            ],
+            'exp': [
+                'too particular about #their# partners',
+                'too harsh about #their# parthers relationship experience'
+            ],
+            'hot': [
+                'not attracting the type of person #they# want',
+                'cared too much about how #they# looked'
+            ],
+            'neuro': [
+                'too insecure',
+                'overly controlling',
+                'not taking tending to #their# mental health'
+            ],
+            'commit': [
+                'too invested in the idea of a long term relationship',
+                'overly committed',
+                'rushed in too quickly'
+            ]
+        } 
+        return random.choice(PROP_CHANGE[reflection['prop']])
+    else:
+        return reflection['prop'] + ' went up.'
+
+

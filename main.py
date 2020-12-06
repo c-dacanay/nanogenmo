@@ -32,7 +32,7 @@ protagonist = {
     'confidence': 0.7,
     'their': 'their',
     'they': 'they',
-    'nickname': 'xXx_Alex_xXx',
+    'nickname': 'alex',
     'interests': random.sample(INTERESTS.keys(), random.randint(1, 3)),
     'hobbies': ''
 }
@@ -89,7 +89,7 @@ def generate_book(num):
         r.simulate()
         r.simulate_reflection()
         date = r.events[len(r.events) - 1]['date']
-        # relationship_narrator.narrate(r)
+        relationship_narrator.narrate(r)
         print('# Chapter ' + str(i + 1.5))
         print(epilogue.get_epilogue(r, date))
 

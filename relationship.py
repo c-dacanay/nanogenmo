@@ -51,7 +51,7 @@ PROP_NAMES = {
     'neuro': 'neurotic',
     'commit': 'serious about the relationship',
     'libido': 'interested in sex',
-    'exp': 'mature for their age',
+    'exp': 'mature',
     'con': 'messy'
 }
 
