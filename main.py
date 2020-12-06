@@ -87,9 +87,10 @@ def generate_book(num):
         new_person = generate_person()
         r = Relationship(protagonist, new_person, date)
         r.simulate()
-        # r.simulate_reflection()
+        r.simulate_reflection()
         date = r.events[len(r.events) - 1]['date']
         relationship_narrator.narrate(r)
+        print('# Chapter ' + str(i + 1.5))
         print(epilogue.get_epilogue(r))
 
 

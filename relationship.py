@@ -441,8 +441,6 @@ class Relationship:
         changed_prop = person_a[target]
         person_a[target] = (person_a[target] * 7 + person_b[target] * 3) / 10
         new_prop = person_a[target]
-
-        print(changed_prop, new_prop)
         #Catalog events by type
         events = self.events
         event_types = {
@@ -469,8 +467,7 @@ class Relationship:
                 event_num = event_types[key]
                 event_memory = key
                 # print(event_memory, event_num, 'event stuff')
-
-        return {
+        self.reflection = {
             'prop': target,
             'old': changed_prop,
             'new': new_prop,
