@@ -431,6 +431,7 @@ class Relationship:
 
     def simulate_reflection(self):
         #Given the relationship, determine Alex's stat change
+        #TODO impliment phases
         person_a = self.a
         person_b = self.b
         max_diff = 0

@@ -13,7 +13,7 @@ from tracery.modifiers import base_english
 from util import get_ab
 from interests import INTERESTS
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.WARN)
 
 
 def narrate(r: Relationship):
@@ -73,15 +73,21 @@ def narrate_commit(event):
             "#a# asked to start dating.",
             "#a# asked if #b# would be interested in dating.",
         ],
-        'dating_result': f"#b# agreed {util.enthusiastically(enthusiasm)}. " if event['success_ratio'] >= 1 else f'#b# said that perhaps they were\'t quite ready yet. ',
-        'ily_challenge': f"#a# says \"I love you\"",
+        'dating_result':
+        f"#b# agreed {util.enthusiastically(enthusiasm)}. "
+        if event['success_ratio'] >= 1 else
+        f'#b# said that perhaps they were\'t quite ready yet. ',
+        'ily_challenge':
+        f"#a# says \"I love you\"",
         'ily_result': [
             '#b# could not say it back. #a# is hurt, but is understanding.'
             if event['success_ratio'] < 1 else
             f'#b# returns the words {util.enthusiastically(enthusiasm)}.'
         ],
-        'a': a['name'],
-        'b': b['name'],
+        'a':
+        a['name'],
+        'b':
+        b['name'],
     }
     grammar = tracery.Grammar(rules)
     if event['phase'] == Phase.COURTING:
@@ -237,7 +243,7 @@ def narrate_conflicts_texture(conflicts, e_delta):
         'rarely fought, but when they did they', 'occasionally', 'sometimes',
         'often', 'always'
     ],
-        len(conflicts) / CHUNK_SIZE * 1.5)
+                      len(conflicts) / CHUNK_SIZE * 1.5)
     fought = random.choice(
         ['disagreed', 'fought', 'quarrelled', 'had spats', 'argued'])
     about = random.choice(['about', 'over'])
@@ -379,23 +385,28 @@ def narrate_experience(event):
         return
     if event['target_property'] == 'open':
         rules = {
-            'a': a['name'],
-            'b': b['name'],
-            'their': a['their'],
-            'hobby': [f"{random.choice(INTERESTS[event['interest']]['hobbies'])}"],
+            'a':
+            a['name'],
+            'b':
+            b['name'],
+            'their':
+            a['their'],
+            'hobby':
+            [f"{random.choice(INTERESTS[event['interest']]['hobbies'])}"],
             #types of classes
-            'food_class': ['grilling', 'cheesemaking', 'cooking', 'bartending', 'cocktail-making', 'beer-brewing', 'breadmaking'],
+            'food_class': [
+                'grilling', 'cheesemaking', 'cooking', 'bartending',
+                'cocktail-making', 'beer-brewing', 'breadmaking'
+            ],
             'proposed': [
-                "asked to", 
-                "begged to", 
-                "proposed that they", 
-                "wondered if it would be fun to", 
-                "suggested that they", 
-                "wanted to", 
-                "invited #b# to"],
+                "asked to", "begged to", "proposed that they",
+                "wondered if it would be fun to", "suggested that they",
+                "wanted to", "invited #b# to"
+            ],
             'hobby_proposal': [
                 f"#a# #proposed# go to {random.choice(INTERESTS[event['interest']]['location'])}.",
-                f"#a# #proposed# {random.choice(INTERESTS[event['interest']]['verb'])}."]
+                f"#a# #proposed# {random.choice(INTERESTS[event['interest']]['verb'])}."
+            ]
         }
         grammar = tracery.Grammar(rules)
         print(grammar.flatten('#hobby_proposal#'))
@@ -403,8 +414,10 @@ def narrate_experience(event):
             f"OPEN EXPERIENCE {event['interest']} {event['threshold']}")
     elif event['target_property'] in ['extra', 'libido']:
         rules = {
-            'origin': f"#they# #enjoyed# #{event['target_property']}#.",
-            'extra': util.rank([
+            'origin':
+            f"#they# #enjoyed# #{event['target_property']}#.",
+            'extra':
+            util.rank([
                 'a tranquil night together',
                 'a tranquil evening watching Netflix',
                 'a quiet night in together',
@@ -413,25 +426,27 @@ def narrate_experience(event):
                 'an afternoon people-watching',
                 'a boisterous night out at the club',
             ], event['threshold']),
-            'libido': util.rank([
+            'libido':
+            util.rank([
                 'a quiet evening together',
                 'a subdued evening together',
                 'a passionate evening together',
                 'an intensely passionate evening together',
             ], event['threshold']),
-            'they': ['They', 'The couple', '#a# and #b#', 'The two of them', 'The pair'],
-            'enjoyed': util.rank([
-                'spent',
-                'were happy to spend',
-                'enjoyed',
-                'were excited to spend',
-                'were thrilled to spend',
-                'savored',
-                'reveled in',
-                'relished'
+            'they': [
+                'They', 'The couple', '#a# and #b#', 'The two of them',
+                'The pair'
+            ],
+            'enjoyed':
+            util.rank([
+                'spent', 'were happy to spend', 'enjoyed',
+                'were excited to spend', 'were thrilled to spend', 'savored',
+                'reveled in', 'relished'
             ], event['delta']),
-            'a': a['name'],
-            'b': b['name'],
+            'a':
+            a['name'],
+            'b':
+            b['name'],
         }
         print(tracery.Grammar(rules).flatten('#origin#'))
     else:
@@ -450,12 +465,18 @@ def narrate_experience(event):
             'exp': [
                 'was a little nervous',
             ],
-            'a': a['name'] if a[event['target_property']] > b[event['target_property']] else b['name'],
-            'b': b['name'] if a[event['target_property']] > b[event['target_property']] else a['name'],
+            'a':
+            a['name']
+            if a[event['target_property']] > b[event['target_property']] else
+            b['name'],
+            'b':
+            b['name']
+            if a[event['target_property']] > b[event['target_property']] else
+            a['name'],
         }
         print(tracery.Grammar(rules).flatten('#origin#'))
         #logging.debug(f"Event: {event}")
- 
+
 
 def narrate_experience_DEPRECATED(event):
     a, b = get_ab(event)
