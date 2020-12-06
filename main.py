@@ -9,12 +9,14 @@ import names
 import argparse
 from interests import INTERESTS
 
-# function to generate hobbies from interests 
+
+# function to generate hobbies from interests
 def getHobbies(ints):
     hobbies = []
-    for x in ints: 
-        hobbies.append(random.choice(INTERESTS[x]["hobbies"]))  
+    for x in ints:
+        hobbies.append(random.choice(INTERESTS[x]["hobbies"]))
     return hobbies
+
 
 protagonist = {
     "name": "Alex",
@@ -31,13 +33,14 @@ protagonist = {
     'their': 'their',
     'they': 'they',
     'nickname': 'xXx_Alex_xXx',
-    'interests': random.sample(INTERESTS.keys(), random.randint(1,3)),
+    'interests': random.sample(INTERESTS.keys(), random.randint(1, 3)),
     'hobbies': ''
 }
 
 # set hobbies based on existing interests
 protagonist['hobbies'] = getHobbies(protagonist['interests'])
- 
+
+
 def generate_person():
     if random.random() > .5:
         gender = "male"
@@ -54,7 +57,7 @@ def generate_person():
         them = "her"
 
     name = names.get_first_name(gender=gender)
-    personInterests = random.sample(INTERESTS.keys(), random.randint(0,3))
+    personInterests = random.sample(INTERESTS.keys(), random.randint(0, 3))
     personHobbies = getHobbies(personInterests)
     return {
         "name": name,
@@ -84,14 +87,17 @@ def generate_book(num):
         new_person = generate_person()
         r = Relationship(protagonist, new_person, date)
         r.simulate()
+        # r.simulate_reflection()
         date = r.events[len(r.events) - 1]['date']
         relationship_narrator.narrate(r)
-        print(epilogue.get_epilogue(r, new_person))
+        print(epilogue.get_epilogue(r))
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="nanogenmo")
-    parser.add_argument('-n', dest='num_chaps', type=int,
+    parser.add_argument('-n',
+                        dest='num_chaps',
+                        type=int,
                         help='the number of chapters to generate',
                         default=10)
     args = parser.parse_args()

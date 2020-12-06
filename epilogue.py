@@ -3,7 +3,7 @@ from relationship import Relationship
 # import relationship_narrator
 
 
-def get_epilogue(rel, person):
+def get_epilogue(r):
     # Given a relationship object and person return a string
     # representing the epilogue of the relationship
 
@@ -14,41 +14,6 @@ def get_epilogue(rel, person):
     # if rel > than 4 events, remember a positive development
     # [eventually] reflect the phase of rel and alex's changed props
 
-    r = rel
+    # r = rel
     # print(l)
     return ""
-
-
-if __name__ == '__main__':
-
-    test_person = {
-        'name': 'Lover',
-        'hot': 1,
-        'open': .5,
-        'con': .5,
-        'extra': .5,
-        'agree': .5,
-        'neuro': .5,
-        'commit': .5,
-        'libido': .5,
-        'exp': .5
-    }
-
-    protagonist = {
-        "name": "Alex",
-        "hot": 0.8,
-        "open": .5,
-        "con": .5,
-        "extra": .5,
-        "agree": .5,
-        "neuro": .5,
-        "commit": .5,
-        "libido": .5,
-        "exp": .5,
-        'confidence': 0.7,
-        'their': 'their'
-    }
-
-    r = Relationship(protagonist, test_person)
-    r.simulate()
-    print(get_epilogue(r, test_person))
