@@ -339,9 +339,9 @@ def narrate_events(a, events):
         narrate_phase(chunk, phase)
     
     #knock alex's confidence just a touch
-    if a['confidence'] > 0.1:
-        a['confidence'] -= 0.5
-    logging.debug(a['confidence'])
+    # logging.debug(f"Alex's confidence is {a['confidence']}")
+    a['confidence'] *= .9 + random.random() * 0.1
+    # logging.debug(f"Alex's confidence is {a['confidence']}")
     print("They never saw each other again.\n\n")
 
 

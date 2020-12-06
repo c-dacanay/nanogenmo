@@ -363,12 +363,14 @@ class Relationship:
         ratio = score / PHASE_SCORE_THRESHOLDS[self.phase]
         event['success_ratio'] = ratio
         if ratio > 1.2:
-            # Random increase to interest + commitment if the response was enthusiastic
+            # Random increase to interest + commitment + confidence if the response was enthusiastic
             a['commit'] *= 1 + random.random() * 0.1
             a['interest'] *= 1 + random.random() * 0.2
             a['commit'] *= 1 + random.random() * 0.1
             b['interest'] *= 1 + random.random() * 0.2
             a['neuro'] *= 0.9 + random.random() * 0.1
+            b['confidence'] *= 1 + random.random() * 0.5
+            a['confidence'] *= 1 + random.random() * 0.5
         elif ratio < 0.8:
             # Debuffs if response was not enthusiastic:
             a['commit'] *= 0.9 + random.random() * 0.1
@@ -376,6 +378,8 @@ class Relationship:
             a['commit'] *= 0.9 + random.random() * 0.1
             b['interest'] *= 0.8 + random.random() * 0.2
             a['neuro'] *= 1 + random.random() * 0.1
+            b['confidence'] *= 0.8 + random.random() * 0.1
+            a['confidence'] *= 0.8 + random.random() * 0.1
 
         event['delta'] = (ratio - 1) / 2
         event['phase'] = self.phase

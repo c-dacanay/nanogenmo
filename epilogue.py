@@ -15,14 +15,16 @@ def get_epilogue(r, date):
 
     if r.phase == Phase.DATING:
         narrate_reflection(a, b, reflection)
+        #TODO narrate memory
    
     get_outlook(a)
-
     narrate_alex(a, interest, hobbies)
+    #TODO narrate affect
 
     if random.random() > 0.7:
         narrate_month(date)
-
+    if random.random() > 0.5:
+        andthen()
 
     return ""
 
@@ -53,11 +55,10 @@ def narrate_alex(a, interest, hobbies):
         'a_they':
         a['they'],
     }
-    grammar = tracery.Grammar(rules)
-    print(grammar.flatten('#origin#'))
+    print(tracery.Grammar(rules).flatten('#origin#'))
 
 def get_outlook(a):
-    if a['confidence'] > .6:
+    if a['confidence'] > .5:
         rules = {
             'origin': '#confident_statement#.',
             'a': a['name'],
@@ -79,12 +80,14 @@ def get_outlook(a):
             'a_they': a['they'],
             'a_their': a['their'],
             'insecure_statement': [
-                'Everything harder for a while',
-                '#a# wondered if #a_they# were unlovable',
-                '#a# did not feel #great# after that',
-                'Everything felt a little gray'
+                '#Things# felt #hard# for a while',
+                '#a# #felt# #a_they# were unlovable',
+                '#a# did not feel #great# after that'
             ],
-            'great': ['great', 'good', 'well', 'excited', 'confident', 'encouraged', '']
+            'Things': ['Everything', 'Life', 'Getting up', 'Dating'],
+            'great': ['great', 'good', 'well', 'excited', 'confident', 'encouraged'],
+            'felt': ['felt as if', 'was sure that', 'felt certain that', 'wondered if'],
+            'hard': ['hard', 'grey', 'difficult', 'lonely', 'like a struggle', 'impossible']
         }
     print(tracery.Grammar(rules).flatten('#origin#'))
 
@@ -99,15 +102,24 @@ def narrate_reflection(a, b, reflection):
         'origin': '#afterward# #realized# that #they# #might# #change#. #intent#.',
         'afterward': ['Immediately after the break up,', 'Later', 'After the relationship ended', 'While the relationship fell apart'],
         'realized': ['#a# realized', '#b# texted #a#', '#a# had the dawning realization'],
+        'might': ['could be', 'were', 'might be', 'were just', 'had been'],
         'change': ref_statement,
+        'intent': ['#a# decided to change', '#a# would have to work on it', 'It hurt to realize', '#a# resolved to improve'],
         'a': a['name'],
         'they': a['they'],
         'their': a['their'],
         'b': b['name'],
         # 'them': a['them']
     }
-    grammar = tracery.Grammar(rules)
-    print(grammar.flatten('#origin#'))
+    print(tracery.Grammar(rules).flatten('#origin#'))
+
+def andthen():
+    rules = {
+    'origin': '#then#...',
+    'then': ['Then Alex saw', 'Until there was', 'Then, one day']
+    # 'them': a['them']
+    }
+    print(tracery.Grammar(rules).flatten('#origin#'))
 
 def get_reflection(a, b, reflection):
     if reflection['old'] > reflection['new']:
@@ -150,7 +162,7 @@ def get_reflection(a, b, reflection):
             'neuro': [
                 'too insecure',
                 'overly controlling',
-                'not taking tending to #their# mental health'
+                'not tending to #their# mental health'
             ],
             'commit': [
                 'too invested in the idea of a long term relationship',
