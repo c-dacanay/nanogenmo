@@ -360,6 +360,8 @@ def narrate_phase(events, phase):
 
 def narrate_experience(event):
     a, b = get_ab(event)
+    if event.get('phase') == Phase.COURTING and random.random() < 0.6:
+        print(artifacts.get_first_date(event))
     if event['rejected']:
         # TODO
         return
@@ -369,14 +371,14 @@ def narrate_experience(event):
             f"OPEN EXPERIENCE {event['interest']} {event['threshold']}")
     elif event['target_property'] in ['extra', 'libido']:
         rules = {
-            'origin': f"#They# #enjoyed# #{event['target_property']}",
+            'origin': f"#they# #enjoyed# #{event['target_property']}#.",
             'extra': util.rank([
-                'a quiet night in',
+                'a quiet night in together',
                 'a night out'
             ], event['threshold']),
             'libido': util.rank([
-                'a subdued evening',
-                'a passionate evening',
+                'a subdued evening together',
+                'a passionate evening together',
             ], event['threshold']),
             'they': ['They', 'The couple', '#a# and #b#', 'The two of them', 'The pair'],
             'enjoyed': [
@@ -387,7 +389,26 @@ def narrate_experience(event):
         }
         print(tracery.Grammar(rules).flatten('#origin#'))
     else:
-        logging.debug(f"Event: {event}")
+        rules = {
+            'origin': [
+                f"#b# #{event['target_property']}#.",
+            ],
+            'hot': [
+                'loved to run their hands over #a#\'s body',
+                'loved to comment on #a#\'s body',
+            ],
+            'con': [
+                'was messy',
+                'was disorganized',
+            ],
+            'exp': [
+                'was a little nervous',
+            ],
+            'a': a['name'] if a[event['target_property']] > b[event['target_property']] else b['name'],
+            'b': b['name'] if a[event['target_property']] > b[event['target_property']] else a['name'],
+        }
+        print(tracery.Grammar(rules).flatten('#origin#'))
+        #logging.debug(f"Event: {event}")
 
 
 def narrate_experience_DEPRECATED(event):
