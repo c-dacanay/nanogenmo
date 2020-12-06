@@ -11,6 +11,7 @@ import tracery
 import artifacts
 from tracery.modifiers import base_english
 from util import get_ab
+from interests import INTERESTS
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -360,34 +361,35 @@ def narrate_phase(events, phase):
 
 def narrate_experience(event):
     a, b = get_ab(event)
-    if event['rejected']:
-        # TODO
-        return
+    # if event['rejected']:
+    #     # TODO
+    #     return
     if event['target_property'] == 'open':
-        # Narrate hobby / date activity!
-        logging.debug(
-            f"OPEN EXPERIENCE {event['interest']} {event['threshold']}")
-    elif event['target_property'] in ['extra', 'libido']:
         rules = {
-            'origin': f"#They# #enjoyed# #{event['target_property']}",
-            'extra': util.rank([
-                'a quiet night in',
-                'a night out'
-            ], event['threshold']),
-            'libido': util.rank([
-                'a subdued evening',
-                'a passionate evening',
-            ], event['threshold']),
-            'they': ['They', 'The couple', '#a# and #b#', 'The two of them', 'The pair'],
-            'enjoyed': [
-                'spent', 'enjoyed'
-            ],
             'a': a['name'],
             'b': b['name'],
+            'their': a['their'],
+            'hobby': [f"{random.choice(INTERESTS[event['interest']]['hobbies'])}"],
+            #types of classes
+            'food_class': ['grilling', 'cheesemaking', 'cooking', 'bartending', 'cocktail-making', 'beer-brewing', 'breadmaking'],
+            'proposed': [
+                "asked to", 
+                "begged to", 
+                "proposed that they", 
+                "wondered if it would be fun to", 
+                "suggested that they", 
+                "wanted to", 
+                "invited #b# to"],
+            'hobby_proposal': [
+                f"#a# #proposed# go to {random.choice(INTERESTS[event['interest']]['location'])}.",
+                f"#a# #proposed# {random.choice(INTERESTS[event['interest']]['verb'])}."]
         }
-        print(tracery.Grammar(rules).flatten('#origin#'))
+        grammar = tracery.Grammar(rules)
+        print(grammar.flatten('#hobby_proposal#'))
+        logging.debug(
+            f"OPEN EXPERIENCE {event['interest']} {event['threshold']}")
     else:
-        logging.debug(f"Event: {event}")
+        narrate_experience_DEPRECATED(event)
 
 
 def narrate_experience_DEPRECATED(event):
