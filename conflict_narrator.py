@@ -1,4 +1,5 @@
 import tracery
+import random
 import business_gen
 from util import get_ab
 import util
@@ -12,52 +13,63 @@ def get_problem(a, b, target_p):
         PROBLEM_NAMES = {
             'open': [
                 'never interested in doing what #a# wanted to do',
+                'never interested in trying new things',
+                'only interested in doing boring activities',
+                'not willing to branch out for date ideas',
                 'too boring',
             ],
             'extra': [
                 'never interested in doing anything social',
+                'not interested enough in socializing',
                 'only interested in staying home',
             ],
             'libido': [
                 'not initiating sex often enough',
+                'not asking #a# for sex often enough',
                 'not passionate enough about the relationship',
             ],
             'con': [
                 'too messy',
+                'too disorganized',
                 'not hardworking enough',
             ],
             'neuro': [
                 'not paying paying enough attention to the relationship',
                 'was not texting often enough',
+                'was not arranging dates often enough',
             ],
             'agree': [
                 'never wanted to adapt for the sake of the relationship',
-                'often rude'
+                'often rude to #b#'
             ],
             'exp': [
                 'was too immature',
                 'was kind of a crybaby'
             ],
             'hot': [
-                'was not hot enough'
+                'was not hot enough',
+                'needed to hit the gym'
             ]
         }
     else:
         # problems for if a is lower than b
         PROBLEM_NAMES = {
             'open': [
-                'always #pushing# to do weird activities',
+                'always #pushing# #a# to do weird new activities',
+                "not understanding of the fact that #a# really did not enjoy discovering things the way #b# did",
             ],
             'extra': [
-                'always #pushing# to socialize',
+                'always #pushing# #a# to socialize',
+                "not understanding of the fact that #a# really did not enjoy socializing the way #b# did",
             ],
             'libido': [
-                'always #pushing# for sex',
-                'always touching me in inappropriate situations',
+                'always #pushing# #a# for more sex',
+                "was not understanding of the fact that #a# just didn't like sex as much as #b#"
             ],
             'con': [
                 'too nitpicky',
                 'too obsessed with details',
+                'too much of a clean freak',
             ],
             'neuro': [
                 'too neurotic',
@@ -66,12 +78,14 @@ def get_problem(a, b, target_p):
             ],
             'agree': [
                 'too wishy washy',
+                'kind of spineless'
             ],
             'exp': [
-                'too demanding',
+                'posessing of too high standards',
             ],
             'hot': [
-                'too hot'
+                'too hot, always getting unwanted attention',
+                'too hot, making #b# feel insecure',
             ]
         }
     return PROBLEM_NAMES[target_p]
@@ -104,12 +118,15 @@ def get_meetup(a, b):
 
 def get_problem_statement(a, b, problem_phrase, event):
     rules = {
-        'origin': ['#problem_statement#. #reaction#.'],
+        'origin': ['#problem_statement#. #anger# #reaction#.'],
         'problem_statement': [
             '#a# was #upset# because #a_they# felt that #b# was #problem#',
             '#a# told #b# that #b# was #problem#',
-            '"Hey, I feel like you are #problem#"',
-            '"Hey, you are really #problem#"',
+        ],
+        'anger': [
+            "It just wouldn't do. ",
+            "Something had to change. ",
+            "#a# wondered if #b# would be willing to do things differently."
         ],
         'upset': ['upset', 'frustrated', 'mad', 'angry'],
         'a': a['name'],
@@ -138,10 +155,23 @@ def get_response(a, b, event):
     rules = {
         'pos': f"#{biggest_roll}#",
         'neg': "#neuro#",
-        'agree': ['#b# wanted to please #a##apology#'],
-        'commit': ['#b# wanted to do right by the relationship#apology#', ],
-        'interest': ['#b# didn\'t want to lose #a##apology#'],
-        'neuro': ['#b# was #angry##worse#'],
+        'agree': [
+            '#b# wanted to please #a##apology#'
+            '#b# didn\'t want #a# to be angry#apology#'
+        ],
+        'commit': [
+            '#b# wanted to do right by the relationship#apology#',
+            '#b# didn\'t want to lose their partner#apology#',
+        ],
+        'interest': [
+            '#b# didn\'t want to lose #a##apology#',
+            '#b# liked #a# quite a bit#apology#',
+        ],
+        'neuro': [
+            '#b# was #angry##worse#',
+            '#b# accused #a# of not liking them enough#worse#',
+            '#b# accused #a# of not being invested enough in the relationship#worse#',
+        ],
         'angry': [
             'furious',
             'upset',
@@ -153,17 +183,22 @@ def get_response(a, b, event):
         ],
         'apology': [
             ', and immediately apologized',
+            ', and apologized profusely',
             ', and promised to make amends',
             ', and put on a display of repentance',
             ', and bought flowers for #a# the next day',
+            ', and bought a coffee for #a# the next morning',
         ],
         'worse': [
-            '. The couple argued for hours.',
-            '. The couple failed to reach a conclusion.',
+            '. #they# #argued# #bitterly#.',
+            '. #they# failed to reach a conclusion.',
         ],
+        'they': ['They', 'The couple', 'The pair'],
         'a': a['name'],
         'a_they': a['they'],
         'b': b['name'],
+        'argued': ['argued', 'fought', 'clashed'],
+        'bitterly': ['bitterly', 'heatedly', 'for hours', 'late into the night', 'acridly', 'acidly', 'venemously'],
     }
     grammar = tracery.Grammar(rules)
     if (event['delta'] > 0):
@@ -184,33 +219,54 @@ def narrate_conflict(event):
         # A was grumpy, but didn't actually initiate a fight.
         logging.debug("FIGHT ABORTED")
         rules = {
-            'origin': '#sometimes# #a# #thought# that #b# was #problem#. #but#',
+            'origin': '#sometimes# #a# #thought# that #perhaps# #b# was #problem#. #but#',
             'a': a['name'],
             'b': b['name'],
-            'sometimes': ['sometimes', 'often', 'occasionally', 'from time to time'],
+            'sometimes': ['Sometimes', 'Often', 'Occasionally', 'From time to time', 'Some nights', 'On rare occassion'],
+            'perhaps': ['perhaps', 'maybe', '', 'it was possible that', 'compared to previous partners at least, that'],
             'thought': ['thought', 'considered', 'wondered', 'felt concerned'],
             'problem': problem_phrase,
             'pushing': ['pushing', 'telling', 'convincing', 'nagging', 'dragging'],
             'but': [
-                '#a# pushed the thought away. ',
-                '#a# let the thought fade away. '
-            ]
+                '#a# pushed the thought the the back of #a_their# mind, and #return#',
+                'But the thought would fade, and #a# #return#',
+                '#a# let the thought fade away, and #return#'
+            ],
+            'return': [
+                '#returned# to #a_their# coffee.'
+                '#returned# to #a_their# breakfast.'
+                '#returned# to #a_their# work.'
+                f"#returned# to reading about {random.choice(a['hobbies'])}" if a[
+                    'hobbies'] else 'returned to reading.',
+                f"#returned# to watching Youtube videos about {random.choice(a['hobbies'])}" if a[
+                    'hobbies'] else 'returned to surfing the Internet.',
+            ],
+            'returned': ['returned', 'continued', 'went back to'],
+            'a_their': a['their'],
         }
         print(tracery.Grammar(rules).flatten('#origin#'))
         return
 
-    # Print some pretext
-    artifact_pretext = artifacts.get_fight_trigger(event)
-    print(artifact_pretext)
+    if random.random() < 0.7:
+        # Print some pretext
+        artifact_pretext = artifacts.get_fight_trigger(event)
+        print(artifact_pretext)
 
-    # Describe meeting
-    meetup = get_meetup(a, b)
-    print(meetup)
+        # Describe meeting
+        meetup = get_meetup(a, b)
+        print(meetup)
 
-    # A expresses the complaint
-    complaint = get_problem_statement(a, b, problem_phrase, event)
-    print(complaint)
+        # A expresses the complaint
+        complaint = get_problem_statement(a, b, problem_phrase, event)
+        print(complaint)
 
-    # B responds
-    response = get_response(a, b, event)
-    print(response)
+        # B responds
+        response = get_response(a, b, event)
+        print(response)
+    else:
+        response = get_response(a, b, event)
+        problem_statement = tracery.Grammar(
+            {'origin': problem_phrase, 'pushing': 'pushing'}).flatten('#origin#')
+        print(
+            f"They often fought because {b['name']} was {problem_statement}. {response}"
+        )

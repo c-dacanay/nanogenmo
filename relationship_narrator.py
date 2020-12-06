@@ -31,10 +31,16 @@ def get_salient_property(person):
         except:
             pass
     props = {
-        'hot': [f"{person['name']}'s {random.choice(['lithe', 'well-defined', 'striking'])} {random.choice(['features', 'body', 'muscles'])}"],
-        'open': [f"{person['name']}'s {random.choice(['pealing laughter', 'earnest expression'])}"],
+        'hot': [
+            f"{person['name']}'s {random.choice(['lithe', 'well-defined', 'striking'])} {random.choice(['features', 'body', 'muscles'])}"
+        ],
+        'open': [
+            f"{person['name']}'s {random.choice(['pealing laughter', 'earnest expression'])}"
+        ],
         'con': [f"{person['name']}'s intense focus"],
-        'extra': [f"{person['name']}'s friendly {random.choice(['disposition', 'demeanor', 'attitude'])}"],
+        'extra': [
+            f"{person['name']}'s friendly {random.choice(['disposition', 'demeanor', 'attitude'])}"
+        ],
         'agree': [f"a quiet kindness in {person['name']}'s movements"],
         'neuro': [f"a raw intensity in {person['name']}'s articulations"],
         'libido': [f"{person['name']}'s deep sexual energy"],
@@ -47,8 +53,10 @@ def get_salient_property(person):
 
 
 def get_interest_sentence(a, b, interest):
-    adjective = ['noticed', 'was struck by',
-                 'was fascinated by', "couldn't help but notice"]
+    adjective = [
+        'noticed', 'was struck by', 'was fascinated by',
+        "couldn't help but notice"
+    ]
     prop = get_salient_property(b)
     return f"{a['name']} {random.choice(adjective)} {prop}. "
 
@@ -65,41 +73,21 @@ def narrate_commit(event):
             "#a# asked to start dating.",
             "#a# asked if #b# would be interested in dating.",
         ],
-        'dating_result': f"#b# agreed {util.enthusiastically(enthusiasm)}. ",
+        'dating_result': f"#b# agreed {util.enthusiastically(enthusiasm)}. " if event['success_ratio'] >= 1 else f'#b# said that perhaps they were\'t quite ready yet. ',
         'ily_challenge': f"#a# says \"I love you\"",
         'ily_result': [
-            '#b# could not say it back. #a# is hurt, but is understanding.' if event[
-                'success_ratio'] < 1 else f'#b# returns the words {util.enthusiastically(enthusiasm)}.'
+            '#b# could not say it back. #a# is hurt, but is understanding.'
+            if event['success_ratio'] < 1 else
+            f'#b# returns the words {util.enthusiastically(enthusiasm)}.'
         ],
         'a': a['name'],
         'b': b['name'],
     }
     grammar = tracery.Grammar(rules)
-    # TODO phase is off by one
-    if event['phase'] == Phase.DATING:
+    if event['phase'] == Phase.COURTING:
         print(grammar.flatten('#courting_phase#'))
-    elif event['phase'] == Phase.COMMITTED:
+    elif event['phase'] == Phase.DATING:
         print(grammar.flatten('#dating_phase#'))
-        '''
-    text = f"{a['name']} asked {b['name']} for more commitment in the relationship. "
-    if event['success_ratio'] > 1:
-        adv = util.enthusiastically(util.scale(
-            event['success_ratio'], 1, 3, 0, 1))
-        text += random.choice([
-            f"{b['name']} {adv} agreed.",
-            f"{b['name']} agreed {adv}.",
-        ])
-    elif event['success_ratio'] < 0.5:
-        text += random.choice([
-            f"{b['name']} refused quickly.",
-            f"{b['name']} was silent."
-        ])
-    else:
-        text += random.choice([
-            f"{b['name']} said {b['they']} needed some time to think about it."
-        ])
-    print(text)
-    '''
     print('\n')
 
 
@@ -109,14 +97,14 @@ def narrate_meeting(event):
     text = ""
     a, b = get_ab(event)
     if event['protagonist_initiated']:
-        text += get_interest_sentence(event['protagonist'],
-                                      event['person'], event['protagonist']['interest'])
+        text += get_interest_sentence(event['protagonist'], event['person'],
+                                      event['protagonist']['interest'])
     else:
-        text += get_interest_sentence(event['person'],
-                                      event['protagonist'],
+        text += get_interest_sentence(event['person'], event['protagonist'],
                                       event['person']['interest'])
-    adverb = util.rank(['nervously', 'shyly', 'quietly', '',
-                        'gently', 'intently', 'boldly'], a['interest'])
+    adverb = util.rank(
+        ['nervously', 'shyly', 'quietly', '', 'gently', 'intently', 'boldly'],
+        a['interest'])
 
     if event['delta'] <= 0:
         REJECTIONS = [
@@ -131,16 +119,12 @@ def narrate_meeting(event):
             f"They exchanged several friendly words, before agreeing to meet again sometime soon. "
         ])
         contact = random.choice([
-            'phone number',
-            'email',
-            'contact',
+            'phone number', 'email', 'contact',
             'phone number scrawled onto a crumpled piece of paper',
             'phone number hastily scribbled on a napkin',
             'email address dashed onto a post-it note',
-            'Discord server invite',
-            'laughter echoing in their ears',
-            'smile etched into their memory',
-            'Instagram handle'
+            'Discord server invite', 'laughter echoing in their ears',
+            'smile etched into their memory', 'Instagram handle'
         ])
         follow3 = random.choice([
             f"{a['name']} left with {b['name']}'s {contact}. ",
@@ -196,8 +180,10 @@ def narrate_dating_chunk(events):
     common_exp_type = max(counts, key=lambda k: counts[k])
     they = random.choice(['The two of them', 'The couple', 'They'])
     pre = random.choice(['found that they ', '', ''])
-    loved = random.choice(['continued', 'liked', 'loved',
-                           'enjoyed', 'spent much time', 'continued to bond by'])
+    loved = random.choice([
+        'continued', 'liked', 'loved', 'enjoyed', 'spent much time',
+        'continued to bond by'
+    ])
     E_DESC = {
         'open': 'going on adventures together',
         # TODO: with hobbies, we can do something interesting
@@ -226,8 +212,17 @@ def narrate_conflicts_texture(conflicts, e_delta):
     protag = conflicts[0]['protagonist']
     person = conflicts[0]['person']
     delta = sum([e['delta'] for e in conflicts])
-    counts = {'open': 0, 'extra': 0, 'libido': 0, 'neuro': 0,
-              'commit': 0, 'con': 0, 'exp': 0, 'agree': 0, 'hot': 0}
+    counts = {
+        'open': 0,
+        'extra': 0,
+        'libido': 0,
+        'neuro': 0,
+        'commit': 0,
+        'con': 0,
+        'exp': 0,
+        'agree': 0,
+        'hot': 0
+    }
     for e in conflicts:
         counts[e['target_property']] += e['delta']
     common_exp_type = min(counts, key=lambda k: counts[k])
@@ -238,24 +233,40 @@ def narrate_conflicts_texture(conflicts, e_delta):
         a = person
         b = protag
     they = random.choice(['The two of them', 'The couple', 'They'])
-    often = util.rank(['rarely fought, but when they did they', 'occasionally',
-                       'sometimes', 'often', 'always'], len(conflicts) / CHUNK_SIZE * 1.5)
+    often = util.rank([
+        'rarely fought, but when they did they', 'occasionally', 'sometimes',
+        'often', 'always'
+    ],
+        len(conflicts) / CHUNK_SIZE * 1.5)
     fought = random.choice(
         ['disagreed', 'fought', 'quarrelled', 'had spats', 'argued'])
     about = random.choice(['about', 'over'])
     C_DESC = {
-        'open': [f"{b['name']}'s reluctance to try new things", f"{a['name']} pushing {b['name']} out of {b['their']} comfort zone"],
-        'extra': [f"{b['name']}'s lack of social energy", f"{a['name']}'s overly gregarious spirit"],
-        'libido': [f"{b['name']}'s aggressive sex drive", f"{a['name']}'s lack of interest in sex"],
+        'open': [
+            f"{b['name']}'s reluctance to try new things",
+            f"{a['name']} pushing {b['name']} out of {b['their']} comfort zone"
+        ],
+        'extra': [
+            f"{b['name']}'s lack of social energy",
+            f"{a['name']}'s overly gregarious spirit"
+        ],
+        'libido': [
+            f"{b['name']}'s aggressive sex drive",
+            f"{a['name']}'s lack of interest in sex"
+        ],
         'neuro': [f"{a['name']}'s anxiety"],
-        'con': [f"{b['name']}'s messiness", f"{a['name']}'s preference for cleanliness"],
+        'con': [
+            f"{b['name']}'s messiness",
+            f"{a['name']}'s preference for cleanliness"
+        ],
         'hot': [f"{b['name']}'s insecurity about their appearance"],
         'exp': [f"{b['name']}'s lack of experience with relationships"],
         'agree': [f"{b['name']}'s lack of agreeability"],
         'commit': [f"{b['name']}'s lack of commitment to the relationship"]
     }
     print(
-        f"{they} {often} {fought} {about} {random.choice(C_DESC[common_exp_type])}. ")
+        f"{they} {often} {fought} {about} {random.choice(C_DESC[common_exp_type])}. "
+    )
 
     logging.debug(f"conflict delta: {delta}")
     scaled_delta = util.scale(delta, -3, 1, 1, 0)
@@ -266,7 +277,8 @@ def narrate_conflicts_texture(conflicts, e_delta):
         "minor",
         "somewhat virulent",
         "draining",
-        "explosive", ], scaled_delta)
+        "explosive",
+    ], scaled_delta)
     fights = random.choice(
         ['scuffles', 'disagreements', 'fights', 'arguments', 'spats'])
     if delta + e_delta > 0:
@@ -280,8 +292,10 @@ def narrate_conflicts_texture(conflicts, e_delta):
         # Insert apology artifact here!
         adverb = util.adverb(util.scale(delta + e_delta, 0, 3, 0, 1))
         adjective = random.choice(['happy', 'content', 'satisfied', 'pleased'])
-        rel = random.choice(['with how things were going',
-                             'with the relationship', 'despite the arguments'])
+        rel = random.choice([
+            'with how things were going', 'with the relationship',
+            'despite the arguments'
+        ])
         overall = f"Alex was {adverb} {adjective} {rel}"
     else:
         conj = ", but" if scaled_delta < 0.5 else ";"
@@ -342,8 +356,6 @@ def narrate_phase(events, phase):
         for event in events:
             narrate_event(event)
     elif phase == Phase.DATING and events:
-        narrate_commit(events.pop(0))
-
         print(prologue.get_prologue(events[0]['person']))
         last_event = None
         for event in events:
@@ -355,15 +367,16 @@ def narrate_phase(events, phase):
         # for event in events:
         #    narrate_event(event)
     elif phase == Phase.COMMITTED and events:
-        narrate_commit(events.pop(0))
         narrate_committed(events)
 
 
 def narrate_experience(event):
     a, b = get_ab(event)
-    # if event['rejected']:
-    #     # TODO
-    #     return
+    if event.get('phase') == Phase.COURTING and random.random() < 0.6:
+        print(artifacts.get_first_date(event))
+    if event['rejected']:
+        # TODO
+        return
     if event['target_property'] == 'open':
         rules = {
             'a': a['name'],
@@ -388,9 +401,61 @@ def narrate_experience(event):
         print(grammar.flatten('#hobby_proposal#'))
         logging.debug(
             f"OPEN EXPERIENCE {event['interest']} {event['threshold']}")
+    elif event['target_property'] in ['extra', 'libido']:
+        rules = {
+            'origin': f"#they# #enjoyed# #{event['target_property']}#.",
+            'extra': util.rank([
+                'a tranquil night together',
+                'a tranquil evening watching Netflix',
+                'a quiet night in together',
+                'a night out together',
+                'an evening hanging out with friends',
+                'an afternoon people-watching',
+                'a boisterous night out at the club',
+            ], event['threshold']),
+            'libido': util.rank([
+                'a quiet evening together',
+                'a subdued evening together',
+                'a passionate evening together',
+                'an intensely passionate evening together',
+            ], event['threshold']),
+            'they': ['They', 'The couple', '#a# and #b#', 'The two of them', 'The pair'],
+            'enjoyed': util.rank([
+                'spent',
+                'were happy to spend',
+                'enjoyed',
+                'were excited to spend',
+                'were thrilled to spend',
+                'savored',
+                'reveled in',
+                'relished'
+            ], event['delta']),
+            'a': a['name'],
+            'b': b['name'],
+        }
+        print(tracery.Grammar(rules).flatten('#origin#'))
     else:
-        narrate_experience_DEPRECATED(event)
-
+        rules = {
+            'origin': [
+                f"#b# #{event['target_property']}#.",
+            ],
+            'hot': [
+                'loved to run their hands over #a#\'s body',
+                'loved to comment on #a#\'s body',
+            ],
+            'con': [
+                'was messy',
+                'was disorganized',
+            ],
+            'exp': [
+                'was a little nervous',
+            ],
+            'a': a['name'] if a[event['target_property']] > b[event['target_property']] else b['name'],
+            'b': b['name'] if a[event['target_property']] > b[event['target_property']] else a['name'],
+        }
+        print(tracery.Grammar(rules).flatten('#origin#'))
+        #logging.debug(f"Event: {event}")
+ 
 
 def narrate_experience_DEPRECATED(event):
     a, b = get_ab(event)
@@ -398,19 +463,23 @@ def narrate_experience_DEPRECATED(event):
         result = f"{b['name']} refused. "
     else:
         lower_dict = {
-            'libido': f'{b["name"]} generally preferred less adventurous sex',
-            'extra': f'{b["name"]} generally preferred a quieter evening',
-            'open': f'{b["name"]} generally preferred to do something they were used to',
+            'libido':
+            f'{b["name"]} generally preferred less adventurous sex',
+            'extra':
+            f'{b["name"]} generally preferred a quieter evening',
+            'open':
+            f'{b["name"]} generally preferred to do something they were used to',
         }
         higher_dict = {
             'libido': f'{b["name"]} generally preferred more adventurous sex',
             'extra': f'{b["name"]} generally preferred to socialize',
             'open': f'{b["name"]} generally preferred to do something new',
         }
-        concession = lower_dict[event['target_property']
-                                ] if event['concession'] < 0 else higher_dict[event['target_property']]
+        concession = lower_dict[event['target_property']] if event[
+            'concession'] < 0 else higher_dict[event['target_property']]
         logging.debug(
-            f"Concession damage for {event['target_property']} is {round(event['concession'], 2)}")
+            f"Concession damage for {event['target_property']} is {round(event['concession'], 2)}"
+        )
         if abs(event['concession']) > 0.2:
             result = f"{concession}, but agreed anyway. "
         else:
@@ -430,10 +499,13 @@ def narrate_experience_DEPRECATED(event):
     experiences = {
         'open': [f'go on a boring date', 'go on an exciting date'],
         'libido': [f'have vanilla sex', f'have kinky sex'],
-        'extra': [f'come over and watch Netflix', 'go out to the club', 'go to a big party'],
+        'extra': [
+            f'come over and watch Netflix', 'go out to the club',
+            'go to a big party'
+        ],
     }
-    activity = util.rank(
-        experiences[event['target_property']], event['threshold'])
+    activity = util.rank(experiences[event['target_property']],
+                         event['threshold'])
     rules = {
         'origin': ['#a# #invited# #activity#. #result#'],
         'invited': ['invited #b# to', 'asked #b# to', 'suggested that they'],

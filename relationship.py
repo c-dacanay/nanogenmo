@@ -30,8 +30,13 @@ def get_location():
     if template == 'restaurant':
         return f"at {business_gen.get_business()}"
     else:
-        return random.choice(['at a bar', 'at the local swimming pool', 'in graduate school', 'in a subway station',
-                              'in a life drawing class', 'in a pottery studio', 'using the same CrossFit Groupon', 'on an escalator', 'at an axe-throwing bar', 'at a screening of "The Graduate"', 'in the waiting room of CityMD'])
+        return random.choice([
+            'at a bar', 'at the local swimming pool', 'in graduate school',
+            'in a subway station', 'in a life drawing class',
+            'in a pottery studio', 'using the same CrossFit Groupon',
+            'on an escalator', 'at an axe-throwing bar',
+            'at a screening of "The Graduate"', 'in the waiting room of CityMD'
+        ])
 
 
 CONFLICT_TARGETS = [
@@ -136,7 +141,8 @@ class Relationship:
             PHASE_EXPERIENCE_TYPES = {
                 Phase.COURTING: ['open', 'extra', 'libido'],
                 Phase.DATING: ['open', 'extra', 'libido', 'hot', 'con', 'exp'],
-                Phase.COMMITTED: ['open', 'extra', 'libido', 'hot', 'con', 'exp', 'commit'],
+                Phase.COMMITTED:
+                ['open', 'extra', 'libido', 'hot', 'con', 'exp', 'commit'],
             }
             exp_type = random.choice(PHASE_EXPERIENCE_TYPES[self.phase])
             thresh = random.gauss(a[exp_type], 0.1)
@@ -161,7 +167,10 @@ class Relationship:
                     else:
                         interest = 'do nothing'
                 elif thresh < 0.66:  # lo - Medium open: choose shared or others activities
-                    interest = random.choice(b['interests'])
+                    if b['interests']:
+                        interest = random.choice(b['interests'])
+                    else:
+                        interest = 'do nothing'
                 else:  # High open: choose new activity
                     interest = random.choice(list(INTERESTS.keys()))
 
@@ -242,8 +251,7 @@ class Relationship:
         # so A more likely to choose 'libido' if a high level of existing libido concession.
         target_property = random.choices(
             population=list(a['concessions'].keys()),
-            weights=list(a['concessions'].values())
-        )[0]
+            weights=list(a['concessions'].values()))[0]
         e['target_property'] = target_property
 
         # A chooses whether or not to actually fight about it.
@@ -372,10 +380,9 @@ class Relationship:
         event['delta'] = (ratio - 1) / 2
         event['phase'] = self.phase
 
-        if ratio > 1 and self.phase == Phase.COURTING:
+        if ratio >= 1 and self.phase == Phase.COURTING:
             self.phase = Phase.DATING
-        # TODO: actually make it 2 commit events happen first
-        elif ratio > 1 and self.phase == Phase.DATING:
+        elif ratio >= 1 and self.phase == Phase.DATING:
             self.phase = Phase.COMMITTED
 
         return event
@@ -397,26 +404,77 @@ class Relationship:
             Phase.COMMITTED: 0.5,
         }
         PHASE_CONFLICT_CHANCES = {
-            Phase.COURTING: 0,
+            Phase.COURTING: 0.1,
             Phase.DATING: 0.5,
             Phase.COMMITTED: 0.8,
         }
         # odds of conflict increase based on neuro
-        neuro_mod = util.scale(
-            (self.a['neuro'] + self.b['neuro']) / 2, 0, 1, 0.7, 1.3)
+        neuro_mod = util.scale((self.a['neuro'] + self.b['neuro']) / 2, 0, 1,
+                               0.7, 1.3)
         chance_conflict = PHASE_CONFLICT_CHANCES[self.phase] * neuro_mod
 
-        if self.health > PHASE_COMMIT_THRESHOLDS[self.phase] and event.get('delta', 0) > 0.25 and event.get('type') != EventType.COMMIT:
+        if self.health > PHASE_COMMIT_THRESHOLDS[self.phase] and event.get(
+                'delta', 0) > 0.25 and event.get('type') != EventType.COMMIT:
             event = self.simulate_commit(event)
         elif (random.random() < PHASE_EXPERIENCE_CHANCES[self.phase]):
             # A development occurred!
             event = self.simulate_experience()
+            event['phase'] = self.phase
         elif (random.random() < chance_conflict):
             event = self.simulate_conflict()
+            event['phase'] = self.phase
         else:
             event = self.simulate_nothing()
+            event['phase'] = self.phase
 
         return event
+
+    def simulate_reflection(self):
+        #Given the relationship, determine Alex's stat change
+        person_a = self.a
+        person_b = self.b
+        max_diff = 0
+        target = ''
+        for x in CONFLICT_TARGETS:
+            diff = person_a[x] - person_b[x]
+            if diff > max_diff:
+                max_diff = diff
+                target = x
+        changed_prop = person_a[target]
+        person_a[target] = (person_a[target] * 7 + person_b[target] * 3) / 10
+        new_prop = person_a[target]
+        #Catalog events by type
+        events = self.events
+        event_types = {
+            "hot": 1,
+            "open": 1,
+            "con": 1,
+            "extra": 1,
+            "agree": 1,
+            "neuro": 1,
+            "commit": 1,
+            "libido": 1
+        }
+
+        event_memory = ''
+        for memory in events:
+            if memory['type'] == EventType.EXPERIENCE:
+                for key in event_types:
+                    if memory['target_property'] == key:
+                        event_types[key] += 1
+
+        for key in event_types:
+            event_num = 1
+            if event_types[key] > event_num:
+                event_num = event_types[key]
+                event_memory = key
+                # print(event_memory, event_num, 'event stuff')
+        self.reflection = {
+            'prop': target,
+            'old': changed_prop,
+            'new': new_prop,
+            'memory': event_memory
+        }
 
     def simulate(self):
         # Given a pair of people, simulate a relatonship between them
@@ -447,7 +505,6 @@ class Relationship:
                 continue
             event['date'] = self.date
             event['health'] = self.health
-            event['phase'] = self.phase
             self.date += PHASE_TIMEDELTA[self.phase]
             self.events.append(event)
             self.health += event['delta']
