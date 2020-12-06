@@ -37,6 +37,9 @@ def get_problem(a, b, target_p):
             'exp': [
                 'was too immature',
                 'was kind of a crybaby'
+            ],
+            'hot': [
+                'was not hot enough'
             ]
         }
     else:
@@ -66,6 +69,9 @@ def get_problem(a, b, target_p):
             ],
             'exp': [
                 'too demanding',
+            ],
+            'hot': [
+                'too hot'
             ]
         }
     return PROBLEM_NAMES[target_p]

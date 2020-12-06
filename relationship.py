@@ -6,6 +6,7 @@ import statistics
 import business_gen
 import math
 from enum import Enum
+from interests import INTERESTS
 
 
 def scale_trait(val):
@@ -132,7 +133,12 @@ class Relationship:
 
         # roll for odds of the person actually initiating the experience
         if binary_roll([a['interest'], a['commit']]):
-            exp_type = random.choice(['open', 'open', 'extra', 'libido'])
+            PHASE_EXPERIENCE_TYPES = {
+                Phase.COURTING: ['open', 'extra', 'libido'],
+                Phase.DATING: ['open', 'extra', 'libido', 'hot', 'con', 'exp'],
+                Phase.COMMITTED: ['open', 'extra', 'libido', 'hot', 'con', 'exp', 'commit'],
+            }
+            exp_type = random.choice(PHASE_EXPERIENCE_TYPES[self.phase])
             thresh = random.gauss(a[exp_type], 0.1)
             experience = {
                 'type': EventType.EXPERIENCE,
@@ -150,11 +156,14 @@ class Relationship:
             if exp_type == 'open':
                 # pick a hobby based on the level of experience (Threshold)
                 if thresh < 0.33:  # Not very open: choose own activities
-                    interest = random.choice(a['interests'])
+                    if a['interests']:
+                        interest = random.choice(a['interests'])
+                    else:
+                        interest = 'do nothing'
                 elif thresh < 0.66:  # lo - Medium open: choose shared or others activities
                     interest = random.choice(b['interests'])
                 else:  # High open: choose new activity
-                    interest = random.choice(INTERESTS.keys())
+                    interest = random.choice(list(INTERESTS.keys()))
 
                 # Now calculate distance for receiver
                 if interest in b['interests']:

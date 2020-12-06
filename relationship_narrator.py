@@ -367,8 +367,27 @@ def narrate_experience(event):
         # Narrate hobby / date activity!
         logging.debug(
             f"OPEN EXPERIENCE {event['interest']} {event['threshold']}")
+    elif event['target_property'] in ['extra', 'libido']:
+        rules = {
+            'origin': f"#They# #enjoyed# #{event['target_property']}",
+            'extra': util.rank([
+                'a quiet night in',
+                'a night out'
+            ], event['threshold']),
+            'libido': util.rank([
+                'a subdued evening',
+                'a passionate evening',
+            ], event['threshold']),
+            'they': ['They', 'The couple', '#a# and #b#', 'The two of them', 'The pair'],
+            'enjoyed': [
+                'spent', 'enjoyed'
+            ],
+            'a': a['name'],
+            'b': b['name'],
+        }
+        print(tracery.Grammar(rules).flatten('#origin#'))
     else:
-        narrate_experience_DEPRECATED(event)
+        logging.debug(f"Event: {event}")
 
 
 def narrate_experience_DEPRECATED(event):
