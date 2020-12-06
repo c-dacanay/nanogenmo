@@ -167,7 +167,10 @@ class Relationship:
                     else:
                         interest = 'do nothing'
                 elif thresh < 0.66:  # lo - Medium open: choose shared or others activities
-                    interest = random.choice(b['interests'])
+                    if b['interests']:
+                        interest = random.choice(b['interests'])
+                    else:
+                        interest = 'do nothing'
                 else:  # High open: choose new activity
                     interest = random.choice(list(INTERESTS.keys()))
 
