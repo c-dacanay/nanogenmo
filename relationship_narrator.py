@@ -361,6 +361,19 @@ def narrate_phase(events, phase):
 def narrate_experience(event):
     a, b = get_ab(event)
     if event['rejected']:
+        # TODO
+        return
+    if event['target_property'] == 'open':
+        # Narrate hobby / date activity!
+        logging.debug(
+            f"OPEN EXPERIENCE {event['interest']} {event['threshold']}")
+    else:
+        narrate_experience_DEPRECATED(event)
+
+
+def narrate_experience_DEPRECATED(event):
+    a, b = get_ab(event)
+    if event['rejected']:
         result = f"{b['name']} refused. "
     else:
         lower_dict = {
