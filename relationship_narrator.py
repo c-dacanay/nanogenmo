@@ -64,7 +64,7 @@ def narrate_commit(event):
             "#a# asked to start dating.",
             "#a# asked if #b# would be interested in dating.",
         ],
-        'dating_result': f"#b# agreed {util.enthusiastically(enthusiasm)}. ",
+        'dating_result': f"#b# agreed {util.enthusiastically(enthusiasm)}. " if event['success_ratio'] >= 1 else f'#b# said that perhaps they were\'t quite ready yet. ',
         'ily_challenge': f"#a# says \"I love you\"",
         'ily_result': [
             '#b# could not say it back. #a# is hurt, but is understanding.' if event[
@@ -74,31 +74,10 @@ def narrate_commit(event):
         'b': b['name'],
     }
     grammar = tracery.Grammar(rules)
-    # TODO phase is off by one
-    if event['phase'] == Phase.DATING:
+    if event['phase'] == Phase.COURTING:
         print(grammar.flatten('#courting_phase#'))
-    elif event['phase'] == Phase.COMMITTED:
+    elif event['phase'] == Phase.DATING:
         print(grammar.flatten('#dating_phase#'))
-        '''
-    text = f"{a['name']} asked {b['name']} for more commitment in the relationship. "
-    if event['success_ratio'] > 1:
-        adv = util.enthusiastically(util.scale(
-            event['success_ratio'], 1, 3, 0, 1))
-        text += random.choice([
-            f"{b['name']} {adv} agreed.",
-            f"{b['name']} agreed {adv}.",
-        ])
-    elif event['success_ratio'] < 0.5:
-        text += random.choice([
-            f"{b['name']} refused quickly.",
-            f"{b['name']} was silent."
-        ])
-    else:
-        text += random.choice([
-            f"{b['name']} said {b['they']} needed some time to think about it."
-        ])
-    print(text)
-    '''
     print('\n')
 
 
@@ -341,8 +320,6 @@ def narrate_phase(events, phase):
         for event in events:
             narrate_event(event)
     elif phase == Phase.DATING and events:
-        narrate_commit(events.pop(0))
-
         print(prologue.get_prologue(events[0]['person']))
         last_event = None
         for event in events:
@@ -354,7 +331,6 @@ def narrate_phase(events, phase):
         # for event in events:
         #    narrate_event(event)
     elif phase == Phase.COMMITTED and events:
-        narrate_commit(events.pop(0))
         narrate_committed(events)
 
 
@@ -373,17 +349,31 @@ def narrate_experience(event):
         rules = {
             'origin': f"#they# #enjoyed# #{event['target_property']}#.",
             'extra': util.rank([
+                'a tranquil night together',
+                'a tranquil evening watching Netflix',
                 'a quiet night in together',
-                'a night out'
+                'a night out together',
+                'an evening hanging out with friends',
+                'an afternoon people-watching',
+                'a boisterous night out at the club',
             ], event['threshold']),
             'libido': util.rank([
+                'a quiet evening together',
                 'a subdued evening together',
                 'a passionate evening together',
+                'an intensely passionate evening together',
             ], event['threshold']),
             'they': ['They', 'The couple', '#a# and #b#', 'The two of them', 'The pair'],
-            'enjoyed': [
-                'spent', 'enjoyed'
-            ],
+            'enjoyed': util.rank([
+                'spent',
+                'were happy to spend',
+                'enjoyed',
+                'were excited to spend',
+                'were thrilled to spend',
+                'savored',
+                'reveled in',
+                'relished'
+            ], event['delta']),
             'a': a['name'],
             'b': b['name'],
         }

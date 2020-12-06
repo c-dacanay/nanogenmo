@@ -187,7 +187,7 @@ def narrate_conflict(event):
             'origin': '#sometimes# #a# #thought# that #b# was #problem#. #but#',
             'a': a['name'],
             'b': b['name'],
-            'sometimes': ['sometimes', 'often', 'occasionally', 'from time to time'],
+            'sometimes': ['Sometimes', 'Often', 'Occasionally', 'From time to time'],
             'thought': ['thought', 'considered', 'wondered', 'felt concerned'],
             'problem': problem_phrase,
             'pushing': ['pushing', 'telling', 'convincing', 'nagging', 'dragging'],

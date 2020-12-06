@@ -375,10 +375,9 @@ class Relationship:
         event['delta'] = (ratio - 1) / 2
         event['phase'] = self.phase
 
-        if ratio > 1 and self.phase == Phase.COURTING:
+        if ratio >= 1 and self.phase == Phase.COURTING:
             self.phase = Phase.DATING
-        # TODO: actually make it 2 commit events happen first
-        elif ratio > 1 and self.phase == Phase.DATING:
+        elif ratio >= 1 and self.phase == Phase.DATING:
             self.phase = Phase.COMMITTED
 
         return event
@@ -400,7 +399,7 @@ class Relationship:
             Phase.COMMITTED: 0.5,
         }
         PHASE_CONFLICT_CHANCES = {
-            Phase.COURTING: 0,
+            Phase.COURTING: 0.1,
             Phase.DATING: 0.5,
             Phase.COMMITTED: 0.8,
         }
@@ -414,10 +413,13 @@ class Relationship:
         elif (random.random() < PHASE_EXPERIENCE_CHANCES[self.phase]):
             # A development occurred!
             event = self.simulate_experience()
+            event['phase'] = self.phase
         elif (random.random() < chance_conflict):
             event = self.simulate_conflict()
+            event['phase'] = self.phase
         else:
             event = self.simulate_nothing()
+            event['phase'] = self.phase
 
         return event
 
@@ -450,7 +452,6 @@ class Relationship:
                 continue
             event['date'] = self.date
             event['health'] = self.health
-            event['phase'] = self.phase
             self.date += PHASE_TIMEDELTA[self.phase]
             self.events.append(event)
             self.health += event['delta']
