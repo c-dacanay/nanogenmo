@@ -3,9 +3,10 @@ import tracery
 import util
 import random
 from interests import INTERESTS
-
+from narrate_time import narrate_month
+import datetime
 # {'prop': 'hot', 'old': 0.565142070087718, 'new': 0.4322991476397663, 'memory': ''}
-def get_epilogue(r):
+def get_epilogue(r, date):
     a = r.a
     interest = random.choice(r.a['interests'])
     hobbies = r.a['hobbies']
@@ -14,6 +15,9 @@ def get_epilogue(r):
 
     # if r.phase == Phase.COURTING:
     get_outlook(a)
+
+    if random.random() > 0.7:
+        narrate_month(date)
     narrate_alex(a, interest, hobbies)
 
     # if reflection['old'] > reflection['new']:
@@ -21,15 +25,16 @@ def get_epilogue(r):
     # else:
     #     print(reflection['prop'] + ' went up.')
 
-    narrate_reflection(reflection)
+    # narrate_reflection(reflection)
     return ""
 
 
 def narrate_alex(a, interest, hobbies):
     a_verb = random.choice(INTERESTS[interest]['verb'])
+    hobby = random.choice(hobbies)
     rules = {
         'origin':
-        f'#a# spent #modifer# time #doing# {random.choice(hobbies)}, and #a_they# #started# {a_verb} #amount#.',
+        f'#a# spent #modifer# time #doing# {hobby}, and #a_they# #started# {a_verb} #amount#.',
         'modifer':
         ['a lot', 'a huge amount', 'some', 'a little', 'a small amount of'],
         'doing': [
@@ -45,6 +50,7 @@ def narrate_alex(a, interest, hobbies):
             'often', 'every now and then', 'occasionally', 'excitedly',
             'as frequently as possible', 'with enthisuasm'
         ],
+        'hobby': hobby,
         'a':
         a['name'],
         'a_they':
@@ -89,8 +95,9 @@ def get_outlook(a):
             'insecure_statement': [
                 'Everything harder for a while',
                 '#a# wondered if #a_they# were unlovable',
-                '#a# did not feel great after that',
+                '#a# did not feel #great# after that',
                 'Everything felt a little gray'
-            ]
+            ],
+            'great': ['great', 'good', 'well', 'excited', 'confident', 'encouraged', '']
         }
     print(tracery.Grammar(rules).flatten('#origin#'))
