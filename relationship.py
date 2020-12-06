@@ -147,10 +147,38 @@ class Relationship:
             }
             # Roll for rejection based on concession damage, interest, commit, and agree
 
+            if exp_type == 'open':
+                # pick a hobby based on the level of experience (Threshold)
+                if thresh < 0.33:  # Not very open: choose own activities
+                    interest = random.choice(a['interests'])
+                elif thresh < 0.66:  # lo - Medium open: choose shared or others activities
+                    interest = random.choice(b['interests'])
+                else:  # High open: choose new activity
+                    interest = random.choice(INTERESTS.keys())
+
+                # Now calculate distance for receiver
+                if interest in b['interests']:
+                    # A proposed an interest that B likes
+                    # If B has high open, then delta is 0.5 (they kinda like it)
+                    # If B has low open, then delta is 0 (they like it)
+                    delta = util.scale(b['open'], 0, 1, 0, 0.5)
+                else:
+                    # A proposed an interest that B doesn't like
+                    # If B has high open, then delta is 0 (they like it)
+                    # If B has low open, then delta is 1 (they hate it)
+                    delta = util.scale(b['open'], 0, 1, 1, 0)
+
+                # save the chosen interest in the event so we can use it
+                # in narration
+                experience['interest'] = interest
+            else:
+                # for other experience types, damage is directly calculated
+                # by comparing the receiver property with the proposed threshold
+                delta = abs(b[exp_type] - thresh)
+
             # only have potential concession damage if the proposed event is congruent
             # with the existing traits. Eg, if A proposes a high open activity but A is
             # lower open than B, no concession damage is taken.
-            delta = abs(b[exp_type] - thresh)
             if thresh > b[exp_type] and a[exp_type] > b[exp_type]:
                 dmg = delta
             elif thresh < b[exp_type] and a[exp_type] < b[exp_type]:
