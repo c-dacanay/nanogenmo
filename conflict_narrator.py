@@ -119,7 +119,7 @@ def get_meetup(a, b):
             '#b_name# was shocked.',
             '#b_name# was mortified.',
             '#b_name# was incensed.',
-        ], gauss(b['neuro'], 0.1)),
+        ], random.gauss(b['neuro'], 0.1)),
         'b_name': b['name'],
         'b_they': b['they'],
         'b_their': b['their'],
