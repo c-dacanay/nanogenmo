@@ -246,9 +246,9 @@ def narrate_conflict(event):
                 '#a# let the thought fade away, and #return#'
             ],
             'return': [
-                '#returned# to #a_their# coffee.'
-                '#returned# to #a_their# breakfast.'
-                '#returned# to #a_their# work.'
+                '#returned# to #a_their# coffee.',
+                '#returned# to #a_their# breakfast.',
+                '#returned# to #a_their# work.',
                 f"#returned# to reading about {random.choice(a['hobbies'])}" if a[
                     'hobbies'] else 'returned to reading.',
                 f"#returned# to watching Youtube videos about {random.choice(a['hobbies'])}" if a[
