@@ -16,10 +16,10 @@ def get_epilogue(r, date):
     if r.phase == Phase.DATING:
         narrate_reflection(a, b, reflection)
         #TODO narrate memory
-   
-    get_outlook(a)
+    else:
+        get_outlook(a)
     narrate_alex(a, interest, hobbies)
-    #TODO narrate affect
+    #TODO random event / new hobby
 
     if random.random() > 0.7:
         narrate_month(date)
@@ -30,24 +30,24 @@ def get_epilogue(r, date):
 
 
 def narrate_alex(a, interest, hobbies):
-    a_verb = random.choice(INTERESTS[interest]['verb'])
+    a_verb = random.choice(INTERESTS[interest]['location'])
     hobby = random.choice(hobbies)
     rules = {
         'origin':
         f'#a# took #modifer# time #doing# {hobby}, and #a_they# #started# {a_verb} #amount#.',
         'modifer':
-        ['a lot', 'a huge amount of', 'some', 'a little', 'a small amount of'],
+        ['a lot', 'lots of', 'some', 'a little', 'a small amount of'],
         'doing': [
-            'practicing', 'watching YouTube videos about', 'enjoying',
+            'to practice', 'to watch YouTube videos about', 'enjoying',
             'obsessing over', 'having fun while'
         ],
         'started': [
-            'began to', 'made plans to', 'started to', 'went back to', 'prioritized going to', 'went to',
-            'chilled while #a_they#'
+            'went to', 'made plans to go to', 'started to go to', 'went back to', 'prioritized going to', 'spent time at',
+            'chilled at the'
         ],
         'amount': [
             'often', 'every now and then', 'occasionally', 'excitedly',
-            'as frequently as possible', 'with enthisuasm'
+            'as frequently as #they# could', 'with enthisuasm'
         ],
         'hobby': hobby,
         'a':
@@ -81,13 +81,14 @@ def get_outlook(a):
             'a_their': a['their'],
             'insecure_statement': [
                 '#Things# felt #hard# for a while',
-                '#a# #felt# #a_they# were unlovable',
+                '#a# #felt# #a_they# were #unlovable#',
                 '#a# did not feel #great# after that'
             ],
             'Things': ['Everything', 'Life', 'Getting up', 'Dating'],
-            'great': ['great', 'good', 'well', 'excited', 'confident', 'encouraged'],
+            'great': ['great', 'good', 'well', 'excited', 'confident', 'encouraged', 'enthusiastic'],
             'felt': ['felt as if', 'was sure that', 'felt certain that', 'wondered if'],
-            'hard': ['hard', 'grey', 'difficult', 'lonely', 'like a struggle', 'impossible']
+            'hard': ['hard', 'grey', 'difficult', 'lonely', 'like a struggle', 'impossible', 'boring', 'uneventful'],
+            'unlovable': ['unlovable', 'unattractive', 'not fun to be around', 'repellant', 'too desperate']
         }
     print(tracery.Grammar(rules).flatten('#origin#'))
 
@@ -101,7 +102,7 @@ def narrate_reflection(a, b, reflection):
     rules = {
         'origin': '#afterward# #realized# that #they# #might# #change#. #intent#.',
         'afterward': ['Immediately after the break up,', 'Later', 'After the relationship ended', 'While the relationship fell apart'],
-        'realized': ['#a# realized', '#b# texted #a#', '#a# had the dawning realization'],
+        'realized': ['#a# realized', '#b# told #a#', '#a# had the dawning realization'],
         'might': ['could be', 'were', 'might be', 'were just', 'had been'],
         'change': ref_statement,
         'intent': ['#a# decided to change', '#a# would have to work on it', 'It hurt to realize', '#a# resolved to improve'],
@@ -172,6 +173,51 @@ def get_reflection(a, b, reflection):
         } 
         return random.choice(PROP_CHANGE[reflection['prop']])
     else:
-        return reflection['prop'] + ' went up.'
+        #prop went up 
+        PROP_CHANGE = {
+            'open': [
+                'really closed off to new things',
+                'stuck in #their# on ways',
+                'unenthusiasatic about #their# partners interests'
+            ],
+            'extra': [
+                'always holding #b# back from socializing',
+                'afraid of social engagements',
+                'too introverted'
+            ],
+            'libido': [
+                'insecure about physical intimacy',
+                'too physically distant'
+            ],
+            'con': [
+                'excessively messy',
+                'lazy and inconsiderate in #their# relationships',
+                'did not put in enough effort'
+            ],
+            'agree': [
+                'too stubborn about #their# needs',
+                'never adapted to what #b# wanted',
+                'refused to adapt for #b#'
+            ],
+            'exp': [
+                'naive about relationships',
+                'not reflecting about #their# previous relationship experiences'
+            ],
+            'hot': [
+                'not taking care of #their# physical apperance',
+                'not attracting the type of people #they# wanted'
+            ],
+            'neuro': [
+                'boring',
+                'too relaxed'
+            ],
+            'commit': [
+                'did not value #b#\'s dedication',
+                'holding #their# relationship back',
+                'afraid of commitment'
+            ]
+        } 
+        
+        return random.choice(PROP_CHANGE[reflection['prop']])
 
 
