@@ -80,6 +80,7 @@ def generate_person():
     }
 
 
+
 def generate_book(num):
     date = datetime.date.fromisoformat('2010-12-01')
     for i in range(num):

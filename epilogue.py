@@ -39,7 +39,7 @@ def narrate_alex(a, interest, hobbies):
         ['a lot', 'lots of', 'some', 'a little', 'a small amount of'],
         'doing': [
             'to practice', 'to watch YouTube videos about', 'enjoying',
-            'obsessing over', 'having fun while'
+            'obsessing over', 'delving into', 'appreciating', 'taking pleasure in'
         ],
         'started': [
             'went to', 'made plans to go to', 'started to go to', 'went back to', 'prioritized going to', 'spent time at',
@@ -82,13 +82,17 @@ def get_outlook(a):
             'insecure_statement': [
                 '#Things# felt #hard# for a while',
                 '#a# #felt# #a_they# were #unlovable#',
-                '#a# did not feel #great# after that'
+                '#a# did not feel #great# after that',
+                '#a# #avoid#'
             ],
             'Things': ['Everything', 'Life', 'Getting up', 'Dating'],
             'great': ['great', 'good', 'well', 'excited', 'confident', 'encouraged', 'enthusiastic'],
             'felt': ['felt as if', 'was sure that', 'felt certain that', 'wondered if'],
             'hard': ['hard', 'grey', 'difficult', 'lonely', 'like a struggle', 'impossible', 'boring', 'uneventful'],
-            'unlovable': ['unlovable', 'unattractive', 'not fun to be around', 'repellant', 'too desperate']
+            'unlovable': ['unlovable', 'unattractive', 'not fun to be around', 'repellant', 'too desperate'],
+            'avoid': ['#tried# to get #their# mind off of things', '#tried# not to be #bugged# by it'],
+            'tried': ['tried', 'attempted'],
+            'bugged': ['annoyed', 'bothered', 'annoyed', 'troubled', 'discouraged']
         }
     print(tracery.Grammar(rules).flatten('#origin#'))
 
@@ -158,7 +162,7 @@ def get_reflection(a, b, reflection):
             ],
             'hot': [
                 'not attracting the type of person #they# want',
-                'cared too much about how #they# looked'
+                'had been vain in #their# relationship with #b#'
             ],
             'neuro': [
                 'too insecure',
