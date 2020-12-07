@@ -98,15 +98,28 @@ def get_meetup(a, b):
             '\n#they# #met# #discuss#.',
         ],
         'they': ['They', 'The couple'],
-        'met': ['later met up at #location#', 'later got on the phone'],
+        'met': [
+            'later met up at #location#',
+            'later got on the phone'
+        ],
         'location': business_gen.get_business(),
-        'discuss': ['to discuss', 'to talk', 'to chat'],
-        'texture': [
+        'discuss': [
+            'to discuss',
+            'to talk',
+            'to chat',
+            'to hash things out',
+            'to continue the conversation'],
+        'texture': util.rank([
+            '#b_name# sighed, and swiped the message away.',
             '#b_name# blinked slowly.',
             '#b_name# rubbed their eyes.',
-            '#b_name# sighed, and swiped the message away.',
             '#b_name# took a deep breath.',
-        ],
+            '#b_name# gasped anxiously.',
+            '#b_name#\'s finger trembled as they dismissed the message.',
+            '#b_name# was shocked.',
+            '#b_name# was mortified.',
+            '#b_name# was incensed.',
+        ], gauss(b['neuro'], 0.1)),
         'b_name': b['name'],
         'b_they': b['they'],
         'b_their': b['their'],
@@ -252,9 +265,10 @@ def narrate_conflict(event):
         artifact_pretext = artifacts.get_fight_trigger(event)
         print(artifact_pretext)
 
-        # Describe meeting
-        meetup = get_meetup(a, b)
-        print(meetup)
+        if random.random() < 0.5:
+            # Describe meeting
+            meetup = get_meetup(a, b)
+            print(meetup)
 
         # A expresses the complaint
         complaint = get_problem_statement(a, b, problem_phrase, event)

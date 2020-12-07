@@ -45,7 +45,7 @@ def narrate_month(date):
             'breezes', 'days', 'mornings', 'evenings', 'flowers', 'sunrises', 'rains'
         ],
         'suadj': [
-            'warm', 'hot', 'sunny', 'stifling', 'humid', 'golden', 'muggy''
+            'warm', 'hot', 'sunny', 'stifling', 'humid', 'golden', 'muggy'
         ],
         'sunoun': [
             'air', 'days', 'mornings', 'evenings', 'nights', 'sunrises'

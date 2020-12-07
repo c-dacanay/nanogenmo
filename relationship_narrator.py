@@ -421,23 +421,26 @@ def narrate_experience(event):
     elif event['target_property'] in ['extra', 'libido']:
         rules = {
             'origin':
-            f"#they# #enjoyed# #{event['target_property']}#.",
+            f"#they# #{event['target_property']}#.",
+            'day': ['day', 'morning', 'afternoon', 'evening'],
             'extra':
             util.rank([
-                'a tranquil night together',
-                'a tranquil evening watching Netflix',
-                'a quiet night in together',
-                'a night out together',
-                'an evening hanging out with friends',
-                'an afternoon people-watching',
-                'a boisterous night out at the club',
+                '#enjoyed# a tranquil #day# watching Netflix',
+                '#enjoyed# a tranquil #day# watching Youtube videos',
+                '#enjoyed# a tranquil #day# watching a movie',
+                '#enjoyed# a quiet #day# reading together',
+                '#enjoyed# a night out together at the bar',
+                '#enjoyed# a #day# hanging out with friends',
+                '#enjoyed# a #day# of people-watching',
+                '#enjoyed# a night out at the club',
             ], event['threshold']),
             'libido':
             util.rank([
-                'a quiet evening together',
-                'a subdued evening together',
-                'a passionate evening together',
-                'an intensely passionate evening together',
+                'lay in bed together, but without touching',
+                'lay in bed together, holding hands',
+                'shared a kiss',
+                '#enjoyed# a passionate evening together',
+                '#enjoyed# intensely passionate evening together',
             ], event['threshold']),
             'they': [
                 'They', 'The couple', '#a# and #b#', 'The two of them',
@@ -472,13 +475,16 @@ def narrate_experience(event):
             ], event['threshold']),
             'con': util.rank([
                 'had a lot of dishes piled up in the sink. ',
+                'decided to call in sick to work. After all, you only live once. ',
                 'was messy.',
                 'forgot to do their laundry yesterday. ',
                 'had a couple of dishes piled up in the sink. ',
                 'was disorganized. ',
                 'noticed they needed to vacuum the carpet.'
                 'decided to start keeping a daily todo list. ',
+                'spent the #day# arranging their books by color and subject. ',
                 'went shopping and purchased a daily planner. ',
+                'stayed late at work. ',
                 'spent the #day# #cleaning# the apartment. ',
                 'spent the #day #cleaning# the apartment. It was moderately dusty. ',
                 'spent the #day# #cleaning# the bathroom. It certainly was in need of some attention. ',
@@ -495,11 +501,12 @@ def narrate_experience(event):
                 '#b# had not responded to #a#\'s text messages for a few hours. #a# sent a followup.',
                 'worried when #b# said that they sometimes preferred to be alone. ',
                 'worried that #b# did not actually find them to be attractive. '
+                '#b# kept a journal of how long it took for #a# to text them back',
                 'worried that #b# would leave them some day soon. ',
             ], event['threshold']),
-            'cleaning': ['tidying', 'cleaning', 'organizing']
+            'cleaning': ['tidying', 'cleaning', 'organizing'],
             'day': ['day', 'morning', 'afternoon', 'evening'],
-            'a': a['name']
+            'a': a['name'],
             'b': b['name']
         }
         print(tracery.Grammar(rules).flatten('#origin#'))
