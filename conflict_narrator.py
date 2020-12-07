@@ -280,7 +280,12 @@ def narrate_conflict(event):
     else:
         response = get_response(a, b, event)
         problem_statement = tracery.Grammar(
-            {'origin': problem_phrase, 'pushing': 'pushing'}).flatten('#origin#')
+            {
+                'origin': problem_phrase,
+                'pushing': 'pushing',
+                'a': a['name'],
+                'b': b['name']
+            }).flatten('#origin#')
         print(
             f"They often fought because {b['name']} was {problem_statement}. {response}"
         )
