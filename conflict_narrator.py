@@ -260,7 +260,8 @@ def narrate_conflict(event):
         print(tracery.Grammar(rules).flatten('#origin#'))
         return
 
-    if random.random() < 0.7:
+    if random.random() < abs(event['delta']):
+        # The bigger the event, the more chance we narrate it explicitly
         # Print some pretext
         artifact_pretext = artifacts.get_fight_trigger(event)
         print(artifact_pretext)
@@ -277,15 +278,23 @@ def narrate_conflict(event):
         # B responds
         response = get_response(a, b, event)
         print(response)
+
+        print('\n')
     else:
-        response = get_response(a, b, event)
-        problem_statement = tracery.Grammar(
-            {
-                'origin': problem_phrase,
-                'pushing': 'pushing',
-                'a': a['name'],
-                'b': b['name']
-            }).flatten('#origin#')
-        print(
-            f"They often fought because {b['name']} was {problem_statement}. {response}"
-        )
+        narrate_conflict_zoomout(a, b, event, problem_phrase)
+
+
+def narrate_conflict_zoomout(a, b, event, problem_phrase):
+    response = get_response(a, b, event)
+    problem_statement = tracery.Grammar(
+        {
+            'origin': "#They# #sometimes# #fought# because #a# felt that #b# was #problem#. ",
+            'problem': problem_phrase,
+            'pushing': 'pushing',
+            'sometimes': util.rank(['occasionally', 'sometimes', 'often', 'frequently', 'always'], util.scale(event['delta'], -1, 0.5, 1, 0)),
+            'fought': ['fought', 'argued', 'clashed', 'scuffled'],
+            'They': ['They', 'The couple'],
+            'a': a['name'],
+            'b': b['name'],
+        }).flatten('#origin#')
+    print(problem_statement)

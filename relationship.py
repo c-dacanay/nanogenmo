@@ -289,7 +289,14 @@ class Relationship:
         # if b met the goal: benefit accordingly. But punish more than reward.
         if (score + e['handicap'] < e['target']):
             # b fell short of the goal: punish proportionally.
-            delta = score + e['handicap'] - e['target'] * 2
+            # more punishment if the couple is further along in the relationship
+            PHASE_CONFLICT_MULTIPLIERS = {
+                Phase.COURTING: 2,
+                Phase.DATING: 3,
+                Phase.COMMITTED: 4,
+            }
+            delta = score + e['handicap'] - e['target'] * \
+                PHASE_CONFLICT_MULTIPLIERS[self.phase]
         else:
             delta = (score + e['handicap'] - e['target']) / 2
 
@@ -362,7 +369,7 @@ class Relationship:
             random.gauss(b['commit'], 0.1) * 2
         ratio = score / PHASE_SCORE_THRESHOLDS[self.phase]
         event['success_ratio'] = ratio
-        if ratio > 1.2:
+        if ratio > 1:
             # Random increase to interest + commitment + confidence if the response was enthusiastic
             a['commit'] *= 1 + random.random() * 0.1
             a['interest'] *= 1 + random.random() * 0.2
@@ -371,7 +378,12 @@ class Relationship:
             a['neuro'] *= 0.9 + random.random() * 0.1
             b['confidence'] *= 1 + random.random() * 0.5
             a['confidence'] *= 1 + random.random() * 0.5
-        elif ratio < 0.8:
+            event['delta'] = 2
+        else:
+            # Check for previous attempts in this phase
+            previous_attempts = [a for a in self.events if a.get('phase')
+                                 == self.phase and a['type'] == EventType.COMMIT]
+            previous_attempts_multiplier = len(previous_attempts)
             # Debuffs if response was not enthusiastic:
             a['commit'] *= 0.9 + random.random() * 0.1
             a['interest'] *= 0.8 + random.random() * 0.2
@@ -380,8 +392,8 @@ class Relationship:
             a['neuro'] *= 1 + random.random() * 0.1
             b['confidence'] *= 0.8 + random.random() * 0.1
             a['confidence'] *= 0.8 + random.random() * 0.1
+            event['delta'] = -2 * (previous_attempts_multiplier + 1)
 
-        event['delta'] = (ratio - 1) / 2
         event['phase'] = self.phase
 
         if ratio >= 1 and self.phase == Phase.COURTING:
@@ -434,8 +446,8 @@ class Relationship:
         return event
 
     def simulate_reflection(self):
-        #Given the relationship, determine Alex's stat change
-        #TODO impliment phases
+        # Given the relationship, determine Alex's stat change
+        # TODO impliment phases
         person_a = self.a
         person_b = self.b
         max_diff = 0
@@ -448,7 +460,7 @@ class Relationship:
         changed_prop = person_a[target]
         person_a[target] = (person_a[target] * 7 + person_b[target] * 3) / 10
         new_prop = person_a[target]
-        #Catalog events by type
+        # Catalog events by type
         events = self.events
         event_types = {
             "hot": 1,
