@@ -36,22 +36,22 @@ def narrate_month(date):
             'crisp', 'harsh', 'cloudy', 'cold', 'crisp', 'snowy', 'grey', 'dark', 'wet', 'frosty'
         ],
         'wnoun': [
-            'days', 'mornings', 'evenings', 'winds', 'storms', 'breezes', 'blizzards'
+            'days', 'mornings', 'evenings', 'winds', 'storms', 'breezes', 'blizzards', 'sunsets'
         ],
         'sadj': [
-            'dewy', 'breezy', 'crisp', 'sunny', 'lush', 'young', 'delicate', 'balmy'
+            'dewy', 'breezy', 'crisp', 'sunny', 'lush', 'young', 'delicate', 'balmy', 'vibrant', 'vivid'
         ],
         'snoun': [
-            'breezes', 'days', 'mornings', 'evenings', 'flowers', 'picnics', 'rains'
+            'breezes', 'days', 'mornings', 'evenings', 'flowers', 'sunrises', 'rains'
         ],
         'suadj': [
-            'warm', 'hot', 'sunny', 'stifling', 'humid', 'golden', 'jovial'
+            'warm', 'hot', 'sunny', 'stifling', 'humid', 'golden', 'muggy''
         ],
         'sunoun': [
-            'air', 'days', 'mornings', 'evenings', 'nights',
+            'air', 'days', 'mornings', 'evenings', 'nights', 'sunrises'
         ],
         'fadj': [
-            'crisp', 'cool', 'gentle', 'beautiful', 'brisk', 'mild', 'warm'
+            'crisp', 'cool', 'gentle', 'beautiful', 'brisk', 'mild', 'warm', 'sunsets',
         ],
         'fnoun': [
             'air', 'days', 'mornings', 'evenings', 'nights', 'leaves', 'foliage', 'breezes',

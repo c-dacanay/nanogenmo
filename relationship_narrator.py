@@ -243,7 +243,7 @@ def narrate_conflicts_texture(conflicts, e_delta):
         'rarely fought, but when they did they', 'occasionally', 'sometimes',
         'often', 'always'
     ],
-                      len(conflicts) / CHUNK_SIZE * 1.5)
+        len(conflicts) / CHUNK_SIZE * 1.5)
     fought = random.choice(
         ['disagreed', 'fought', 'quarrelled', 'had spats', 'argued'])
     about = random.choice(['about', 'over'])
@@ -337,8 +337,8 @@ def narrate_events(a, events):
             event = events.pop(0)
             chunk.append(event)
         narrate_phase(chunk, phase)
-    
-    #knock alex's confidence just a touch
+
+    # knock alex's confidence just a touch
     # logging.debug(f"Alex's confidence is {a['confidence']}")
     a['confidence'] *= .9 + random.random() * 0.1
     # logging.debug(f"Alex's confidence is {a['confidence']}")
@@ -399,7 +399,7 @@ def narrate_experience(event):
             a['their'],
             'hobby':
             [f"{random.choice(INTERESTS[event['interest']]['hobbies'])}"],
-            #types of classes
+            # types of classes
             'food_class': [
                 'grilling', 'cheesemaking', 'cooking', 'bartending',
                 'cocktail-making', 'beer-brewing', 'breadmaking'
@@ -458,30 +458,52 @@ def narrate_experience(event):
     else:
         rules = {
             'origin': [
-                f"#b# #{event['target_property']}#.",
+                f"#a# #{event['target_property']}#.",
             ],
-            'hot': [
-                'loved to run their hands over #a#\'s body',
-                'loved to comment on #a#\'s body',
-            ],
-            'con': [
-                'was messy',
-                'was disorganized',
-            ],
-            'exp': [
-                'was a little nervous',
-            ],
-            'a':
-            a['name']
-            if a[event['target_property']] > b[event['target_property']] else
-            b['name'],
-            'b':
-            b['name']
-            if a[event['target_property']] > b[event['target_property']] else
-            a['name'],
+            'hot': util.rank([
+                'sometimes gave off a mildly unpleasant odor',
+                'liked to brag about how infrequently their hair needed to be washed',
+                'often met #b# for dates wearing an old college sweatshirt and an ill-fitting pair of jeans',
+                'fell asleep sometimes without washing up first. ',
+                'considered indulging in more skincare products. ',
+                'liked to go shopping for the latest trendy fashions. ',
+                'went shopping for organic groceries. That figure didn\'t keep itself in shape!',
+                'spent the #day# at the gym. That body didn\'t keep itself in shape!',
+            ], event['threshold']),
+            'con': util.rank([
+                'had a lot of dishes piled up in the sink. ',
+                'was messy.',
+                'forgot to do their laundry yesterday. ',
+                'had a couple of dishes piled up in the sink. ',
+                'was disorganized. ',
+                'noticed they needed to vacuum the carpet.'
+                'decided to start keeping a daily todo list. ',
+                'went shopping and purchased a daily planner. ',
+                'spent the #day# #cleaning# the apartment. ',
+                'spent the #day #cleaning# the apartment. It was moderately dusty. ',
+                'spent the #day# #cleaning# the bathroom. It certainly was in need of some attention. ',
+            ], event['threshold']),
+            'exp': util.rank([
+                'was upset with #b#, but said nothing. ',
+                'was jealous of #b#\'s moderately attractive co-worker.',
+                'asked #b# how they were feeling about the relationship. The couple had an earnest conversation about where things were going.',
+                '#a# suggested that they begin a weekly relationship-checkin process. #b# agreed happily. '
+            ], event['threshold']),
+            'neuro': util.rank([
+                '#a# had not heard from #b# for a couple days.',
+                '#b# had a night out with friends planned today. #a# was happy to pass the evening doing other things',
+                '#b# had not responded to #a#\'s text messages for a few hours. #a# sent a followup.',
+                'worried when #b# said that they sometimes preferred to be alone. ',
+                'worried that #b# did not actually find them to be attractive. '
+                'worried that #b# would leave them some day soon. ',
+            ], event['threshold']),
+            'cleaning': ['tidying', 'cleaning', 'organizing']
+            'day': ['day', 'morning', 'afternoon', 'evening'],
+            'a': a['name']
+            'b': b['name']
         }
         print(tracery.Grammar(rules).flatten('#origin#'))
-        #logging.debug(f"Event: {event}")
+        # logging.debug(f"Event: {event}")
 
 
 def narrate_experience_DEPRECATED(event):
