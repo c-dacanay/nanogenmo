@@ -96,12 +96,11 @@ def get_outlook(a):
             'a': a['name'],
             'a_they': a['they'],
             'a_their': a['their'],
-            'confident_statement': [
-                'Overall, things had been going well for #a#',
+            'confident_statement': rank([
                 '#a# invested time in #a_their# #nonromantic#',
-                '#a# felt #chill#',
                 '#a# felt #chill# regarding the encounter'
-            ],
+                'Overall, things had been going quite well for #a#',
+            ], a['confidence']/2),
             'chill': ['undeterred', 'unbothered', 'at ease', 'aloof', 'untroubled', 'nonchalant'],
             'nonromantic': ['friendships', 'career', 'hobbies', 'stack of unread books']
         }
@@ -111,12 +110,12 @@ def get_outlook(a):
             'a': a['name'],
             'a_they': a['they'],
             'a_their': a['their'],
-            'insecure_statement': [
-                '#Things# felt #hard# for a while',
+            'insecure_statement': rank([
                 '#a# #felt# #a_they# were #unlovable#',
+                '#Things# felt #hard# for a while',
                 '#a# did not feel #great# after that',
                 '#a# #avoid#'
-            ],
+            ], a['confidence']/2),
             'Things': ['Everything', 'Life', 'Getting up', 'Dating'],
             'great': ['great', 'good', 'well', 'excited', 'confident', 'encouraged', 'enthusiastic'],
             'felt': ['felt as if', 'was sure that', 'felt certain that', 'wondered if'],
@@ -131,17 +130,14 @@ def get_outlook(a):
 def narrate_reflection(a, b, reflection):
     # memory = reflection['memory']
     ref_statement = get_reflection(a, b, reflection)
-    # rules = {
-    #     'origin': 'Alex felt #feeling# about the breakup.',
-    #     'feeling': ['bad', 'good', 'awful', 'relieved', 'confused']
-    # }
+
     rules = {
         'origin': '#afterward# #realized# that #they# #might# #change#. #intent#.',
         'afterward': ['Immediately after the break up,', 'Later', 'After the relationship ended', 'While the relationship fell apart'],
         'realized': ['#a# realized', '#b# told #a#', '#a# had the dawning realization'],
         'might': ['could be', 'were', 'might be', 'were just', 'had been'],
         'change': ref_statement,
-        'intent': ['#a# decided to change', '#a# would have to work on it', 'It hurt to realize', '#a# resolved to improve'],
+        'intent': rank(['It hurt to realize', '#a# would have to work on it', '#a# resolved to improve', '#a# decided to change'], a['confidence']),
         'a': a['name'],
         'they': a['they'],
         'their': a['their'],
