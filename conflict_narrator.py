@@ -50,6 +50,9 @@ def get_problem(a, b, target_p):
             'hot': [
                 'was not hot enough',
                 'needed to hit the gym'
+            ],
+            'commit': [
+                'was not committed enough'
             ]
         }
     else:
@@ -89,6 +92,9 @@ def get_problem(a, b, target_p):
                 'was too hot, making #b# feel insecure',
                 'was too charming to others',
                 'was too flirty with coworkers'
+            ],
+            'commit': [
+                'was too seriou'
             ]
         }
     return PROBLEM_NAMES[target_p]
@@ -244,7 +250,7 @@ def narrate_conflict(event):
                 event['date'] - conflicts[len(conflicts) - 1]['date'])
         elif event['prev']:
             # THere were previous aborted fights.
-            main = 'The idea that #b# #problem# came back #a#\'s #mind#.'
+            main = 'The idea that #b# #problem# came back to #a#\'s #mind#.'
         else:
             main = '#time# #a# #thought# that #perhaps# #b# #problem#.'
 
@@ -259,7 +265,7 @@ def narrate_conflict(event):
             'ago': ago,
             'floated': ['floated back into #b_their# #mind#', 'drifted into #b_their# #mind#'],
             'perhaps': ['perhaps', 'maybe', '', 'it was possible that', 'compared to previous partners'],
-            'thought': ['thought', 'considered', 'wondered', 'felt concerned'],
+            'thought': ['thought', 'considered', 'felt bothered', 'felt concerned'],
             'problem': problem_phrase,
             'pushing': ['pushing', 'telling', 'convincing', 'nagging', 'dragging'],
             'but': [
