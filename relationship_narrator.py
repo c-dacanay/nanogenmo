@@ -226,7 +226,6 @@ def narrate_experience(event):
         # TODO
         return
     if event['target_property'] == 'open':
-        #getAcademicInterest()
         rules = {
             'proposed': [
                 "asked to", "begged to", "proposed that they",
@@ -305,7 +304,7 @@ def narrate_experience(event):
                 'forgot to do their laundry yesterday',
                 'had a couple of dishes piled up in the sink',
                 'was disorganized',
-                'noticed they needed to vacuum the carpet'
+                'noticed they needed to vacuum the carpet',
                 'decided to start keeping a daily todo list',
                 'spent the #day# arranging their books by color and subject',
                 'went shopping and purchased a daily planner',

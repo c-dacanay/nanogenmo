@@ -76,7 +76,7 @@ def narrate_alex(a, interest, hobby):
         ],
         'started': [
             'went to', 'made plans to go to', 'started to go to', 'went back to', 'prioritized going to', 'spent time at',
-            'chilled at the'
+            'chilled at'
         ],
         'amount': [
             'often', 'every now and then', 'occasionally', 'excitedly',
@@ -88,6 +88,7 @@ def narrate_alex(a, interest, hobby):
         'a_they':
         a['they'],
     }
+    rules.update(getInterestRules(a, b, interest))
     print(tracery.Grammar(rules).flatten('#origin#'))
 
 def get_outlook(a):

@@ -12,35 +12,35 @@ def get_problem(a, b, target_p):
         # problems for if a is higher than b
         PROBLEM_NAMES = {
             'open': [
-                'never interested in doing what #a# wanted to do',
-                'never interested in trying new things',
-                'only interested in doing boring activities',
-                'not willing to branch out for date ideas',
-                'too boring',
+                'was never interested in doing what #a# wanted to do',
+                'was never interested in trying new things',
+                'was only interested in doing boring activities',
+                'was not willing to branch out for date ideas',
+                'was too boring',
             ],
             'extra': [
-                'never interested in doing anything social',
-                'not interested enough in socializing',
-                'only interested in staying home',
+                'was never interested in doing anything social',
+                'was not interested enough in socializing',
+                'was only interested in staying home',
             ],
             'libido': [
-                'not initiating sex often enough',
-                'not asking #a# for sex often enough',
-                'not passionate enough about the relationship',
+                'was not initiating sex often enough',
+                'was not asking #a# for sex often enough',
+                'was not passionate enough about the relationship',
             ],
             'con': [
-                'too messy',
-                'too disorganized',
-                'not hardworking enough',
+                'was too messy',
+                'was too disorganized',
+                'was not hardworking enough',
             ],
             'neuro': [
-                'not paying paying enough attention to the relationship',
+                'was not paying paying enough attention to the relationship',
                 'was not texting often enough',
                 'was not arranging dates often enough',
             ],
             'agree': [
                 'never wanted to adapt for the sake of the relationship',
-                'often rude to #b#'
+                'was often rude to #b#'
             ],
             'exp': [
                 'was too immature',
@@ -55,37 +55,39 @@ def get_problem(a, b, target_p):
         # problems for if a is lower than b
         PROBLEM_NAMES = {
             'open': [
-                'always #pushing# #a# to do weird new activities',
-                "not understanding of the fact that #a# really did not enjoy discovering things the way #b# did",
+                'was always #pushing# #a# to do weird new activities',
+                "was not understanding of the fact that #a# really did not enjoy discovering things the way #b# did",
             ],
             'extra': [
-                'always #pushing# #a# to socialize',
-                "not understanding of the fact that #a# really did not enjoy socializing the way #b# did",
+                'was always #pushing# #a# to socialize',
+                "was not understanding of the fact that #a# really did not enjoy socializing the way #b# did",
             ],
             'libido': [
-                'always #pushing# #a# for more sex',
+                'was always #pushing# #a# for more sex',
                 "was not understanding of the fact that #a# just didn't like sex as much as #b#"
             ],
             'con': [
-                'too nitpicky',
-                'too obsessed with details',
-                'too much of a clean freak',
+                'was too nitpicky',
+                'was too obsessed with details',
+                'was too much of a clean freak',
             ],
             'neuro': [
-                'too neurotic',
-                'too anxious',
-                'too insecure',
+                'was too neurotic',
+                'was too anxious',
+                'was too insecure',
             ],
             'agree': [
-                'too wishy washy',
-                'kind of spineless'
+                'was too wishy washy',
+                'lacked a spine'
             ],
             'exp': [
-                'posessing of too high standards',
+                'had unachievable standards',
             ],
             'hot': [
-                'too hot, always getting unwanted attention',
-                'too hot, making #b# feel insecure',
+                'was too desired, always getting unwanted attention',
+                'was too hot, making #b# feel insecure',
+                'was too charming to others',
+                'was too flirty with coworkers'
             ]
         }
     return PROBLEM_NAMES[target_p]
@@ -133,8 +135,8 @@ def get_problem_statement(a, b, problem_phrase, event):
     rules = {
         'origin': ['#problem_statement#. #anger# #reaction#.'],
         'problem_statement': [
-            '#a# was #upset# because #a_they# felt that #b# was #problem#',
-            '#a# told #b# that #b# was #problem#',
+            '#a# was #upset# because #a_they# felt that #b# #problem#',
+            '#a# told #b# that #b# #problem#',
         ],
         'anger': [
             "It just wouldn't do. ",
@@ -232,11 +234,11 @@ def narrate_conflict(event):
         # A was grumpy, but didn't actually initiate a fight.
         logging.debug("FIGHT ABORTED")
         rules = {
-            'origin': '#sometimes# #a# #thought# that #perhaps# #b# was #problem#. #but#',
+            'origin': '#sometimes# #a# #thought# that #perhaps# #b# #problem#. #but#',
             'a': a['name'],
             'b': b['name'],
             'sometimes': ['Sometimes', 'Often', 'Occasionally', 'From time to time', 'Some nights', 'On rare occassion'],
-            'perhaps': ['perhaps', 'maybe', '', 'it was possible that', 'compared to previous partners at least, that'],
+            'perhaps': ['perhaps', 'maybe', '', 'it was possible that', 'compared to previous partners'],
             'thought': ['thought', 'considered', 'wondered', 'felt concerned'],
             'problem': problem_phrase,
             'pushing': ['pushing', 'telling', 'convincing', 'nagging', 'dragging'],
@@ -254,7 +256,7 @@ def narrate_conflict(event):
                 f"#returned# to watching Youtube videos about {random.choice(a['hobbies'])}" if a[
                     'hobbies'] else 'returned to surfing the Internet.',
             ],
-            'returned': ['returned', 'continued', 'went back to'],
+            'returned': ['returned', 'went back'],
             'a_their': a['their'],
         }
         print(tracery.Grammar(rules).flatten('#origin#'))
@@ -288,7 +290,7 @@ def narrate_conflict_zoomout(a, b, event, problem_phrase):
     response = get_response(a, b, event)
     problem_statement = tracery.Grammar(
         {
-            'origin': "#They# #sometimes# #fought# because #a# felt that #b# was #problem#. ",
+            'origin': "#They# #sometimes# #fought# because #a# felt that #b# #problem#. ",
             'problem': problem_phrase,
             'pushing': 'pushing',
             'sometimes': util.rank(['occasionally', 'sometimes', 'often', 'frequently', 'always'], util.scale(event['delta'], -1, 0.5, 1, 0)),
