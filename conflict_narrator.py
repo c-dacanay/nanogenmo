@@ -102,7 +102,7 @@ def get_meetup(a, b):
             'later met up at #location#',
             'later got on the phone'
         ],
-        'location': business_gen.get_business(),
+        'location': business_gen.get_business(desc=False),
         'discuss': [
             'to discuss',
             'to talk',

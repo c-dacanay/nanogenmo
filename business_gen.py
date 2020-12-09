@@ -5,7 +5,7 @@ b = ["axe", "ale", "ant", "aunt", "awl", "bait", "band", "bank", "bath", "bay", 
      "kite", "kites", "knife", "knob", "knot", "lace", "lake", "lamb", "lamp", "light", "lights", "lime", "loaf", "loaves", "lock", "locks", "loom", "lunch", "maid", "map", "maps", "mask", "meat", "mice", "milk", "mint", "mole", "moles", "moth", "moon", "mouse", "nest", "north", "pail", "pails", "park", "parks", "pear", "pears", "pen", "pens", "pig", "pigs", "plaid", "queen", "quilt", "rain", "rake", "rat", "road", "roads", "rose", "roses", "rye", "sack", "sail", "sails", "salt", "scale", "scarf", "scarves", "sea", "seed", "shoe", "shoes", "silk", "sink", "sleet", "smoke", "snail", "snails", "snake", "snakes", "snow", "soap", "son", "sons", "song", "songs", "spark", "spools", "spool", "spoon", "spy", "spies", "stage", "star", "stars", "steel", "stone", "stones", "stove", "straw", "stream", "street", "string", "quince", "sun", "steam", "sword", "sage", "tern", "thief", "thieves", "thorn", "thread", "throne", "toad", "tomb", "tooth", "town", "tramp", "tree", "twig", "twine", "vase", "veil", "vein", "vest", "vine", "well", "whale", "wharf", "wharves", "wheel", "wine", "wing", "wings", "wire", "wish", "wolf", "wolves", "wood", "wool", "wren", "wrench", "wrist", "yard", "yarn", "plane", "adze", "cave", "loon", "pin", "pine", "fate", "hoof", "hooves", "skull", "block", "stamp", "chick", "hawk", "pearl", "sleigh", "peach", "lye"]
 
 
-def get_business():
+def get_business(desc=True):
     adj = random.choice(['new', 'tasty', 'trendy', 'modern', 'reliable', 'old, quiet',
                          'recently renovated', '', 'tranquil', 'fast casual', 'hole-in-the-wall', 'chic', 'cheap'])
     noun = random.choice(['climbing gym', 'restaurant', 'watering hole', 'stomping ground', 'fitness club', 'place', 'social club', 'lounge', 'salon',
@@ -20,4 +20,6 @@ def get_business():
         f'',
         f', the {adj} {noun} on {num} St',
     ])
+    if not desc:
+        detail = ''
     return f"{random.choice(a).capitalize()} & {random.choice(b).capitalize()}{detail}"
