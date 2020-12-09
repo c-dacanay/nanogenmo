@@ -180,7 +180,7 @@ def get_reflection(a, b, reflection):
             ],
             'libido': [
                 'too overt about sex',
-                'asked for physical intimacy too much',
+                'asking for physical intimacy too much',
                 'too physically needy'
             ],
             'con': [
