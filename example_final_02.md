@@ -1,191 +1,215 @@
 # Chapter 1
-Alex met John in a pottery studio. 
-John was struck by Alex's striking muscles. After a few moments, John smiled boldly, but Alex did not respond. 
+Alex met Joseph at Mortar & Field, that old, quiet abandoned lot for the adventurous. 
+Alex was fascinated by Joseph glancing over every now and again. Alex smiled nervously. Joseph smiled back. Soon, they got to talking and found themselves engaged in animated conversation. Alex left with Joseph's email address dashed onto a post-it note. 
 
+
+On Wednesday,  the two of them reveled in a passionate evening together.
+At dawn the next day, Joseph noticed a message from Alex.
+
+
+*alex (2010-12-03)*: i had a great time💦👄 when are u free next?
+
+*joseph_96🌶<3😍 (2010-12-03)*: Maybe in a bit, I'm busy this week
+
+Later that week,  Alex asked Joseph if they wanted to hang out, but Joseph never responded to Alex's message. 
+
+Later that week,  Joseph asked Alex if they were free, but Alex was busy. 
+
+Later that week,  Alex wanted to hang out with Joseph, but Joseph was busy. 
+
+At seven the next afternoon, Alex sent Joseph a text message.
+
+
+*alex (2010-12-07)*: you are scarcely great👅 when are u free next?
+
+*joseph_96🌶<3😍 (2010-12-07)*: Of course! friday?
+
+Wanting to surprise Joseph, Alex asked Joseph to go to a boardgame meet up together. 'Do we have to?' Joseph replied.
+Later that week,  Joseph wanted to see Alex, but Alex was busy. 
+
+Friday came around.  the couple reveled in a passionate evening together.
+The next evening, Alex noticed a message from Joseph.
+
+
+*alex (2010-12-16)*: I had a good time. When are you free next?
+
+*joseph_96🌶<3😍 (2010-12-16)*: uhhh let me take a look at my calendar
+
+On Thursday,  Joseph asked Alex if they wanted to hang out, but Alex never responded to Joseph's message. 
+
+The next afternoon, Alex sent Joseph a text message.
+
+
+*alex (2010-12-17)*: hope you had a nice time. when are u free next?
+
+*joseph_96🌶<3😍 (2010-12-17)*: Looking forward to it. im free on monday
+
+Later that week,  Alex and Joseph shared a kiss.
+
+
+
+*alex (2010-12-18)*: I had a good time. Let's do it again sometime
+
+*joseph_96🌶<3😍 (2010-12-18)*: uhhh let me take a look at my calendar
+
+Later that week,  Joseph asked Alex if they were free, but Alex had other plans. 
+
+On Sunday,  Joseph asked Alex if they wanted to hang out, but Alex never responded to Joseph's message. 
+
+Monday came around.  Joseph asked Alex if they wanted to hang out, but Alex forgot to return Joseph's message. 
+
+Later that week,  Joseph asked Alex if they were free, but Alex had other plans. 
+
+In the mood for adventure, Joseph asked Alex to write a letter to their local representative together. 'Oh, okay,' Alex replied.
+Thursday came around.  Alex and Joseph spent a night out together at the bar.
+Later that week,  Alex wanted to hang out with Joseph, but Joseph was busy. 
 
 They never saw each other again.
 
 
 ## Chapter 1.5
-Alex invested time in their stack of unread books.
-Alex took a lot time taking pleasure in board games, and they spent time at the sporting goods store every now and then.
-Until there was...
+Alex invested time in their friendships.
+Alex took lots of time obsessing over yoga, and they chilled at a yoga class every now and then.
+Then Alex saw...
 
 # Chapter 2
-Alex met Sharon using the same CrossFit Groupon. 
-Sharon couldn't help but notice Alex's easygoing confidence. After several minutes, Sharon smiled boldly, but Alex averted their eyes. 
+Alex met Tonia in a life drawing class. 
+Alex was struck by Tonia's striking features. After a few moments, Alex smiled boldly, but Tonia quickly turned away. 
 
 
 They never saw each other again.
 
 
 ## Chapter 2.5
-Alex invested time in their stack of unread books.
-Alex took a lot time taking pleasure in coffee, and they started to go to boardgame cafe occasionally.
+Alex invested time in their hobbies.
+Alex took a lot time to practice yoga, and they went to the beauty store often.
+Then, one day...
 
 # Chapter 3
-Alex met Frederick at Caption & Block, the tasty climbing gym on 24 St. 
-Alex noticed Frederick glancing over every now and again. Eventually, Alex smiled nervously. Frederick waved in return. Soon, they got to talking and found themselves engaged in animated conversation. Frederick left with Alex's contact. 
-
-
-
-*alex (2010-12-03)*: you are scarcely great💖🌶 when can i see you again?
-
-*frederick_83 (2010-12-03)*: Absolutely! after work on thursday?
-
-Wanting to surprise Frederick, Alex asked Frederick to go to the local board meeting together. 'Oh, okay,' Frederick replied.
-
-
-
-*alex (2010-12-07)*: Yo! I had a good time. Let's do it again sometime
-
-*frederick_83 (2010-12-07)*: yeah id love to! im free on friday?
-
-Later that week,  they were thrilled to spend a night out at the club.
-In effort to mix up what they usually do, Frederick invited Alex to go to a restaurant that just opened together. 'I'd love to!' Alex replied.
-On Sunday Frederick was discussing Alex with a friend and realized that  Alex was too boring. Frederick exhaled slowly. Perhaps it could be resolved with a simple conversation.  Frederick resolved to bring it up to Alex next time they saw each other. Alex was furious. The pair argued acidly.
-
-The next night, Alex sent Frederick a text message.
-
-
-*alex (2010-12-14)*: hope you had a nice time... repeat soon?
-
-*frederick_83 (2010-12-14)*: I'd love to. wednesday?
-
-Tuesday came around.  the two of them shared a kiss.
-Later that week,  the two of them were thrilled to spend a quiet morning reading together.
-At twilight the next day, Frederick sent Alex a text message.
-
-
-*alex (2010-12-18)*: Hello! I had a good time. See me again soon?
-
-*frederick_83 (2010-12-18)*: yeah id love to! i could do monday?
-
-Wanting to surprise Alex, Frederick begged Alex to go to a restaurant that just opened together. 'Yes, let's do it,' Alex replied.
-Alex asked to start dating. Frederick said that perhaps they were't quite ready yet. 
+Alex met Jessica at Zephyr & Geese, the recently renovated social club on 34 St. 
+Jessica was struck by Alex's easygoing confidence. Jessica giggled gently. Alex waved in return. They exchanged several friendly words, before agreeing to meet again sometime soon. Jessica left with Alex's Discord server invite. 
 
 
 
 
 
-*alex (2010-12-21)*: Yo! I had a good time. Let's do it again sometime
+*alex (2011-01-01)*: You're cute.Want to do it again?
 
-*frederick_83 (2010-12-21)*: yeah it was cool
+*jessica80😍💦😍 (2011-01-01)*: :) im free on after work on thursday?
 
-Tuesday came around.  Frederick wanted to hang out with Alex, but Alex never responded to Frederick's message. 
+Later that week,  the couple enjoyed a tranquil morning watching Netflix.
+Wednesday came around.  Jessica asked Alex if they were free, but Alex forgot to return Jessica's message. 
 
-On Thursday,  Frederick wanted to see Alex, but Alex forgot to return Frederick's message. 
+At two the next morning, Alex sent Jessica a text message.
 
-On Wednesday,  they shared a kiss.
-Later that week,  the two of them were thrilled to spend a passionate evening together.
 
-*alex (2011-01-02)*: Yo! I had a good time. Let's do it again sometime
+*alex (2011-01-07)*: hey, thanks for hanging out💋 can i see you again?
 
-*frederick_83 (2011-01-02)*: im kinda busy rn but ill text u
+*jessica80😍💦😍 (2011-01-07)*: Yeah...
 
-Sunday came around.  Frederick wanted to hang out with Alex, but Alex never responded to Frederick's message. 
-
-Monday came around.  Frederick wanted to hang out with Alex, but Alex forgot to return Frederick's message. 
-
-Monday came around.  Frederick wanted to see Alex, but Alex forgot to return Frederick's message. 
-
-They sometimes scuffled because Frederick felt that Alex didn't communicate their needs well.
-
-On Monday,  Frederick asked Alex if they were free, but Alex forgot to return Frederick's message. 
+Friday came around.  Alex asked Jessica if they were free, but Jessica never responded to Alex's message. 
 
 They never saw each other again.
 
 
 ## Chapter 3.5
-Alex invested time in their hobbies.
-Alex took a small amount of time enjoying coffee, and they chilled at a boardgame meet up as frequently as they could.
+Alex invested time in their stack of unread books.
+Alex took a little time delving into yoga, and they chilled at the gym with enthusiasm.
+
+January brought blustery storms and hot chocolate.
+
 
 # Chapter 4
-Alex met Alma at the local swimming pool. 
-Alex was struck by a quiet kindness in Alma's movements. After several minutes, Alex giggled intently, but Alma did not respond. 
+Alex met Darryl in graduate school. 
+Darryl noticed Alex's easygoing confidence. Eventually, Darryl began to gaze boldly at Alex, but Alex did not respond. 
 
 
 They never saw each other again.
 
 
 ## Chapter 4.5
-Alex was sure that they were too desperate.
-Alex took some time to practice board games, and they went back to a winery with enthusiasm.
-Then Alex saw...
+Alex invested time in their stack of unread books.
+Alex took a lot time appreciating yoga, and they started to go to Sephora as frequently as they could.
+
+January brought frosty winds and wool flannels.
+
 
 # Chapter 5
-Alex met Polly at Onyx & Roses, that trendy abandoned lot for the restless. 
-Alex couldn't help but notice a quiet kindness in Polly's movements. After several minutes, Alex smiled intently, but Polly quickly turned away. 
+Alex met Dorothy at the local swimming pool. 
+Alex noticed Dorothy's easygoing confidence. After a few moments, Alex began to gaze boldly at Dorothy, but Dorothy did not respond. 
 
 
 They never saw each other again.
 
 
 ## Chapter 5.5
-Alex was sure that they were too desperate.
-Alex took some time to watch YouTube videos about coffee, and they chilled at the sporting goods store occasionally.
-Then, one day...
+Alex invested time in their hobbies.
+Alex took lots of time enjoying yoga, and they went to the beauty store with enthusiasm.
 
 # Chapter 6
-Alex met William in graduate school. 
+Alex met Steve at Badger & Steel, that  fitness club for the bold and adventurous. 
+Alex was struck by a quiet kindness in Steve's movements. Eventually, Alex giggled boldly, but Steve averted his eyes. 
+
+
 They never saw each other again.
 
 
 ## Chapter 6.5
-Alex felt certain that they were unlovable.
-Alex took some time to watch YouTube videos about board games, and they went to the sporting goods store every now and then.
+Alex invested time in their hobbies.
+Alex took a little time enjoying yoga, and they spent time at Sephora with enthusiasm.
+
+January brought blustery winds and warm blankets.
+
+Until there was...
 
 # Chapter 7
-Alex met Doris in graduate school. 
-Alex was struck by Doris's well-defined body. After several minutes, Alex smiled boldly, but Doris did not respond. 
+Alex met Johnny at Pocket & Faith, that  abandoned lot for the adventurous. 
+Alex couldn't help but notice Johnny's deep sexual energy. Eventually, Alex waved boldly, but Johnny quickly turned away. 
 
 
 They never saw each other again.
 
 
 ## Chapter 7.5
-Alex felt certain that they were not fun to be around.
-Alex took some time to watch YouTube videos about diving, and they went back to a restaurant that just opened with enthusiasm.
-Then Alex saw...
+Alex invested time in their career.
+Alex took a lot time to watch YouTube videos about yoga, and they chilled at the gym every now and then.
+Then, one day...
 
 # Chapter 8
-Alex met James in a pottery studio. 
-James couldn't help but notice Alex's even, placid tones. After a few moments, James began to gaze boldly at Alex, but Alex did not respond. 
+Alex met Susan at an axe-throwing bar. 
+Alex couldn't help but notice Susan's intense focus. After a few moments, Alex began to gaze boldly at Susan, but Susan quickly turned away. 
 
 
 They never saw each other again.
 
 
 ## Chapter 8.5
-Alex felt certain that they were unlovable.
-Alex took a little time appreciating board games, and they spent time at a cocktail-making class occasionally.
+Alex felt certain that they were unattractive.
+Alex took a little time delving into yoga, and they started to go to Sephora with enthusiasm.
+
+January brought dark winds and wool flannels.
+
+Then, one day...
 
 # Chapter 9
-Alex met Mary at a bar. 
-Alex noticed Mary's even, placid tones. Eventually, Alex smiled boldly, but Mary averted her eyes. 
+Alex met Tyler at Gingham & Salt, the chic fitness club. 
+Tyler was struck by Alex's intense focus. Eventually, Tyler giggled boldly, but Alex quickly turned away. 
 
 
 They never saw each other again.
 
 
 ## Chapter 9.5
-Alex wondered if they were unlovable.
-Alex took lots of time enjoying diving, and they went to a winery excitedly.
-
-January brought frosty breezes and snowy blizzards.
-
+Alex felt as if they were unlovable.
+Alex took some time taking pleasure in yoga, and they went back to a yoga class every now and then.
 Then Alex saw...
 
 # Chapter 10
-Alex met Carolyn at Railway & Vine, the tranquil warehouse on 21 St. 
-Carolyn was fascinated by Alex's even, placid tones. Carolyn smiled gently, but Alex quickly turned away. 
-
-
+Alex met Melanie at Bucket & Stars, that new pottery studio for the bold and disaffected. 
 They never saw each other again.
 
 
 ## Chapter 10.5
 Alex felt certain that they were not fun to be around.
-Alex took lots of time to watch YouTube videos about coffee, and they spent time at a LAN party with enthusiasm.
-Then, one day...
+Alex took lots of time to practice yoga, and they prioritized going to a yoga class often.
 
