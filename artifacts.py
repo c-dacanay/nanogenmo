@@ -58,19 +58,19 @@ def get_first_date(event):
 
     rules = {
         'a': [
-            f'{preface}#a_msg#', '#a_msg#'
+            f'{preface}\n#a_msg#', '#a_msg#'
         ],
         'b': [
-            f'{preface}#b_msg#', '#b_msg#'
+            f'{preface}\n#b_msg#', '#b_msg#'
         ],
         'a_msg': [
-            f'#a_pre##a_start##punc##a_ask#\n#b_pre##b_{response}#'
+            f'\n#a_pre##a_start##punc##a_ask#\n\n#b_pre##b_{response}#'
         ],
         'b_msg': [
-            f'#b_pre##b_start##b_start2##b_ask#\n#a_pre##a_{response}#'
+            f'\n#b_pre##b_start##b_start2##b_ask#\n\n#a_pre##a_{response}#'
         ],
-        'a_pre': f"{a_nick} ({time}): ",
-        'b_pre': f"{b_nick} ({time}): ",
+        'a_pre': f"*{a_nick} ({time})*: ",
+        'b_pre': f"*{b_nick} ({time})*: ",
         'punc': ['. ', '! ', '... ', '#e# ', '#e##e# '],
         'e': HEART_EMOJIS,
         'a_start': [
@@ -164,15 +164,15 @@ def get_fight_trigger(event):
     b_nick = b['nickname']
     time = event['date']
     rules = {
-        'origin': ['#preface#\n#a#\n'],
+        'origin': ['#preface#\n#a#\n\n'],
         'preface': f'{get_message_intro(a, b)}',
         'a_lines': [
             'Hey, there\'s something I want to talk to you about',
             'Hey can we talk?',
             'Hey do you have a minute to chat?',
         ],
-        'a_pre': f"{a_nick} ({time}): ",
-        'b_pre': f"{b_nick} ({time}): ",
+        'a_pre': f"*{a_nick} ({time})*: ",
+        'b_pre': f"*{b_nick} ({time})*: ",
         'a': '#a_pre##a_lines#',
     }
     grammar = tracery.Grammar(rules)

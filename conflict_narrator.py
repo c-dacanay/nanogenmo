@@ -50,7 +50,7 @@ def get_problem(a, b, target_p):
             ],
             'exp': [
                 'was too immature',
-                'was kind of a crybaby'
+                'was kind of a crybaby',
                 'was too jealous',
                 'didn\'t communicate their needs well'
             ],
@@ -114,7 +114,7 @@ def get_problem(a, b, target_p):
             ],
             'hot': [
                 'was too desired, always getting unwanted attention',
-                'was too hot, making #b# feel insecure',
+                'was too hot, making #a# feel insecure',
                 'was too charming to others',
                 'was too flirty with coworkers'
             ],
@@ -195,12 +195,11 @@ def get_problem_statement(a, b, problem_phrase, event):
             '#a#\'s tones were accusing',
         ], event['neuro_roll']),
         'texture': util.rank([
-            '#b# sighed, and swiped the message away.',
+            '#b# sighed.',
             '#b# blinked slowly.',
             '#b# rubbed their eyes.',
             '#b# took a deep breath.',
             '#b# gasped anxiously.',
-            '#b#\'s finger trembled as they dismissed the message.',
             '#b# was shocked.',
             '#b# was mortified.',
             '#b# was incensed.',
@@ -292,7 +291,7 @@ def get_conflict_thought(a, b, event, problem_phrase):
         'a_their': a['their'],
         'b': b['name'],
         'b_their': b['their'],
-        'time': ['One morning', 'One day'],
+        'time': ['One morning', 'One day', '', f'On {event["date"].strftime("%A")}'],
         'mind': ['mind', 'head'],
         'ago': ago,
         'floated': ['floated back into #a#\'s #mind#', 'drifted into #a#\'s #mind#'],
@@ -325,7 +324,7 @@ def get_conflict_thought(a, b, event, problem_phrase):
             '#a# #return#. It wasn\'t a big deal, but nonetheless',
             '#a# exhaled slowly. Perhaps it could be resolved with a simple conversation. ',
             '#a# bit #a_their# lip. It was becoming more and more bothersome the more #a_they# thought about it.',
-            '#a# clenched #a_their# fist. It was really not something #a# valued in a partner',
+            '#a# clenched #a_their# fist. It was really not something #a# valued in a partner. ',
             '#a# felt themselves shaking with anger.',
         ], (event['target'])),
         'fight': ['fight', 'argument', 'dispute', 'spat']
@@ -371,7 +370,7 @@ def narrate_conflict_zoomout(a, b, event, problem_phrase):
     response = get_response(a, b, event)
     problem_statement = tracery.Grammar(
         {
-            'origin': "#They# #sometimes# #fought# because #a# felt that #b# #problem#. ",
+            'origin': "#They# #sometimes# #fought# because #a# felt that #b# #problem#.\n",
             'problem': problem_phrase,
             'pushing': 'pushing',
             'sometimes': util.rank(['occasionally', 'sometimes', 'often', 'frequently', 'always'], util.scale(event['delta'], -1, 0.5, 1, 0)),

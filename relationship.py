@@ -77,8 +77,8 @@ PHASE_COMMIT_THRESHOLDS = {
 }
 
 PHASE_SCORE_THRESHOLDS = {
-    Phase.COURTING: 1,
-    Phase.DATING: 3,
+    Phase.COURTING: 1.5,
+    Phase.DATING: 2.5,
     Phase.COMMITTED: 6,
 }
 
@@ -389,6 +389,7 @@ class Relationship:
             previous_attempts = [a for a in self.events if a.get('phase')
                                  == self.phase and a['type'] == EventType.COMMIT]
             previous_attempts_multiplier = len(previous_attempts)
+            event['prev'] = previous_attempts_multiplier
             # Debuffs if response was not enthusiastic:
             a['commit'] *= 0.9 + random.random() * 0.1
             a['interest'] *= 0.8 + random.random() * 0.2

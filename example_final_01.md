@@ -1,241 +1,329 @@
 # Chapter 1
-Alex met Hazel at Spigot & Crane, the fast casual restaurant on 85 St. 
-Alex noticed Hazel's easygoing confidence. After a few moments, Alex smiled nervously. Hazel waved in return. They exchanged several friendly words, before agreeing to meet again sometime soon. Alex left with Hazel's Discord server invite. 
+Alex met Martha at a bar. 
+Alex noticed Martha's even, placid tones. After a few moments, Alex began to gaze boldly at Martha. Martha waved in return. Soon, they got to talking and found themselves engaged in animated conversation. Alex left with Martha's phone number hastily scribbled on a napkin. 
 
 
-At twilight the next day, Hazel noticed a message from Alex.
+At six the next afternoon, Martha sent Alex a text message.
 
 
-*alex (2010-12-02)*: i had fun tonight👅 repeat soon?
+*alex (2010-12-01)*: Whats up! You're a cutie 👄See me again soon?
 
-*hazel (2010-12-02)*: For sure! what about monday?
+*martha (2010-12-01)*: yeah id love to! im free on tomorrow?
 
-Wanting to surprise Hazel, Alex suggested that they write at the cafe together. 'Sounds like fun!' Hazel replied.
-Later that week,  Hazel wanted to hang out with Alex, but Alex was busy. 
+In the mood for adventure, Martha begged Alex to volunteer at the animal shelter together. 'Okay,' Alex replied.
+Later that week,  the couple lay in bed together, but without touching.
 
+*alex (2010-12-04)*: can’t stop thinking about you! when can i see you again?
 
+*martha (2010-12-04)*: Absolutely! what about tomorrow?
 
-
-*alex (2010-12-10)*: Hello! I had a good time. Want to do it again?
-
-*hazel (2010-12-10)*: yes!! after work on thursday??
-
-On Friday,  the pair lay in bed together, holding hands.
-Later that week,  the two of them reveled in a tranquil morning watching a movie.
-Alex asked if Hazel would be interested in dating. Hazel agreed carefully. 
+Later that week,  the couple shared a kiss.
 
 
-Over time, Alex realized that Hazel seemed insecure about romantic relationships and was ready for something serious. Hazel was exacting and combative. She always invented new games and inside jokes.
+
+*alex (2010-12-06)*: Hello! You're a cutie 💋Want to do it again?
+
+*martha (2010-12-06)*: yeah id love to! i can do day after tomorrow?
+
+Monday came around.  they relished a tranquil evening watching a movie.
+Later that week,  the pair shared a kiss.
+At one the next morning, Martha sent Alex a text message.
 
 
-Friday came around.  Hazel and Alex shared a kiss.
-The couple sometimes scuffled because Hazel felt that Alex was not arranging dates often enough.
+*alex (2010-12-11)*: Heya! You're a cutie 🥰See me again soon?
+
+*martha (2010-12-11)*: :) i could do friday?
+
+In effort to mix up what they usually do, Martha wondered if it would be fun to go to the sporting goods store together. 'I guess so...' Alex replied.
+Martha asked if Alex would be interested in dating. Alex agreed very happily. 
 
 
-January brought blustery days and wet socks.
-
- Alex had the thought that perhaps Hazel didn't initiate sex often enough. Alex let the thought fade away. 
-Monday came around.  Hazel wanted to hang out with Alex, but Alex had other plans. 
-
-Later that week,  the pair reveled in a morning hanging out with friends.
-The next afternoon, Hazel sent Alex a text message.
-
-*hazel (2011-01-19)*: Hey can we talk?
-
- 
-The couple arranged a time to discuss. Hazel was angry because she felt that Alex never wanted to go out. Hazel was angry.  Hazel's tones were accusing. Alex's finger trembled as they dismissed the message. Alex was pissed. The couple failed to reach a conclusion.
-
-Tuesday came around.  Hazel asked Alex if they wanted to hang out, but Alex had other plans. 
-
-On Friday,  Hazel went to sleep without washing up first. .
-Monday came around.  the pair enjoyed a evening hanging out with friends.
-Later that week,  Hazel asked Alex if they were free, but Alex forgot to return Hazel's message. 
+Over time, Alex realized that Martha seemed timid in romantic relationships and was ready for something serious. Martha was exacting and affectionate. She was a picky eater and could not be convinced to try new food.
 
 
-February brought crisp days and warm blankets.
+The couple sometimes clashed because Martha felt that Alex pushed Martha for sex too often.
 
-They sometimes clashed because Alex felt that Hazel pushed Alex to socialize when they didn't want to.
-
-The couple frequently argued because Hazel felt that Alex didn't respect what Hazel wanted to do on dates.
-
-On Monday,  Hazel wanted to see Alex, but Alex forgot to return Hazel's message. 
-
-Sunday came around.  Alex spent the day arranging their books by color and subject.
-
-March brought sunny rains and melodic bird calls.
-
-At twilight the next day, Alex sent Hazel a text message.
-
-*alex (2011-03-08)*: Hey can we talk?
-
- 
-They arranged a time to hash things out. Alex was upset because they felt that Hazel needed to go on a diet. Alex wondered if Hazel would be willing to do things differently.It just wouldn't do.  Alex's voice was soft, but firm. Hazel was shocked. Hazel accused Alex of not being invested enough in the relationship. The couple failed to reach a conclusion.
-
-Thursday came around.  Alex wanted to see Hazel, but Hazel never responded to Alex's message. 
-
-On Sunday,  Hazel asked Alex if they wanted to hang out, but Alex was busy. 
-
-They sometimes clashed because Hazel felt that Alex was never interested in doing anything social.
-
-Tuesday came around.  Hazel wanted to see Alex, but Alex was busy. 
+Tuesday came around.  the couple were excited to spend a night out together at the bar.
+Martha said "I love you" Alex returns the words apprehensively.
 
 
-April brought delicate showers and hay fever.
-
-One morning, the fight they had 15 days ago about how Alex never wanted to socialize drifted into Hazel's head. Hazel exhaled slowly. Perhaps it could be resolved with a simple conversation.  Hazel resolved to bring it up to Alex next time they saw each other. 
-The couple later met up at Viper & Horn to continue the conversation. Alex was angry. The couple fought for hours.
-
-Later that week,  the two of them shared a kiss.
-Later that week,  the two of them shared a kiss.
-, the argument they had 15 days ago about how Alex was never interested in doing anything social drifted into Hazel's mind. Hazel exhaled slowly. Perhaps it could be resolved with a simple conversation.  Hazel resolved to bring it up to Alex next time they saw each other. 
-They met up to continue the conversation. Alex accused Hazel of not liking them enough. The couple failed to reach a conclusion.
-
-On Thursday,  Hazel asked Alex if they wanted to hang out, but Alex never responded to Hazel's message. 
-
-Sunday came around.  Hazel wanted to see Alex, but Alex had other plans. 
-
-
-May brought dewy mornings and vivid showers.
-
-The couple occasionally argued because Alex felt that Hazel was not passionate enough about the relationship.
-
-On Saturday,  Hazel and Alex shared a kiss.
-Tuesday came around.  Hazel asked Alex if they were free, but Alex was busy. 
-
-The next night, Alex noticed a message from Hazel.
-
-*hazel (2011-05-13)*: Hey, there's something I want to talk to you about
-
- 
-The couple arranged a time to hash things out. Hazel was frustrated because she felt that Alex was too messy. Hazel wondered if Alex would be willing to do things differently.It just wouldn't do.  Hazel's tones were accusing. Alex gasped anxiously. Alex accused Hazel of not liking them enough. The couple argued acridly.
-
+The couple lived happily ever after
 They never saw each other again.
 
 
 ## Chapter 1.5
-Later Alex realized that they might be too harsh about their parthers relationship experience. Alex decided to change.
-One night, while Alex was going to a cabaret they imagined Hazel's body silhouetted against the moonlight. Alex sighed and dismissed the thought.
-Alex took a little time enjoying dance, and they started to go to a stand-up show every now and then.
-Until there was...
+Alex invested time in their hobbies.
+Alex took lots of time to watch YouTube videos about baseball, and they prioritized going to the sporting goods store every now and then.
 
 # Chapter 2
-Alex met Flora at Cipher & Faith, the cheap warehouse. 
-Flora noticed Alex's easygoing confidence. Eventually, Flora walked boldly toward Alex, but Alex averted their eyes. 
+Alex met Heather in graduate school. 
+Alex was struck by Heather's striking features. Eventually, Alex smiled boldly, but Heather did not respond. 
 
 
 They never saw each other again.
 
 
 ## Chapter 2.5
-Alex invested time in their career.
-Alex took lots of time to watch YouTube videos about dance, and they chilled at a one-man play every now and then.
-Then Alex saw...
+Alex invested time in their friendships.
+Alex took a lot time delving into baseball, and they chilled at the record shop as frequently as they could.
+Until there was...
 
 # Chapter 3
-Alex met Norma at Spider & Pin, that modern place for the disaffected and young. 
-Norma couldn't help but notice Alex's easygoing confidence. Eventually, Norma giggled boldly, but Alex quickly turned away. 
+Alex met Daniel at Pepper & Fern, the tranquil lounge. 
+Daniel noticed Alex's easygoing confidence. Daniel giggled boldly, but Alex did not respond. 
 
 
 They never saw each other again.
 
 
 ## Chapter 3.5
-Alex invested time in their hobbies.
-Alex took a small amount of time delving into dance, and they spent time at a D&D one-shot with enthusiasm.
+Alex invested time in their friendships.
+Alex took some time appreciating audio-tech, and they chilled at Alex's next show as frequently as they could.
 
-May brought breezy rains and balmy mornings.
+June brought hot nights and beach days.
 
+Then Alex saw...
 
 # Chapter 4
-Alex met Mattie at Tower & Thread. 
+Alex met Rachel at Dovetail & Stage, that cheap social club for the urban dweller and bold. 
+Alex was fascinated by Rachel's easygoing confidence. Alex giggled boldly. Rachel returned a flirtatious glance. They exchanged several friendly words, before agreeing to meet again sometime soon. Rachel left with Alex's contact. 
+
+
+At nine the next morning, Alex sent Rachel a text message.
+
+
+*alex (2012-06-29)*: can’t stop thinking about you! again sometime?again?
+
+*rachel (2012-06-29)*: Of course! im free on some time next week
+
+Later that week,  Alex and Rachel were thrilled to spend a night out together at the bar.
+
+*alex (2012-07-01)*: hope you had a nice time😘👀 when can i see you again?
+
+*rachel (2012-07-01)*: Of course! after work on thursday?
+
+On Sunday,  the two of them shared a kiss.
+Monday came around.  the couple shared a kiss.
+
+*alex (2012-07-05)*: it was really nice to spend time with you... when can i see you again?
+
+*rachel (2012-07-05)*: For sure! what about day after tomorrow?
+
+Thursday came around.  they shared a kiss.
+Rachel asked if Alex would be interested in dating. Alex agreed somewhat nervously. 
+
+
+Over time, Alex realized that Rachel was meandering and altruistic. She enjoyed trying new things but was still quite skeptical. She was a gorgeous person with a laid-back demeanor.
+
+
+ Alex felt concerned that perhaps Rachel was too serious about the relationship. Alex returned to their work.. It wasn't a big deal, but nonetheless Alex resolved to bring it up to Rachel next time they saw each other. Rachel wanted to please Alex, and apologized profuselyRachel didn't want Alex to be angry, and bought a coffee for Alex the next morning
+
+Sunday came around.  Rachel suggested that they begin a weekly relationship-checkin process. Alex agreed happily. .
+The next morning, Rachel sent Alex a text message.
+
+*rachel (2012-07-21)*: Hey do you have a minute to chat?
+
+ Rachel told Alex that Alex was not passionate enough about the relationship. Rachel was angry.  Rachel's voice was cold. Alex accused Rachel of not being invested enough in the relationship. The pair failed to reach a conclusion.
+
+Later that week,  Rachel asked Alex if they were free, but Alex had other plans. 
+
+
+August brought unbearably hot air and barbeques.
+
+Wanting to have a nice evening together, Alex wanted to watch video essays on YouTube together. 'Okay,' Rachel replied.
+One morning Alex had the thought that  Rachel wanted to talk too much. Alex clenched their fist. It was really not something Alex valued in a partner.  Alex resolved to bring it up to Rachel next time they saw each other. Rachel accused Alex of not liking them enough. They argued bitterly.
+
+They sometimes scuffled because Rachel felt that Alex only wanted to do things related to sports, music; only things Alex liked to do .
+
+
+
+*alex (2012-08-17)*: Hey, there's something I want to talk to you about
+
+ 
+They arranged a time to chat. Alex again was angry because they felt that Rachel wanted to talk about feelings too often. Alex was angry.  Alex folded their arms, glaring at Rachel. Rachel accused Alex of not being invested enough in the relationship. They failed to reach a conclusion.
+
 They never saw each other again.
 
 
 ## Chapter 4.5
-Alex invested time in their career.
-Alex took some time obsessing over dance, and they spent time at the opera as frequently as they could.
+Later Alex realized that they had been too much of a social butterfly. Alex decided to change.
+One evening while Alex was getting groceries they thought about Rachel's body silhouetted against the moonlight. Alex took in a deep breath as tears welled up in their eyes. There was no one like her.
+Alex took a lot time to practice baseball, and they went back to the sporting goods store as frequently as they could.
 
-May brought sunny sunrises and hay fever.
+August brought searing nights and beach days.
 
+Until there was...
 
 # Chapter 5
-Alex met Edward in graduate school. 
-Edward was struck by Alex's easygoing confidence. After a few moments, Edward waved boldly, but Alex quickly turned away. 
+Alex met Dennis at Waistcoat & Lace, that new place for the bold and urban dweller. 
+Dennis was fascinated by Alex's easygoing confidence. Dennis walked gently toward Alex. Alex smiled back. Soon, they got to talking and found themselves engaged in animated conversation. Alex left with Dennis's Instagram handle. 
 
 
 They never saw each other again.
 
 
 ## Chapter 5.5
-Alex invested time in their hobbies.
-Alex took a little time appreciating dance, and they chilled at a performance with enthusiasm.
-
-May brought balmy breezes and hay fever.
-
-Then, one day...
+Alex invested time in their career.
+Alex took a little time obsessing over baseball, and they started to go to the sporting goods store as frequently as they could.
 
 # Chapter 6
-Alex met Lloyd at Tinker & Lamb, that modern fitness club for the disaffected and single. 
-Alex couldn't help but notice Lloyd glancing over every now and again. After a few moments, Alex began to gaze nervously at Lloyd. Lloyd smiled back. They exchanged several friendly words, before agreeing to meet again sometime soon. Alex left with Lloyd's email address dashed onto a post-it note. 
+Alex met Cynthia in a subway station. 
+Alex was fascinated by Cynthia's pealing laughter. After several minutes, Alex giggled intently. Cynthia smiled back. Soon, they got to talking and found themselves engaged in animated conversation. Cynthia left with Alex's Discord server invite. 
 
 
-Friday came around.  Lloyd wanted to hang out with Alex, but Alex had other plans. 
+
+*alex (2012-08-17)*: hey, thanks for hanging out! when are u free next?
+
+*cynthia (2012-08-17)*: For sure! im free on tuesday
+
+Friday came around.  Alex and Cynthia shared a kiss.
+The next afternoon, Cynthia noticed a message from Alex.
+
+
+*alex (2012-08-18)*: hope you had a nice time🌶 repeat soon?
+
+*cynthia (2012-08-18)*: Of course! i could do wednesday
+
+Wanting to surprise Cynthia, Alex wondered if it would be fun to learn Alex's favorite game together. 'You know I don't like that,' Cynthia replied.
+Sunday came around.  they relished a tranquil afternoon watching a movie.
+
+*alex (2012-08-20)*: i had a great time... repeat soon?
+
+*cynthia (2012-08-20)*: For sure! what about friday?
+
+On Monday,  the couple relished a night out together at the bar.
+Alex asked to start dating. Cynthia agreed somewhat nervously. 
+
+
+Over time, Alex realized that She was a gorgeous person with a gregarious personality. Cynthia was exacting and argumentative. She was cautious and hated surprises.
+
+
+Later that week,  Alex asked Cynthia if they were free, but Cynthia never responded to Alex's message. 
+
+On Monday,  Cynthia asked Alex how they were feeling about the relationship. The couple had an earnest conversation about where things were going..
+Later that week,  the couple savored a tranquil day watching Youtube videos.
+Alex said "I love you" Cynthia could not say it back. Alex was hurt, but was understanding.
+
+
+
+September brought gentle mornings and bitter leaves.
+
+On Wednesday,  Alex wanted to hang out with Cynthia, but Cynthia had other plans. 
+
+In the mood for adventure, Cynthia suggested that they go to the state park together. 'Sure!' Alex replied.
+The next night, Cynthia noticed a message from Alex.
+
+*alex (2012-09-23)*: Hey do you have a minute to chat?
+
+ Alex was frustrated because they felt that Cynthia pushed Alex out of their comfort zone too often. Alex was angry.  Alex looked at Cynthia silently, waiting for a response. Cynthia was defensive. They fought bitterly.
+
+Saturday came around.  Alex went shopping for organic groceries. That figure didn't keep itself in shape!.
+
+October brought gentle nights and warm sweaters.
+
+
+
+*alex (2012-10-05)*: Hey can we talk?
+
+ 
+They later got on the phone to discuss. Alex again was mad because they felt that Cynthia didn't understand that Alex did not enjoy discovering things the way Cynthia did. Alex was angry.  Alex's voice was gentle, but firm. Cynthia was shocked. Cynthia accused Alex of not liking them enough. The couple failed to reach a conclusion.
+
+On Monday Alex considered that  Cynthia never wanted to socialize. Alex bit their lip. It was becoming more and more bothersome the more they thought about it. Alex resolved to bring it up to Cynthia next time they saw each other. 
+The couple arranged a time to hash things out. Cynthia was furious. They failed to reach a conclusion.
 
 They never saw each other again.
 
 
 ## Chapter 6.5
-Alex invested time in their friendships.
-Alex took a lot time delving into dance, and they started to go to a one-man play every now and then.
-Until there was...
+After the relationship ended Alex realized that they had been never stood up for their needs. Alex decided to change.
+One evening while Alex was reading about music they thought about Cynthia's body silhouetted against the moonlight. Alex wondered, surprised by their own desperation, if anyone other than Cynthia would do.
+Alex took a small amount of time to practice baseball, and they made plans to go to Alex's next show as frequently as they could.
+
+October brought frosty leaves and tacky decorations.
+
 
 # Chapter 7
-Alex met John at Creature & Pine. 
-Alex couldn't help but notice John's even, placid tones. Eventually, Alex waved boldly, but John quickly turned away. 
+Alex met Lois at Canvas & Crane, the trendy coffee shop. 
+Alex couldn't help but notice Lois glancing over every now and again. Alex walked shyly toward Lois. Lois smiled back. Soon, they got to talking and found themselves engaged in animated conversation. Alex left with Lois's phone number. 
 
+
+On Monday,  Lois asked Alex if they were free, but Alex forgot to return Lois's message. 
 
 They never saw each other again.
 
 
 ## Chapter 7.5
-Alex invested time in their friendships.
-Alex took some time appreciating dance, and they went to a magic show excitedly.
-Then Alex saw...
+Alex invested time in their hobbies.
+Alex took a small amount of time appreciating audio-tech, and they went to a music store often.
 
 # Chapter 8
-Alex met Laura at Riddle & Ham. 
-Laura was fascinated by Alex's easygoing confidence. Laura began to gaze  at Alex, but Alex averted their eyes. 
+Alex met Jeanmarie at Number & Frog, the reliable coffee shop on 88 St. 
+Jeanmarie was fascinated by Alex's easygoing confidence. Jeanmarie began to gaze boldly at Alex, but Alex quickly turned away. 
 
 
 They never saw each other again.
 
 
 ## Chapter 8.5
-Alex invested time in their hobbies.
-Alex took lots of time appreciating dance, and they chilled at a stand-up show excitedly.
+Alex invested time in their career.
+Alex took some time to practice audio-tech, and they started to go to the sporting goods store every now and then.
 
 # Chapter 9
-Alex met Anthony at the local swimming pool. 
-Alex was struck by Anthony's deep sexual energy. After a few moments, Alex smiled boldly, but Anthony did not respond. 
+Alex met Sara at Hammer & Jars, that new lounge for the restless and restless. 
+Alex noticed a raw intensity in Sara's articulations. Alex giggled quietly. Sara waved in return. They exchanged several friendly words, before agreeing to meet again sometime soon. Sara left with Alex's smile etched into their memory. 
 
+
+The next day, Sara sent Alex a text message.
+
+
+*alex (2012-10-15)*: Hey! I had a great time. See me again soon?
+
+*sara_88🍆🥰 (2012-10-15)*: :) im free on tuesday?
+
+Monday came around.  the couple reveled in a morning hanging out with friends.
+
+*alex (2012-10-20)*: Yo! I had a great time. Let's do it again sometime
+
+*sara_88🍆🥰 (2012-10-20)*: yeah it was cool
+
+Later that week,  Sara wanted to hang out with Alex, but Alex was busy. 
+
+
+*alex (2012-10-23)*: I had a great time. Want to do it again?
+
+*sara_88🍆🥰 (2012-10-23)*: yes!! im free on some time next week?
+
+Tuesday came around.  Sara and Alex lay in bed together, holding hands.
+
+*alex (2012-10-24)*: i had a great time... repeat soon?
+
+*sara_88🍆🥰 (2012-10-24)*: Absolutely! after work on thursday?
+
+Wanting to have a nice evening together, Alex begged Sara to go to the science museum together. 'I'd love to!' Sara replied.
+Alex asked if Sara would be interested in dating. Sara said that perhaps they were't quite ready yet. 
+
+
+Sunday came around.  Sara wanted to hang out with Alex, but Alex never responded to Sara's message. 
 
 They never saw each other again.
 
 
 ## Chapter 9.5
-Alex invested time in their career.
-Alex took a lot time enjoying dance, and they made plans to go to a musical every now and then.
-Then, one day...
+Alex invested time in their friendships.
+Alex took lots of time taking pleasure in baseball, and they went to the sporting goods store occasionally.
 
 # Chapter 10
-Alex met Toni at the local swimming pool. 
-Alex was fascinated by Toni's easygoing confidence. After a few moments, Alex began to gaze boldly at Toni, but Toni averted her eyes. 
+Alex met Sherie at Spyglass & Grouse, the new salon. 
+Alex couldn't help but notice Sherie's deep sexual energy. Eventually, Alex smiled intently, but Sherie averted her eyes. 
 
 
 They never saw each other again.
 
 
 ## Chapter 10.5
-Alex felt certain that they were unlovable.
-Alex took a small amount of time delving into dance, and they prioritized going to the opera occasionally.
+Alex invested time in their hobbies.
+Alex took a lot time delving into audio-tech, and they went back to the game often.
+
+October brought gentle sunsets and cool foliage.
+
 

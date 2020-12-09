@@ -80,7 +80,6 @@ def generate_person():
     }
 
 
-
 def generate_book(num):
     date = datetime.date.fromisoformat('2010-12-01')
     for i in range(num):
@@ -91,7 +90,7 @@ def generate_book(num):
         r.simulate_reflection()
         date = r.events[len(r.events) - 1]['date']
         relationship_narrator.narrate(r)
-        print('# Chapter ' + str(i + 1.5))
+        print('## Chapter ' + str(i + 1.5))
         print(epilogue.get_epilogue(r, date))
 
 
