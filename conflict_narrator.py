@@ -131,13 +131,14 @@ def get_problem(a, b, target_p):
 def get_meetup(a, b):
     rules = {
         'origin': [
-            '#texture# \n#they# #met# #discuss#.',
             '\n#they# #met# #discuss#.',
         ],
         'they': ['They', 'The couple'],
         'met': [
             'later met up at #location#',
-            'later got on the phone'
+            'later got on the phone',
+            'arranged a time',
+            'met up',
         ],
         'location': business_gen.get_business(desc=False),
         'discuss': [
@@ -194,15 +195,15 @@ def get_problem_statement(a, b, problem_phrase, event):
             '#a#\'s tones were accusing',
         ], event['neuro_roll']),
         'texture': util.rank([
-            '#b_name# sighed, and swiped the message away.',
-            '#b_name# blinked slowly.',
-            '#b_name# rubbed their eyes.',
-            '#b_name# took a deep breath.',
-            '#b_name# gasped anxiously.',
-            '#b_name#\'s finger trembled as they dismissed the message.',
-            '#b_name# was shocked.',
-            '#b_name# was mortified.',
-            '#b_name# was incensed.',
+            '#b# sighed, and swiped the message away.',
+            '#b# blinked slowly.',
+            '#b# rubbed their eyes.',
+            '#b# took a deep breath.',
+            '#b# gasped anxiously.',
+            '#b#\'s finger trembled as they dismissed the message.',
+            '#b# was shocked.',
+            '#b# was mortified.',
+            '#b# was incensed.',
         ], random.gauss(b['neuro'], 0.1))
     }
     grammar = tracery.Grammar(rules)
@@ -301,11 +302,10 @@ def get_conflict_thought(a, b, event, problem_phrase):
         'pushing': ['pushing', 'telling', 'convincing', 'nagging', 'dragging'],
         'but': [
             '#pushed_back#, and #return#',
-            '#pushed_back#'
+            '#pushed_back#. '
         ],
         'pushed_back': [
             '#a# pushed the thought the the back of #a_their# mind',
-            'But the thought would fade',
             '#a# let the thought fade away',
         ],
         'return': [
