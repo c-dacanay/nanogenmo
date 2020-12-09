@@ -11,7 +11,7 @@ import tracery
 import artifacts
 from tracery.modifiers import base_english
 from util import get_ab
-from interests import INTERESTS
+from interests import INTERESTS, getInterestRules
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -226,20 +226,8 @@ def narrate_experience(event):
         # TODO
         return
     if event['target_property'] == 'open':
+        #getAcademicInterest()
         rules = {
-            'a':
-            a['name'],
-            'b':
-            b['name'],
-            'their':
-            a['their'],
-            'hobby':
-            [f"{random.choice(INTERESTS[event['interest']]['hobbies'])}"],
-            # types of classes
-            'food_class': [
-                'grilling', 'cheesemaking', 'cooking', 'bartending',
-                'cocktail-making', 'beer-brewing', 'breadmaking'
-            ],
             'proposed': [
                 "asked to", "begged to", "proposed that they",
                 "wondered if it would be fun to", "suggested that they",
@@ -250,6 +238,7 @@ def narrate_experience(event):
                 f"#a# #proposed# {random.choice(INTERESTS[event['interest']]['verb'])}."
             ]
         }
+        rules.update(getInterestRules(a, b, event['interest']))
         grammar = tracery.Grammar(rules)
         print(grammar.flatten('#hobby_proposal#'))
         logging.debug(

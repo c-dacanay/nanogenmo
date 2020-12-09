@@ -2,7 +2,7 @@ from relationship import Relationship, Phase
 import tracery
 import util
 import random
-from interests import INTERESTS
+from interests import INTERESTS, getInterestRules
 from narrate_time import narrate_month
 from util import rank
 import datetime
@@ -60,6 +60,7 @@ def narrate_memory(a, b, reflection, interest):
                 '#a# took in a deep breath as tears welled up in #a_their# eyes. There was no one like #b_their#' 
                 ], a['interest'])
         }
+        rules.update(getInterestRules(a, b, interest))
         print(tracery.Grammar(rules).flatten('#memory_sentence#'))
 
 def narrate_alex(a, interest, hobby):
@@ -79,7 +80,7 @@ def narrate_alex(a, interest, hobby):
         ],
         'amount': [
             'often', 'every now and then', 'occasionally', 'excitedly',
-            'as frequently as #they# could', 'with enthisuasm'
+            'as frequently as #they# could', 'with enthusiasm'
         ],
         'hobby': hobby,
         'a':
