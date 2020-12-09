@@ -264,6 +264,7 @@ class Relationship:
         # if A's neuroticism is high.
         e['concession_roll'] = gauss(a['concessions'][target_property], 0.2)
         e['neuro_roll'] = gauss(a['neuro'], 0.2)
+        e['target'] = a['concessions'][e['target_property']]
 
         if e['concession_roll'] < 0.5 and e['neuro_roll'] < 0.5:
             # If it isn't a big deal, return an event with 'initiated' key set to False
@@ -275,7 +276,6 @@ class Relationship:
 
         # Now the conflict has begun. B must assuage
         # A's concession damage.
-        e['target'] = a['concessions'][e['target_property']]
         e['handicap'] = util.scale(random.random(), 0, 1, -0.25, 0.25)
 
         variance = (1.05 - b['exp']) / 4
