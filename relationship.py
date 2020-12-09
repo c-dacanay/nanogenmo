@@ -99,26 +99,26 @@ class Relationship:
         self.a = a
         self.b = b
         self.a['concessions'] = {
-            'open': 0,
-            'extra': 0,
-            'libido': 0,
-            'commit': 0,
-            'con': 0,
-            'hot': 0,
-            'neuro': 0,
-            'agree': 0,
-            'exp': 0,
+            'open': 0.01,
+            'extra': 0.01,
+            'libido': 0.01,
+            'commit': 0.01,
+            'con': 0.01,
+            'hot': 0.01,
+            'neuro': 0.01,
+            'agree': 0.01,
+            'exp': 0.01,
         }
         self.b['concessions'] = {
-            'open': 0,
-            'extra': 0,
-            'libido': 0,
-            'commit': 0,
-            'con': 0,
-            'hot': 0,
-            'neuro': 0,
-            'agree': 0,
-            'exp': 0,
+            'open': 0.01,
+            'extra': 0.01,
+            'libido': 0.01,
+            'commit': 0.01,
+            'con': 0.01,
+            'hot': 0.01,
+            'neuro': 0.01,
+            'agree': 0.01,
+            'exp': 0.01,
         }
 
     def simulate_experience(self):
@@ -252,7 +252,12 @@ class Relationship:
         target_property = random.choices(
             population=list(a['concessions'].keys()),
             weights=list(a['concessions'].values()))[0]
+
         e['target_property'] = target_property
+
+        # Include previous fights
+        e['prev'] = [f for f in self.events if f['type'] ==
+                     EventType.CONFLICT and f['target_property'] == target_property]
 
         # A chooses whether or not to actually fight about it.
         # Fighting is more likely if concession damage is high or

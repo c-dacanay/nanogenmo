@@ -11,7 +11,7 @@ def getInterestRules(a, b, interest):
         'b': b['name'],
         'their': a['their'],
         'they': a['they'],
-        #'their_hobby': f"{a['hobbies']
+        # 'their_hobby': f"{a['hobbies']
         'hobby': [f"{random.choice(INTERESTS[interest]['hobbies'])}"],
         # types of classes
         'food_class': [
@@ -43,12 +43,13 @@ INTERESTS = {
         'verb': ["volunteer at the animal shelter", "go WWOOFing"]
     },
     'food-drink': {
-        'hobbies': ["bartending", "competitive eating","beer", "wine", "coffee", "cocktails", "grilling", "cheese", "cooking", "baking", "tea", "bread", "kombucha"],
+        'hobbies': ["bartending", "competitive eating", "beer", "wine", "coffee", "cocktails", "grilling", "cheese", "cooking", "baking", "tea", "bread", "kombucha"],
         'location': ["a winery", "a restaurant that just opened", "a #food_class# class"],
         'verb': ["cook dinner together", "try a new recipe", "make fancy cocktails"]
     },
     'music': {
-        'hobbies': ["composition", "DJing", "singing", "beat boxing", "audio-tech"], #plays instrument, listening to #music-genre#]
+        # plays instrument, listening to #music-genre#]
+        'hobbies': ["composition", "DJing", "singing", "beat boxing", "audio-tech"],
         'location': ["a concert", "a music store", "a music festival", "the record shop", "#a#'s next show", "a songwriting class"],
         'verb': ["listen to an album #they# recently discovered"]
     },
@@ -69,7 +70,7 @@ INTERESTS = {
     },
     'health-beauty': {
         'hobbies': ["makeup", "yoga", "meditation", "skincare", "fashion", "fitness", "power-lifting", "weight-training", "bodybuilding", "jogging", "running", "barre", "HIIT workouts"],
-        'locations': ["the gym", "Sephora", "the beauty store", "a yoga class"],
+        'location': ["the gym", "Sephora", "the beauty store", "a yoga class"],
         'verb': ["do facial masks", "give each other makeovers", "meditate", "go on a run", "work out", "go shopping"]
     },
     'politics': {
@@ -82,7 +83,7 @@ INTERESTS = {
         'location': ["the movies", "a screening", "a premiere", "a showcase", "a film festival"],
         'verb': ["binge-watch Netflix", "introduce #b# to #their# favorite show", "watch a movie in bed", "do a photoshoot", "watch video essays on YouTube"]
     },
-     'literature': {
+    'literature': {
         'hobbies': ["reading", "fiction-writing", "poetry"],
         'location': ["#their# favorite bookstore", "the library", "a release party", "an author's talk", "a book signing"],
         'verb': ["read in the park", "write at the cafe", "do the crossword", "play Scrabble"]
@@ -94,4 +95,3 @@ INTERESTS = {
     }
 
 }
-

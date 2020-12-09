@@ -1,4 +1,5 @@
 import tracery
+import humanize
 import random
 import business_gen
 from util import get_ab
@@ -233,11 +234,30 @@ def narrate_conflict(event):
     if not event['initiated']:
         # A was grumpy, but didn't actually initiate a fight.
         logging.debug("FIGHT ABORTED")
+        conflicts = [e for e in event['prev'] if e['initiated']]
+        ago = ''
+        if conflicts:
+            # There were previou fights about it.
+            # One morning, the fight they had in December about Susan's laziness floated into ALex's mind.
+            main = '#time# the #fight# they had #ago# about #b# #problem# #floated#.'
+            ago = humanize.naturaldelta(
+                event['date'] - conflicts[len(conflicts) - 1]['date'])
+        elif event['prev']:
+            # THere were previous aborted fights.
+            main = 'The idea that #b# #problem# came back #a#\'s #mind#.'
+        else:
+            main = '#time# #a# #thought# that #perhaps# #b# #problem#.'
+
         rules = {
-            'origin': '#sometimes# #a# #thought# that #perhaps# #b# #problem#. #but#',
+            'origin': '#main# #but#',
+            'main': main,
             'a': a['name'],
             'b': b['name'],
-            'sometimes': ['Sometimes', 'Often', 'Occasionally', 'From time to time', 'Some nights', 'On rare occassion'],
+            'b_their': b['their'],
+            'time': ['One morning', 'One day'],
+            'mind': ['mind', 'head'],
+            'ago': ago,
+            'floated': ['floated back into #b_their# #mind#', 'drifted into #b_their# #mind#'],
             'perhaps': ['perhaps', 'maybe', '', 'it was possible that', 'compared to previous partners'],
             'thought': ['thought', 'considered', 'wondered', 'felt concerned'],
             'problem': problem_phrase,
@@ -259,7 +279,12 @@ def narrate_conflict(event):
             'returned': ['returned', 'went back'],
             'a_their': a['their'],
         }
-        print(tracery.Grammar(rules).flatten('#origin#'))
+        import pdb
+        try:
+            print(tracery.Grammar(rules).flatten('#origin#'))
+        except:
+            pdb.set_trace()
+
         return
 
     if random.random() < abs(event['delta']):
@@ -291,6 +316,22 @@ def narrate_conflict_zoomout(a, b, event, problem_phrase):
     problem_statement = tracery.Grammar(
         {
             'origin': "#They# #sometimes# #fought# because #a# felt that #b# #problem#. ",
+            'problem': problem_phrase,
+            'pushing': 'pushing',
+            'sometimes': util.rank(['occasionally', 'sometimes', 'often', 'frequently', 'always'], util.scale(event['delta'], -1, 0.5, 1, 0)),
+            'fought': ['fought', 'argued', 'clashed', 'scuffled'],
+            'They': ['They', 'The couple'],
+            'a': a['name'],
+            'b': b['name'],
+        }).flatten('#origin#')
+    print(problem_statement)
+
+
+def narrate_minor_conflict(a, b, event, problem_phrase):
+    problem_statement = tracery.Grammar(
+        {
+            'origin': "#a# #asked# #b# to #a# felt that #b# was #problem#. ",
+            # Alex asked Tracy to be more hot
             'problem': problem_phrase,
             'pushing': 'pushing',
             'sometimes': util.rank(['occasionally', 'sometimes', 'often', 'frequently', 'always'], util.scale(event['delta'], -1, 0.5, 1, 0)),

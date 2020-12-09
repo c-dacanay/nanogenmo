@@ -7,6 +7,7 @@ from narrate_time import narrate_month
 from util import rank
 import datetime
 
+
 def get_epilogue(r, date):
     a = r.a
     b = r.b
@@ -21,7 +22,7 @@ def get_epilogue(r, date):
     else:
         get_outlook(a)
     narrate_alex(a, interest, hobby)
-    #TODO random event / new hobby
+    # TODO random event / new hobby
 
     if random.random() > 0.7:
         narrate_month(date)
@@ -29,6 +30,7 @@ def get_epilogue(r, date):
         andthen()
 
     return ""
+
 
 def narrate_memory(a, b, reflection, interest):
     if reflection['memory']:
@@ -41,7 +43,7 @@ def narrate_memory(a, b, reflection, interest):
             'b_their': b['their'],
             'b_they': b['they'],
             'time': ['Every now and then when #a# was #action#', 'Some mornings, in those tender moments between sleep and wake,', 'One night, while #a# was #action#', 'Randomly when #a# was #action#', 'When #a# was #action#', 'One evening while #a# was #action#'],
-            'action': ['going to bed', 'getting groceries', f"going to {random.choice(INTERESTS[interest]['location'])}",'daydreaming', 'getting ready for work', 'making plans for a vacation', f"reading about {interest}" ],
+            'action': ['going to bed', 'getting groceries', f"going to {random.choice(INTERESTS[interest]['location'])}", 'daydreaming', 'getting ready for work', 'making plans for a vacation', f"reading about {interest}"],
             'remembered': ['#a_they# couldn\'t help but think about', '#a_they# remebered', '#a# recalled', '#a_they# imagined', '#a_they# thought about'],
             'open': ['#b#\'s enthusiastic charm', '#b#\'s gentle hand on #a_their#\'s, beckoning', '#b#\'s open and excited response when trying something new together'],
             'extra': ['#b#\'s melodic laughter', 'watching #b# at a party while #b_they# charmed the whole room'],
@@ -53,17 +55,19 @@ def narrate_memory(a, b, reflection, interest):
             'neuro': ['one of #b#\'s emotional breakdowns', 'brushing #a_their# hands through #b#\'s hair as #b_they# endured another mood swing', '#b#\'s constant refrain: "thank you for staying being with me"'],
             'commit': ['meeting #b#\'s parents', 'talking about moving in with #b#', 'long discussions about #a_their# future with #b#'],
             'reaction': rank(['#a# sighed and dismissed the thought',
-                '#a# tried to push #b# out of #a_their# mind', 
-                '#a# bit #a_their# lip and moved on with #a_their# day',
-                'In that moment #a# felt overcome with affection, and loss',
-                '#a# wondered, surprised by #a_their# own desperation, if anyone other than #b# would do',
-                '#a# took in a deep breath as tears welled up in #a_their# eyes. There was no one like #b_their#' 
-                ], a['interest'])
+                              '#a# tried to push #b# out of #a_their# mind',
+                              '#a# bit #a_their# lip and moved on with #a_their# day',
+                              'In that moment #a# felt overcome with affection, and loss',
+                              '#a# wondered, surprised by #a_their# own desperation, if anyone other than #b# would do',
+                              '#a# took in a deep breath as tears welled up in #a_their# eyes. There was no one like #b_their#'
+                              ], a['interest'])
         }
         rules.update(getInterestRules(a, b, interest))
         print(tracery.Grammar(rules).flatten('#memory_sentence#'))
 
+
 def narrate_alex(a, interest, hobby):
+    print(interest)
     a_verb = random.choice(INTERESTS[interest]['location'])
     rules = {
         'origin':
@@ -88,8 +92,9 @@ def narrate_alex(a, interest, hobby):
         'a_they':
         a['they'],
     }
-    rules.update(getInterestRules(a, b, interest))
+    rules.update(getInterestRules(a, {'name': ''}, interest))
     print(tracery.Grammar(rules).flatten('#origin#'))
+
 
 def get_outlook(a):
     if a['confidence'] > .5:
@@ -129,6 +134,7 @@ def get_outlook(a):
         }
     print(tracery.Grammar(rules).flatten('#origin#'))
 
+
 def narrate_reflection(a, b, reflection):
     # memory = reflection['memory']
     ref_statement = get_reflection(a, b, reflection)
@@ -148,17 +154,19 @@ def narrate_reflection(a, b, reflection):
     }
     print(tracery.Grammar(rules).flatten('#origin#'))
 
+
 def andthen():
     rules = {
-    'origin': '#then#...',
-    'then': ['Then Alex saw', 'Until there was', 'Then, one day']
-    # 'them': a['them']
+        'origin': '#then#...',
+        'then': ['Then Alex saw', 'Until there was', 'Then, one day']
+        # 'them': a['them']
     }
     print(tracery.Grammar(rules).flatten('#origin#'))
 
+
 def get_reflection(a, b, reflection):
     if reflection['old'] > reflection['new']:
-        #if prop went down
+        # if prop went down
         PROP_CHANGE = {
             'open': [
                 'obsessed with novely',
@@ -204,10 +212,10 @@ def get_reflection(a, b, reflection):
                 'overly committed',
                 'rushed in too quickly'
             ]
-        } 
+        }
         return random.choice(PROP_CHANGE[reflection['prop']])
     else:
-        #prop went up 
+        # prop went up
         PROP_CHANGE = {
             'open': [
                 'really closed off to new things',
@@ -250,8 +258,6 @@ def get_reflection(a, b, reflection):
                 'holding #their# relationship back',
                 'afraid of commitment'
             ]
-        } 
-        
+        }
+
         return random.choice(PROP_CHANGE[reflection['prop']])
-
-
