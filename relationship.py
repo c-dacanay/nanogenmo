@@ -456,7 +456,7 @@ class Relationship:
         max_diff = 0
         target = ''
         for x in CONFLICT_TARGETS:
-            diff = person_a[x] - person_b[x]
+            diff = abs(person_a[x] - person_b[x])
             if diff > max_diff:
                 max_diff = diff
                 target = x
