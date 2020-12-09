@@ -227,21 +227,33 @@ def narrate_experience(event):
         return
     if event['target_property'] == 'open':
         rules = {
+            'mood': util.rank([
+                "Having a strong preference for what #they# wanted to do for date night,",
+                f"Having been obsessed with {event['interest']} more than ever lately,",
+                "Wanting to have a nice evening together,",
+                "Wanting to surprise #b#,",
+                "In effort to mix up what they usually do,",
+                "In the mood for adventure,"
+            ], event['threshold']),
             'proposed': [
-                "asked to", "begged to", "proposed that they",
+                "asked #b# to", "begged #b# to", "proposed that they",
                 "wondered if it would be fun to", "suggested that they",
                 "wanted to", "invited #b# to"
             ],
             'hobby_proposal': [
-                f"#a# #proposed# go to {random.choice(INTERESTS[event['interest']]['location'])}.",
-                f"#a# #proposed# {random.choice(INTERESTS[event['interest']]['verb'])}."
-            ]
+                f"#mood# #a# #proposed# go to {random.choice(INTERESTS[event['interest']]['location'])} together.",
+                f"#mood# #a# #proposed# {random.choice(INTERESTS[event['interest']]['verb'])} together."
+            ],
+            'response': util.rank([
+                "I'd love to!", "Sounds like fun!", "Yes, let's do it,", "Sure!", "Okay,", "Oh, okay,", "I guess so...", "Do we have to?", "You know I don't like that,"
+            ], 1-event['delta']),
+            'reply': ["'#response#' #b# replied."]
         }
         rules.update(getInterestRules(a, b, event['interest']))
         grammar = tracery.Grammar(rules)
-        print(grammar.flatten('#hobby_proposal#'))
+        print(grammar.flatten('#hobby_proposal# #reply#'))
         logging.debug(
-            f"OPEN EXPERIENCE {event['interest']} {event['threshold']}")
+            f"OPEN EXPERIENCE {event['interest']} {event['threshold']} a: {a['open']} b: {b['open']}")
     elif event['target_property'] in ['extra', 'libido']:
         rules = {
             'origin':
