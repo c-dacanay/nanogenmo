@@ -67,7 +67,6 @@ def narrate_memory(a, b, reflection, interest):
 
 
 def narrate_alex(a, interest, hobby):
-    print(interest)
     a_verb = random.choice(INTERESTS[interest]['location'])
     rules = {
         'origin':
