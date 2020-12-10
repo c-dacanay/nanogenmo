@@ -78,16 +78,26 @@ def narrate_commit(event):
         if event['success_ratio'] >= 1 else
         f'#b# said that perhaps they were\'t quite ready yet. ',
         'ily_challenge':
-        f"#a# says \"I love you\"",
+        f"#a# said \"I love you\"",
         'ily_result': [
-            '#b# could not say it back. #a# is hurt, but is understanding.'
+            '#b# could not say it back. #a# was #hurt#'
             if event['success_ratio'] < 1 else
-            f'#b# returns the words {util.enthusiastically(enthusiasm)}.'
+            f'#b# returned the words {util.enthusiastically(enthusiasm)}.'
         ],
+        'hurt': util.rank(
+            [
+                'hurt, but said #a_they# understood.',
+                'wounded. A tear fell from #a#\'s left eye. ',
+                'devasted. #a_they# had hoped #b#\'s response might have been different this time',
+                'mortified. #a# shouted that #b# was wasting #a#\'s time. #b# shrugged. '
+            ],
+            util.scale(event.get('prev', 0), 0, 3, 0, 1)
+        ),
         'a':
         a['name'],
         'b':
         b['name'],
+        'a_they': a['they']
     }
     grammar = tracery.Grammar(rules)
     if event['phase'] == Phase.COURTING:
@@ -208,6 +218,7 @@ def narrate_phase(events, phase):
             narrate_event(event)
     elif phase == Phase.DATING and events:
         print(prologue.get_prologue(events[0]['person']))
+        print('\n')
         last_event = None
         for event in events:
             narrate_event(event)
@@ -223,30 +234,69 @@ def narrate_experience(event):
     if event.get('phase') == Phase.COURTING and random.random() < 0.6:
         print(artifacts.get_first_date(event))
     if event['rejected']:
-        # TODO
+        rules = {
+            'origin': "#Onday# #want#, #reject#. \n",
+            'a': a['name'],
+            'b': b['name'],
+            'Onday': [
+                f"On {event['date'].strftime('%A')}, ",
+                f"{event['date'].strftime('%A')} came around. ",
+                "Later that week, "
+            ],
+            'want': [
+                '#a# asked #b# if they wanted to hang out',
+                '#a# asked #b# if they were free',
+                '#a# wanted to hang out with #b#',
+                '#a# wanted to see #b#',
+            ],
+            'reject': [
+                'but #b# was busy',
+                'but #b# forgot to return #a#\'s message',
+                'but #b# had other plans',
+                'but #b# never responded to #a#\'s message'
+            ]
+        }
+        print(tracery.Grammar(rules).flatten('#origin#'))
         return
     if event['target_property'] == 'open':
         rules = {
+            'mood': util.rank([
+                "Having a strong preference for what #they# wanted to do for date night,",
+                f"Having been obsessed with {event['interest']} more than ever lately,",
+                "Wanting to have a nice evening together,",
+                "Wanting to surprise #b#,",
+                "In effort to mix up what they usually do,",
+                "In the mood for adventure,"
+            ], event['threshold']),
             'proposed': [
-                "asked to", "begged to", "proposed that they",
+                "asked #b# to", "begged #b# to", "proposed that they",
                 "wondered if it would be fun to", "suggested that they",
                 "wanted to", "invited #b# to"
             ],
             'hobby_proposal': [
-                f"#a# #proposed# go to {random.choice(INTERESTS[event['interest']]['location'])}.",
-                f"#a# #proposed# {random.choice(INTERESTS[event['interest']]['verb'])}."
-            ]
+                f"#mood# #a# #proposed# go to {random.choice(INTERESTS[event['interest']]['location'])} together.",
+                f"#mood# #a# #proposed# {random.choice(INTERESTS[event['interest']]['verb'])} together."
+            ],
+            'response': util.rank([
+                "I'd love to!", "Sounds like fun!", "Yes, let's do it,", "Sure!", "Okay,", "Oh, okay,", "I guess so...", "Do we have to?", "You know I don't like that,"
+            ], 1-event['delta']),
+            'reply': ["'#response#' #b# replied."]
         }
         rules.update(getInterestRules(a, b, event['interest']))
         grammar = tracery.Grammar(rules)
-        print(grammar.flatten('#hobby_proposal#'))
+        print(grammar.flatten('#hobby_proposal# #reply#'))
         logging.debug(
-            f"OPEN EXPERIENCE {event['interest']} {event['threshold']}")
+            f"OPEN EXPERIENCE {event['interest']} {event['threshold']} a: {a['open']} b: {b['open']}")
     elif event['target_property'] in ['extra', 'libido']:
         rules = {
             'origin':
-            f"#they# #{event['target_property']}#.",
+            f"#Onday# #they# #{event['target_property']}#.",
             'day': ['day', 'morning', 'afternoon', 'evening'],
+            'Onday': [
+                f"On {event['date'].strftime('%A')}, ",
+                f"{event['date'].strftime('%A')} came around. ",
+                "Later that week, "
+            ],
             'extra':
             util.rank([
                 '#enjoyed# a tranquil #day# watching Netflix',
@@ -267,8 +317,8 @@ def narrate_experience(event):
                 '#enjoyed# intensely passionate evening together',
             ], event['threshold']),
             'they': [
-                'They', 'The couple', '#a# and #b#', 'The two of them',
-                'The pair'
+                'they', 'the couple', '#a# and #b#', 'the two of them',
+                'the pair'
             ],
             'enjoyed':
             util.rank([
@@ -285,48 +335,51 @@ def narrate_experience(event):
     else:
         rules = {
             'origin': [
-                f"#a# #{event['target_property']}#.",
+                f"#Onday# #{event['target_property']}#.",
+            ],
+            'Onday': [
+                f"On {event['date'].strftime('%A')}, ",
+                f"{event['date'].strftime('%A')} came around. ",
+                "Later that week, "
             ],
             'hot': util.rank([
-                'sometimes gave off a mildly unpleasant odor',
-                'liked to brag about how infrequently their hair needed to be washed',
-                'often met #b# for dates wearing an old college sweatshirt and an ill-fitting pair of jeans',
-                'fell asleep sometimes without washing up first. ',
-                'considered indulging in more skincare products. ',
-                'liked to go shopping for the latest trendy fashions. ',
-                'went shopping for organic groceries. That figure didn\'t keep itself in shape!',
-                'spent the #day# at the gym. That body didn\'t keep itself in shape!',
+                '#b# noticed that #a# sometimes gave off a mildly unpleasant odor',
+                '#a# bragged to #b# about how infrequently their hair needed to be washed',
+                '#a# met #b# wearing an old college sweatshirt and an ill-fitting pair of jeans',
+                '#a# went to sleep without washing up first. ',
+                '#a# bought more skincare products. ',
+                '#a# went shopping for the latest trendy fashions. ',
+                '#a# went shopping for organic groceries. That figure didn\'t keep itself in shape!',
+                '#a# spent the #day# at the gym. That body didn\'t keep itself in shape!',
             ], event['threshold']),
             'con': util.rank([
-                'had a lot of dishes piled up in the sink',
-                'decided to call in sick to work. After all, you only live once',
-                'was messy',
-                'forgot to do their laundry yesterday',
-                'had a couple of dishes piled up in the sink',
-                'was disorganized',
-                'noticed they needed to vacuum the carpet',
-                'decided to start keeping a daily todo list',
-                'spent the #day# arranging their books by color and subject',
-                'went shopping and purchased a daily planner',
-                'stayed late at work',
-                'spent the #day# #cleaning# the apartment',
-                'spent the #day #cleaning# the apartment. It was moderately dusty',
-                'spent the #day# #cleaning# the bathroom. It certainly was in need of some attention',
+                '#b# noticed #a# had a lot of dishes piled up in the sink',
+                '#a# decided to call in sick to work. After all, you only live once',
+                '#a# forgot to do their laundry.',
+                '#a# left a couple of dishes piled up in the sink',
+                '#a# noticed they needed to vacuum the carpet',
+                '#a# decided to start keeping a daily todo list',
+                '#a# spent the #day# arranging their books by color and subject',
+                '#a# went shopping and purchased a daily planner',
+                '#a# stayed late at work',
+                '#a# spent the #day# #cleaning# the apartment',
+                '#a# spent the #day #cleaning# the apartment. It was moderately dusty',
+                '#a# spent the #day# #cleaning# the bathroom. It certainly was in need of some attention',
             ], event['threshold']),
             'exp': util.rank([
-                'was upset with #b#, but said nothing. ',
-                'was jealous of #b#\'s moderately attractive co-worker.',
-                'asked #b# how they were feeling about the relationship. The couple had an earnest conversation about where things were going.',
+                '#a# was upset with #b#, but said nothing. ',
+                '#a# was jealous of #b#\'s moderately attractive co-worker.',
+                '#a# asked #b# how they were feeling about the relationship. The couple had an earnest conversation about where things were going.',
                 '#a# suggested that they begin a weekly relationship-checkin process. #b# agreed happily. '
             ], event['threshold']),
             'neuro': util.rank([
-                '#a# had not heard from #b# for a couple days.',
-                '#b# had a night out with friends planned today. #a# was happy to pass the evening doing other things',
+                '#a# fretted. #a# had not heard from #b# for a couple days.',
+                '#b# had a night out with friends planned. #a# was happy to pass the evening doing other things',
                 '#b# had not responded to #a#\'s text messages for a few hours. #a# sent a followup.',
-                'worried when #b# said that they sometimes preferred to be alone. ',
-                'worried that #b# did not actually find them to be attractive. '
+                '#a# worried when #b# said that they sometimes preferred to be alone. ',
+                '#a# worried that #b# did not actually find them to be attractive. '
                 '#b# kept a journal of how long it took for #a# to text them back',
-                'worried that #b# would leave them some day soon. ',
+                '#a# worried that #b# would leave them some day soon. ',
             ], event['threshold']),
             'cleaning': ['tidying', 'cleaning', 'organizing'],
             'day': ['day', 'morning', 'afternoon', 'evening'],

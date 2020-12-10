@@ -31,6 +31,7 @@ INTERESTS = {
         'hobbies': ["basketball", "baseball", "baseball", "cricket", "frisbee", "quidditch", "billiards", "football", "golf", "gymnastics", "hunting", "orienteering", "badminton", "racquet ball", "table tennis", "tennis", "track and field", "sailing", "hockey", "lacrosse", "swimming", "diving", "bowling"],
         'location': ["the game", "the sporting goods store"],
         'verb': ["watch #hobby# replays on Youtube", "watch the game at a bar"]
+        #'solo': ["watching the game", "thinking about how he could improve his #hobby# game"]
     },
     'outdoors': {
         'hobbies': ["camping", "hiking", "rock climbing", "backpacking", "canoeing", "rappelling", "caving", "hiking", "mountainbiking", "kayaking", "rafting"],
@@ -45,7 +46,7 @@ INTERESTS = {
     'food-drink': {
         'hobbies': ["bartending", "competitive eating", "beer", "wine", "coffee", "cocktails", "grilling", "cheese", "cooking", "baking", "tea", "bread", "kombucha"],
         'location': ["a winery", "a restaurant that just opened", "a #food_class# class"],
-        'verb': ["cook dinner together", "try a new recipe", "make fancy cocktails"]
+        'verb': ["cook dinner", "try a new recipe", "make fancy cocktails"]
     },
     'music': {
         # plays instrument, listening to #music-genre#]

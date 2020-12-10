@@ -77,8 +77,8 @@ PHASE_COMMIT_THRESHOLDS = {
 }
 
 PHASE_SCORE_THRESHOLDS = {
-    Phase.COURTING: 1,
-    Phase.DATING: 3,
+    Phase.COURTING: 1.5,
+    Phase.DATING: 2.5,
     Phase.COMMITTED: 6,
 }
 
@@ -377,26 +377,24 @@ class Relationship:
         if ratio > 1:
             # Random increase to interest + commitment + confidence if the response was enthusiastic
             a['commit'] *= 1 + random.random() * 0.1
-            a['interest'] *= 1 + random.random() * 0.2
+            a['interest'] *= 1 + random.random() * 0.1
             a['commit'] *= 1 + random.random() * 0.1
-            b['interest'] *= 1 + random.random() * 0.2
+            b['interest'] *= 1 + random.random() * 0.1
             a['neuro'] *= 0.9 + random.random() * 0.1
-            b['confidence'] *= 1 + random.random() * 0.5
-            a['confidence'] *= 1 + random.random() * 0.5
+            b['confidence'] *= 1 + random.random() * 0.1
+            a['confidence'] *= 1 + random.random() * 0.1
             event['delta'] = 2
         else:
             # Check for previous attempts in this phase
             previous_attempts = [a for a in self.events if a.get('phase')
-                                 == self.phase and a['type'] == EventType.COMMIT]
+                                 == self.phase and a['type'] == EventType.COMMIT and a['protagonist_initiated'] == protag_init]
             previous_attempts_multiplier = len(previous_attempts)
+            event['prev'] = previous_attempts_multiplier
             # Debuffs if response was not enthusiastic:
-            a['commit'] *= 0.9 + random.random() * 0.1
-            a['interest'] *= 0.8 + random.random() * 0.2
-            a['commit'] *= 0.9 + random.random() * 0.1
             b['interest'] *= 0.8 + random.random() * 0.2
             a['neuro'] *= 1 + random.random() * 0.1
-            b['confidence'] *= 0.8 + random.random() * 0.1
-            a['confidence'] *= 0.8 + random.random() * 0.1
+            b['confidence'] *= 0.8 + random.random() * 0.2
+            a['confidence'] *= 0.8 + random.random() * 0.2
             event['delta'] = -2 * (previous_attempts_multiplier + 1)
 
         event['phase'] = self.phase
@@ -458,7 +456,7 @@ class Relationship:
         max_diff = 0
         target = ''
         for x in CONFLICT_TARGETS:
-            diff = person_a[x] - person_b[x]
+            diff = abs(person_a[x] - person_b[x])
             if diff > max_diff:
                 max_diff = diff
                 target = x
