@@ -29,7 +29,7 @@ def get_nickname(name):
 
 def get_message_intro(a, b):
     rules = {
-        'origin': ['#time.capitalize#, #phrase#.', ''],
+        'origin': ['<p>#time.capitalize#, #phrase#.</p>', ''],
         'phrase': ['#a# #action#', '#b# #passive#'],
         'action': ['sent #b# a text message'],
         'passive': ['noticed a message from #a#'],
@@ -64,13 +64,13 @@ def get_first_date(event):
             f'{preface}\n#b_msg#', '#b_msg#'
         ],
         'a_msg': [
-            f'\n#a_pre##a_start##punc##a_ask#\n\n#b_pre##b_{response}#'
+            f'<p>#a_pre#<span class="message">#a_start##punc##a_ask#</span></p><p>#b_pre#<span class="message">#b_{response}#</span></p>'
         ],
         'b_msg': [
-            f'\n#b_pre##b_start##b_start2##b_ask#\n\n#a_pre##a_{response}#'
+            f'<p>#b_pre#<span class="message">#b_start##b_start2##b_ask#</span></p><p>#a_pre#<span class="message">#a_{response}#</span></p>'
         ],
-        'a_pre': f"*{a_nick} ({time})*: ",
-        'b_pre': f"*{b_nick} ({time})*: ",
+        'a_pre': f"<span class='user'>{a_nick}</span><span class='time'>({time})</span>: ",
+        'b_pre': f"<span class='user'>{b_nick}</span><span class='time'>({time})</span>: ",
         'punc': ['. ', '! ', '... ', '#e# ', '#e##e# '],
         'e': HEART_EMOJIS,
         'a_start': [
@@ -171,9 +171,9 @@ def get_fight_trigger(event):
             'Hey can we talk?',
             'Hey do you have a minute to chat?',
         ],
-        'a_pre': f"*{a_nick} ({time})*: ",
-        'b_pre': f"*{b_nick} ({time})*: ",
-        'a': '#a_pre##a_lines#',
+        'a_pre': f"<span class='user'>{a_nick}</span><span class='time'>({time})</span>: ",
+        'b_pre': f"<span class='user'>{b_nick}</span><span class='time'>({time})</span>: ",
+        'a': '<p>#a_pre#<span class="message">#a_lines#</span></p>',
     }
     grammar = tracery.Grammar(rules)
     return grammar.flatten("#origin#")

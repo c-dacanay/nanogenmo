@@ -3,6 +3,7 @@ import artifacts
 import random
 import datetime
 from relationship import Relationship
+import logging
 import relationship_narrator
 import epilogue
 import names
@@ -83,15 +84,38 @@ def generate_person():
 def generate_book(num):
     date = datetime.date.fromisoformat('2010-12-01')
     for i in range(num):
-        print('# Chapter ' + str(i + 1))
+        logging.debug(f"Chapter {str(i + 1)}")
+        # Print HTML header
+        print(f'''
+            <html>
+                <head>
+                </head>
+                <body>
+                    <div id='wrapper'>
+            ''')
+
+        print(f'<h1>Chapter {str(i + 1)}</h1>')
+
         new_person = generate_person()
         r = Relationship(protagonist, new_person, date)
         r.simulate()
         r.simulate_reflection()
         date = r.events[len(r.events) - 1]['date']
         relationship_narrator.narrate(r)
-        print('## Chapter ' + str(i + 1.5))
+
+        print(f'<h2>Chapter {str(i + 1.5)}</h2>')
         print(epilogue.get_epilogue(r, date))
+
+        # Print HTML closing tags
+        print('''
+                </div>
+            </body>
+        </html>
+        ''')
+
+        # Print separator line so that we can turn this into multiple
+        # HTML files later
+        print('|')
 
 
 if __name__ == "__main__":

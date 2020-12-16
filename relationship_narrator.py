@@ -285,8 +285,8 @@ def narrate_experience(event):
         rules.update(getInterestRules(a, b, event['interest']))
         grammar = tracery.Grammar(rules)
         print(grammar.flatten('#hobby_proposal# #reply#'))
-        logging.debug(
-            f"OPEN EXPERIENCE {event['interest']} {event['threshold']} a: {a['open']} b: {b['open']}")
+        # logging.debug(
+        #    f"OPEN EXPERIENCE {event['interest']} {event['threshold']} a: {a['open']} b: {b['open']}")
     elif event['target_property'] in ['extra', 'libido']:
         rules = {
             'origin':
@@ -410,9 +410,9 @@ def narrate_experience_DEPRECATED(event):
         }
         concession = lower_dict[event['target_property']] if event[
             'concession'] < 0 else higher_dict[event['target_property']]
-        logging.debug(
-            f"Concession damage for {event['target_property']} is {round(event['concession'], 2)}"
-        )
+        # logging.debug(
+        #    f"Concession damage for {event['target_property']} is {round(event['concession'], 2)}"
+        # )
         if abs(event['concession']) > 0.2:
             result = f"{concession}, but agreed anyway. "
         else:
@@ -453,8 +453,8 @@ def narrate_experience_DEPRECATED(event):
     grammar = tracery.Grammar(rules)
     grammar.add_modifiers(base_english)
     print(grammar.flatten("#origin#"))
-    logging.debug(
-        f"The relationship health changed by {round(event['delta'], 2)}. ")
+    # logging.debug(
+    #    f"The relationship health changed by {round(event['delta'], 2)}. ")
 
 
 def narrate_conflict(event):
