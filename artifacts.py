@@ -8,6 +8,9 @@ import tracery
 from tracery.modifiers import base_english
 
 # def narrate_artifact(evt: Event):
+HEART_EMOJIS = [
+    '💖', '<3', '😍', '🥰', '😘', '👅', '👄', '💋', '👀', '🔥', '💦', '🌶', '🍑', '🍆'	    '💖', '<3', '😍', '🥰', '😘', '👅', '👄', '💋', '👀', '🔥', '💦', '🌶', '🍑', '🍆'
+]
 
 
 def get_nickname(name):
@@ -61,7 +64,6 @@ def get_first_date(event):
             f'{preface} #b_msg#', '#b_msg#'
         ],
         'a_msg': [
-<<<<<<< HEAD
             f'<p>#a_pre#<span class="message">#a_start##punc##a_ask#</span></p><p>#b_pre#<span class="message">#b_{response}#</span></p>'
         ],
         'b_msg': [
@@ -71,16 +73,6 @@ def get_first_date(event):
         'b_pre': f"<span class='user'>{b_nick}</span><span class='time'>({time})</span>: ",
         'punc': ['. ', '! ', '... ', '#e# ', '#e##e# '],
         'e': HEART_EMOJIS,
-=======
-            f'#a_pre# #a_start##punc# #a_ask#\n#b_pre# #b_{response}#'
-        ],
-        'b_msg': [
-            f'#b_pre# #b_start# #b_start2# #b_ask#\n#a_pre# #a_{response}#'
-        ],
-        'a_pre': f"{a_nick} ({time}):",
-        'b_pre': f"{b_nick} ({time}):",
-        'punc': ['.', '!', '...'],
->>>>>>> 54bcf0e9960c98055f96d229f1c79714c6ba2a5d
         'a_start': [
             'it was really nice to spend time with you',
             'i had fun tonight',
@@ -181,16 +173,9 @@ def get_fight_trigger(event):
             'Hey, I think we should check in later',
             'Hey do you have a minute to chat?'
         ],
-<<<<<<< HEAD
         'a_pre': f"<span class='user'>{a_nick}</span><span class='time'>({time})</span>: ",
         'b_pre': f"<span class='user'>{b_nick}</span><span class='time'>({time})</span>: ",
         'a': '<p>#a_pre#<span class="message">#a_lines#</span></p>',
-=======
-        'a_pre': f"{a_nick} ({time}): ",
-        'b_pre': f"{b_nick} ({time}): ",
-        'a': '#a_pre##a_lines#',
->>>>>>> 54bcf0e9960c98055f96d229f1c79714c6ba2a5d
     }
     grammar = tracery.Grammar(rules)
     return grammar.flatten("#origin#")
-
