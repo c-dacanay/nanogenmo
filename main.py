@@ -107,7 +107,8 @@ def generate_book(num):
         print(epilogue.get_epilogue(r, date))
 
         # Print HTML closing tags
-        print('''
+        print(f'''
+                    <p><a href="{i+1}.html">Next</a></p>
                 </div>
             </body>
         </html>
