@@ -89,8 +89,10 @@ def generate_book(num):
         print(f'''
             <html>
                 <head>
+                    <link rel="stylesheet" type="text/css" href="style.css" />
                 </head>
                 <body>
+                    <div id='container'>
                     <div id='wrapper'>
             ''')
 
@@ -109,6 +111,7 @@ def generate_book(num):
         # Print HTML closing tags
         print(f'''
                     <p><a href="{i+1}.html">Next</a></p>
+                </div>
                 </div>
             </body>
         </html>
