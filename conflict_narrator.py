@@ -172,11 +172,11 @@ def get_problem_statement(a, b, problem_phrase, event):
             f'#a# {again}told #b# that #b# #problem#',
         ],
         'anger': util.rank([
-            "#a# emphasized that they weren't angry, just wanted the best for the relationship. ",
-            "#a# wondered if #b# would be willing to do things differently."
-            "It just wouldn't do. ",
-            "#a# was angry. ",
-            "Something had to change. ",
+            "#a# emphasized that they weren't angry. They just wanted the best for the relationship.",
+            "#a# wondered if #b# would be willing to do things differently.",
+            "It just wouldn't do.",
+            "#a# was angry.",
+            "Something had to change.",
         ], event['target']),
         'upset': ['upset', 'frustrated', 'mad', 'angry'],
         'a': a['name'],
@@ -216,8 +216,8 @@ def get_response(a, b, event):
         'pos': f"#{biggest_roll}#",
         'neg': "#neuro#",
         'agree': [
-            '#b# wanted to please #a##apology#'
-            '#b# didn\'t want #a# to be angry#apology#'
+            '#b# wanted to please #a##apology#.'
+            '#b# didn\'t want #a# to be angry#apology#.'
         ],
         'commit': [
             '#b# wanted to do right by the relationship#apology#',
@@ -266,13 +266,24 @@ def get_response(a, b, event):
     else:
         return grammar.flatten('#neg#')
 
+def get_outcome(a, b, event):
+    rules = {
+        'origin': util.rank([
+            'Talking things out drastically improved their relationship.',
+            'Things were shaky for a bit, but the relationship soon returned to normal.',
+            'Things felt awkward for awhile.',
+            'Things seemed tenuous for a long while after.',
+        ], 1-event['delta'])
+    }
+    grammar = tracery.Grammar(rules)
+    return grammar.flatten('#origin#')
 
 def get_conflict_thought(a, b, event, problem_phrase):
     logging.debug("FIGHT ABORTED")
     conflicts = [e for e in event['prev'] if e['initiated']]
     ago = ''
     if conflicts:
-        # There were previou fights about it.
+        # There were previous fights about it.
         # One morning, the fight they had in December about Susan's laziness floated into ALex's mind.
         main = '#time#, the #fight# they had #ago# about how #b# #problem# #floated#.'
         ago = humanize.naturaldelta(
@@ -281,7 +292,7 @@ def get_conflict_thought(a, b, event, problem_phrase):
         # THere were previous aborted fights.
         main = 'The idea that #b# #problem# came back to #a#\'s #mind#.'
     else:
-        main = '#time# #a# #thought# that #perhaps# #b# #problem#.'
+        main = '#time#, #a# #thought# that #perhaps# #b# #problem#.'
     but = '#resolve#' if event['initiated'] else '#but#'
 
     rules = {
@@ -291,7 +302,7 @@ def get_conflict_thought(a, b, event, problem_phrase):
         'a_their': a['their'],
         'b': b['name'],
         'b_their': b['their'],
-        'time': ['One morning', 'One day', '', f'On {event["date"].strftime("%A")}'],
+        'time': ['One morning', 'One day', f'On {event["date"].strftime("%A")}'],
         'mind': ['mind', 'head'],
         'ago': ago,
         'floated': ['floated back into #a#\'s #mind#', 'drifted into #a#\'s #mind#'],
@@ -350,16 +361,17 @@ def narrate_conflict(event):
         # Print some pretext
         rules = {
             'origin': [
-                '#message# #meetup# #complaint# #response#\n',
-                '#message# #complaint# #response#\n',
-                '#thought# #meetup# #response#\n',
-                '#thought# #response#\n',
+                '#message# #meetup# #complaint# #response# #outcome#\n',
+                '#message# #complaint# #response# #outcome#\n',
+                '#thought# #meetup# #response# #outcome#\n',
+                '#thought# #response# #outcome#\n',
             ],
             'thought': get_conflict_thought(a, b, event, problem_phrase),
             'message': artifacts.get_fight_trigger(event),
             'meetup': get_meetup(a, b),
             'complaint': get_problem_statement(a, b, problem_phrase, event),
-            'response': get_response(a, b, event)
+            'response': get_response(a, b, event),
+            'outcome': get_outcome(a, b, event)
         }
         print(tracery.Grammar(rules).flatten('#origin#'))
     else:
