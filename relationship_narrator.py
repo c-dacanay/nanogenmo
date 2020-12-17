@@ -76,7 +76,7 @@ def narrate_commit(event):
         'dating_result':
         f"#b# agreed {util.enthusiastically(enthusiasm)}. "
         if event['success_ratio'] >= 1 else
-        f'#b# said that perhaps they were\'t quite ready yet. ',
+        f'#b# said that perhaps they weren\'t quite ready yet. ',
         'ily_challenge':
         f"#a# said \"I love you\"",
         'ily_result': [
@@ -163,7 +163,7 @@ def narrate_meeting(event):
         f"{time}{a['name']} smiled {adverb}{followup}",
         f"{time}{a['name']} began to gaze {adverb} at {b['name']}{followup}",
         f"{time}{a['name']} giggled {adverb}{followup}",
-        f"{time}{a['name']} walked {adverb} toward {b['name']}{followup}"
+        f"{time}{a['name']} walked {adverb}toward {b['name']}{followup}"
     ]
     print(text + random.choice(APPROACHES) + "\n\n")
 
@@ -239,9 +239,9 @@ def narrate_experience(event):
             'a': a['name'],
             'b': b['name'],
             'Onday': [
-                f"On {event['date'].strftime('%A')}, ",
-                f"{event['date'].strftime('%A')} came around. ",
-                "Later that week, "
+                f"On {event['date'].strftime('%A')},",
+                f"{event['date'].strftime('%A')} came around.",
+                "Later that week,"
             ],
             'want': [
                 '#a# asked #b# if they wanted to hang out',
@@ -285,17 +285,17 @@ def narrate_experience(event):
         rules.update(getInterestRules(a, b, event['interest']))
         grammar = tracery.Grammar(rules)
         print(grammar.flatten('#hobby_proposal# #reply#'))
-        logging.debug(
-            f"OPEN EXPERIENCE {event['interest']} {event['threshold']} a: {a['open']} b: {b['open']}")
+        # logging.debug(
+        #    f"OPEN EXPERIENCE {event['interest']} {event['threshold']} a: {a['open']} b: {b['open']}")
     elif event['target_property'] in ['extra', 'libido']:
         rules = {
             'origin':
-            f"#Onday# #they# #{event['target_property']}#.",
+            f"#Onday# #{event['target_property']}#.",
             'day': ['day', 'morning', 'afternoon', 'evening'],
             'Onday': [
-                f"On {event['date'].strftime('%A')}, ",
-                f"{event['date'].strftime('%A')} came around. ",
-                "Later that week, "
+                f"On {event['date'].strftime('%A')}, #they#",
+                f"{event['date'].strftime('%A')} came around. #they.capitalize#",
+                "Later that week, #they#"
             ],
             'extra':
             util.rank([
@@ -331,7 +331,9 @@ def narrate_experience(event):
             'b':
             b['name'],
         }
-        print(tracery.Grammar(rules).flatten('#origin#'))
+        grammar = tracery.Grammar(rules)
+        grammar.add_modifiers(base_english)
+        print(grammar.flatten("#origin#"))
     else:
         rules = {
             'origin': [
@@ -410,9 +412,9 @@ def narrate_experience_DEPRECATED(event):
         }
         concession = lower_dict[event['target_property']] if event[
             'concession'] < 0 else higher_dict[event['target_property']]
-        logging.debug(
-            f"Concession damage for {event['target_property']} is {round(event['concession'], 2)}"
-        )
+        # logging.debug(
+        #    f"Concession damage for {event['target_property']} is {round(event['concession'], 2)}"
+        # )
         if abs(event['concession']) > 0.2:
             result = f"{concession}, but agreed anyway. "
         else:
@@ -453,8 +455,8 @@ def narrate_experience_DEPRECATED(event):
     grammar = tracery.Grammar(rules)
     grammar.add_modifiers(base_english)
     print(grammar.flatten("#origin#"))
-    logging.debug(
-        f"The relationship health changed by {round(event['delta'], 2)}. ")
+    # logging.debug(
+    #    f"The relationship health changed by {round(event['delta'], 2)}. ")
 
 
 def narrate_conflict(event):

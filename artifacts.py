@@ -9,19 +9,19 @@ from tracery.modifiers import base_english
 
 # def narrate_artifact(evt: Event):
 HEART_EMOJIS = [
-    '💖', '<3', '😍', '🥰', '😘', '👅', '👄', '💋', '👀', '🔥', '💦', '🌶', '🍑', '🍆'
+    '💖', '<3', '😍', '🥰', '😘', '👅', '👄', '💋', '👀', '🔥', '💦', '🌶', '🍑', '🍆'	    '💖', '<3', '😍', '🥰', '😘', '👅', '👄', '💋', '👀', '🔥', '💦', '🌶', '🍑', '🍆'
 ]
 
 
 def get_nickname(name):
     rules = {
         'origin': '#nick#',
-        'nick': ['#name##suffix#'],
-        'name': name.lower(),
+        'nick': ['#l#-#dog#', '#name##suffix#'],
+        'l': name[0],
+        'dog': ['dog', 'dawg', 'cat', 'catz', 'star', 'Z', 'qt', 'babe', 'bob', 'mack', '💖'],
+        'name': [name, '#l'],
         'num': ['420', '69'] + [str(n + 80) for n in range(20)],
-        'suffix': ['', '#emojis#', '#num##emojis#', '_#num##emojis#'],
-        'emojis': ['', '#e#', '#e##e#', '#e##e##e#'],
-        'e': HEART_EMOJIS
+        'suffix': ['#num#', '_#num#', '#dog##num#']
     }
     grammar = tracery.Grammar(rules)
     return grammar.flatten("#origin#")
@@ -29,7 +29,7 @@ def get_nickname(name):
 
 def get_message_intro(a, b):
     rules = {
-        'origin': ['#time.capitalize#, #phrase#.', ''],
+        'origin': ['<p>#time.capitalize#, #phrase#.</p>', ''],
         'phrase': ['#a# #action#', '#b# #passive#'],
         'action': ['sent #b# a text message'],
         'passive': ['noticed a message from #a#'],
@@ -58,19 +58,19 @@ def get_first_date(event):
 
     rules = {
         'a': [
-            f'{preface}\n#a_msg#', '#a_msg#'
+            f'{preface} #a_msg#', '#a_msg#'
         ],
         'b': [
-            f'{preface}\n#b_msg#', '#b_msg#'
+            f'{preface} #b_msg#', '#b_msg#'
         ],
         'a_msg': [
-            f'\n#a_pre##a_start##punc##a_ask#\n\n#b_pre##b_{response}#'
+            f'<p>#a_pre#<span class="message">#a_start##punc##a_ask#</span></p><p>#b_pre#<span class="message">#b_{response}#</span></p>'
         ],
         'b_msg': [
-            f'\n#b_pre##b_start##b_start2##b_ask#\n\n#a_pre##a_{response}#'
+            f'<p>#b_pre#<span class="message">#b_start##b_start2##b_ask#</span></p><p>#a_pre#<span class="message">#a_{response}#</span></p>'
         ],
-        'a_pre': f"*{a_nick} ({time})*: ",
-        'b_pre': f"*{b_nick} ({time})*: ",
+        'a_pre': f"<span class='user'>{a_nick}</span><span class='time'>({time})</span>: ",
+        'b_pre': f"<span class='user'>{b_nick}</span><span class='time'>({time})</span>: ",
         'punc': ['. ', '! ', '... ', '#e# ', '#e##e# '],
         'e': HEART_EMOJIS,
         'a_start': [
@@ -87,33 +87,33 @@ def get_first_date(event):
             'can i see you again?',
             'when can i see you again?',
             'when are u free next?',
-            'again sometime?'
+            'again sometime?',
             'again?'
         ],
         'b_start': [
-            'Hey! ',
-            'Heya! ',
-            'Yo! ',
-            'Hello! ',
-            'Whats up! ',
+            'Hey!',
+            'Heya!',
+            'Yo!',
+            'Hello!',
+            'Whats up!',
             '',
         ],
         'b_ask': [
             'See me again soon?',
             'Want to do it again?',
             'When are you free next?',
-            "Let's do it again sometime",
+            "Let's do it again sometime.",
         ],
-        'b_start2': util.rank([
-            f'I had a good time. ',
-            f'I had a great time. ',
+        'b_start2': [
+            f'I had a wonderful time.',
+            f'I had an awesome time.',
+            f'I had a fantastic time.',
             "You're cute.",
-            f'It was super fun #e#',
-            "You're a cutie #e#",
-        ], b_interest),
+            "You're a cutie.",
+        ],
         'a_rej': [
-            'yeah it was cool',
             'uhhh let me take a look at my calendar',
+            'let me get back to you',
             'im kinda busy rn but ill text u',
         ],
         'b_rej': [
@@ -121,22 +121,23 @@ def get_first_date(event):
             'Yeah...',
         ],
         'a_resp': [
-            ":) #suggest#?",
-            "yeah id love to! #suggest#?",
+            ":) #suggest#",
+            "yeah id love to! #suggest#",
             "yes!! #suggest#?",
         ],
         'b_resp': [
-            'Looking forward to it. #suggest#',
-            'I\'d love to. #suggest#',
+            'Looking forward to it #suggest#',
+            '#suggest#',
+            'I\'d love to #suggest#',
             'Of course! #suggest#',
             'Absolutely! #suggest#',
             'For sure! #suggest#',
         ],
         'suggest': [
             'what about #day#?',
-            'im free on #day#',
-            'i can do #day#',
-            'i could do #day#',
+            'im free on #day#!',
+            'i can do #day#.',
+            'i could do #day#.',
             '#day#?'
         ],
         'day': [
@@ -164,16 +165,17 @@ def get_fight_trigger(event):
     b_nick = b['nickname']
     time = event['date']
     rules = {
-        'origin': ['#preface#\n#a#\n\n'],
+        'origin': ['#preface#\n#a#\n'],
         'preface': f'{get_message_intro(a, b)}',
         'a_lines': [
             'Hey, there\'s something I want to talk to you about',
             'Hey can we talk?',
-            'Hey do you have a minute to chat?',
+            'Hey, I think we should check in later',
+            'Hey do you have a minute to chat?'
         ],
-        'a_pre': f"*{a_nick} ({time})*: ",
-        'b_pre': f"*{b_nick} ({time})*: ",
-        'a': '#a_pre##a_lines#',
+        'a_pre': f"<span class='user'>{a_nick}</span><span class='time'>({time})</span>: ",
+        'b_pre': f"<span class='user'>{b_nick}</span><span class='time'>({time})</span>: ",
+        'a': '<p>#a_pre#<span class="message">#a_lines#</span></p>',
     }
     grammar = tracery.Grammar(rules)
     return grammar.flatten("#origin#")

@@ -2,6 +2,7 @@ import random
 import datetime
 import util
 import conflict_dialogue
+import logging
 import statistics
 import business_gen
 import math
@@ -128,6 +129,7 @@ class Relationship:
             - type (open, extra, commit, libido)
             - threshold (0-1 value)
         '''
+        logging.debug("BEGIN EXPERIENCE event")
         # decide who has an opportunity to initiate the experience
         # a is always the initiator, b responds
         a = self.a
@@ -146,6 +148,8 @@ class Relationship:
             }
             exp_type = random.choice(PHASE_EXPERIENCE_TYPES[self.phase])
             thresh = random.gauss(a[exp_type], 0.1)
+            logging.debug(
+                f"{a['name']} initiates {exp_type} experience with value {thresh}")
             experience = {
                 'type': EventType.EXPERIENCE,
                 'target_property': exp_type,
@@ -205,6 +209,8 @@ class Relationship:
                 dmg = 0
 
             concession_roll = gauss(b['concessions'][exp_type] + delta, 0.1)
+            logging.debug(
+                f"{b['name']} takes {exp_type}-damage = {dmg}")
             PHASE_EXPERIENCE_AGREE = {
                 Phase.COURTING: 1.2,
                 Phase.DATING: 1.1,
@@ -216,6 +222,7 @@ class Relationship:
             ) * PHASE_EXPERIENCE_AGREE[self.phase]
 
             if agree_roll < concession_roll:
+                logging.debug(f"{b['name']} rejected the offer")
                 # reject experience
                 experience['rejected'] = True
                 return experience
@@ -223,6 +230,7 @@ class Relationship:
             experience['concession'] = dmg
             experience['delta'] = gauss(1 - concession_roll, 0.2)
             return experience
+        logging.debug("EXPERIENCE failed - not sufficient interest")
         return {
             'type': EventType.NOTHING,
             'health': self.health,
@@ -239,6 +247,7 @@ class Relationship:
         if random.random() < 0.5:
             a = self.b
             b = self.a
+        logging.debug("BEGIN CONFLICT event")
 
         e = {
             'type': EventType.CONFLICT,
@@ -266,8 +275,12 @@ class Relationship:
         e['neuro_roll'] = gauss(a['neuro'], 0.2)
         e['target'] = a['concessions'][e['target_property']]
 
+        logging.debug(
+            f"{target_property} is chosen, a rolls {e['concession_roll']} for existing damage and {e['neuro_roll']} for neuroticism")
+
         if e['concession_roll'] < 0.5 and e['neuro_roll'] < 0.5:
             # If it isn't a big deal, return an event with 'initiated' key set to False
+            logging.debug("Neither sufficient to trigger a conflict, abort")
             e['initiated'] = False
             e['delta'] = 0
             return e
@@ -289,6 +302,8 @@ class Relationship:
 
         score = rolls['agree'] + rolls['commit'] + \
             rolls['interest'] + rolls['neuro']
+        logging.debug(
+            f"{b['name']} rolls {score}, needs to match {e['target'] - e['target']}")
 
         # calculate relationship health delta:
         # if b met the goal: benefit accordingly. But punish more than reward.
@@ -318,7 +333,11 @@ class Relationship:
         return e
 
     def simulate_meeting(self):
+        logging.debug(
+            f"Meeting began, Alex has confidence f{self.a['confidence']} and interest level {self.a['interest']})"
+        )
         if binary_roll([self.a['confidence'], self.a['interest']]):
+            logging.debug("Meeting succeded! Alex initiates contact")
             delta = random.gauss(self.b['interest'], 0.3) - 0.5
             return {
                 'type': EventType.MEETING,
@@ -328,7 +347,11 @@ class Relationship:
                 'protagonist_initiated': True,
                 'delta': delta,
             }
+        logging.debug(
+            f"Alex didn't initiate contact. {self.b['name']} has an opportunity to")
         if binary_roll([self.b['confidence'], self.b['interest']]):
+            logging.debug(
+                f"Meeting succeded! {self.b['name']} initiates contact")
             delta = random.gauss(self.a['interest'], 0.3) - 0.5
             return {
                 'type': EventType.MEETING,
@@ -358,7 +381,12 @@ class Relationship:
             a = self.b
             b = self.a
         # Roll for whether or not they actually do it
+        logging.debug("BEGIN COMMIT event")
+        logging.debug(
+            f"{a['name']} confidence {a['confidence']}, interest {a['interest']}, commit {a['commit']}")
         if not binary_roll([a['confidence'], a['interest'], a['commit']]):
+            logging.debug(
+                f"a['name'] wasn't confident/interested/committed enough. COMMIT event failed")
             return self.simulate_nothing()
 
         event = {
@@ -374,8 +402,11 @@ class Relationship:
             random.gauss(b['commit'], 0.1) * 2
         ratio = score / PHASE_SCORE_THRESHOLDS[self.phase]
         event['success_ratio'] = ratio
+        logging.debug(
+            f"Interest + Commitment roll = f{score}, need {PHASE_SCORE_THRESHOLDS[self.phase]} to succeed")
         if ratio > 1:
             # Random increase to interest + commitment + confidence if the response was enthusiastic
+            logging.debug("COMMIT succeeded, initiate phase change")
             a['commit'] *= 1 + random.random() * 0.1
             a['interest'] *= 1 + random.random() * 0.1
             a['commit'] *= 1 + random.random() * 0.1
@@ -385,10 +416,13 @@ class Relationship:
             a['confidence'] *= 1 + random.random() * 0.1
             event['delta'] = 2
         else:
+            logging.debug("COMMIT failed")
             # Check for previous attempts in this phase
             previous_attempts = [a for a in self.events if a.get('phase')
                                  == self.phase and a['type'] == EventType.COMMIT and a['protagonist_initiated'] == protag_init]
             previous_attempts_multiplier = len(previous_attempts)
+            logging.debug(
+                f"{previous_attempts_multiplier} previous failed attempts detected")
             event['prev'] = previous_attempts_multiplier
             # Debuffs if response was not enthusiastic:
             b['interest'] *= 0.8 + random.random() * 0.2
@@ -407,6 +441,7 @@ class Relationship:
         return event
 
     def simulate_nothing(self):
+        logging.debug("Nothing happened")
         return {
             'type': EventType.NOTHING,
             'health': self.health,
@@ -453,6 +488,7 @@ class Relationship:
         # TODO impliment phases
         person_a = self.a
         person_b = self.b
+        logging.debug("BEGIN REFLECTION")
         max_diff = 0
         target = ''
         for x in CONFLICT_TARGETS:
@@ -460,8 +496,12 @@ class Relationship:
             if diff > max_diff:
                 max_diff = diff
                 target = x
+        logging.debug(
+            f"Largest property difference: {target} | Alex: {person_a[target]} | {person_b['name']}: {person_b[target]}")
         changed_prop = person_a[target]
         person_a[target] = (person_a[target] * 7 + person_b[target] * 3) / 10
+        logging.debug(
+            f"Alex changed: new {target} score is {person_a[target]}")
         new_prop = person_a[target]
         # Catalog events by type
         events = self.events
@@ -489,6 +529,7 @@ class Relationship:
                 event_num = event_types[key]
                 event_memory = key
                 # print(event_memory, event_num, 'event stuff')
+        logging.debug(f"memory chosen: {event_memory}")
         self.reflection = {
             'prop': target,
             'old': changed_prop,
@@ -530,5 +571,6 @@ class Relationship:
             self.health += event['delta']
             self.a = event['protagonist']
             self.b = event['person']
+            logging.debug(f"relationship health is {self.health}")
 
         return self.events
