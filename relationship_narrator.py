@@ -163,7 +163,7 @@ def narrate_meeting(event):
         f"{time}{a['name']} smiled {adverb}{followup}",
         f"{time}{a['name']} began to gaze {adverb} at {b['name']}{followup}",
         f"{time}{a['name']} giggled {adverb}{followup}",
-        f"{time}{a['name']} walked {adverb}toward {b['name']}{followup}"
+        f"{time}{a['name']} walked {adverb} toward {b['name']}{followup}"
     ]
     print(text + random.choice(APPROACHES) + "\n\n")
 
@@ -245,7 +245,7 @@ def narrate_experience(event):
             ],
             'want': [
                 '#a# asked #b# if they wanted to hang out',
-                '#a# asked #b# if they were free',
+                f'#a# asked #b# if {b["they"]} were free',
                 '#a# wanted to hang out with #b#',
                 '#a# wanted to see #b#',
             ],
@@ -337,7 +337,7 @@ def narrate_experience(event):
     else:
         rules = {
             'origin': [
-                f"#Onday# #{event['target_property']}#.",
+                f"#Onday# #{event['target_property']}#",
             ],
             'Onday': [
                 f"On {event['date'].strftime('%A')}, ",
@@ -345,48 +345,48 @@ def narrate_experience(event):
                 "Later that week, "
             ],
             'hot': util.rank([
-                '#b# noticed that #a# sometimes gave off a mildly unpleasant odor',
-                '#a# bragged to #b# about how infrequently their hair needed to be washed',
-                '#a# met #b# wearing an old college sweatshirt and an ill-fitting pair of jeans',
-                '#a# went to sleep without washing up first. ',
-                '#a# bought more skincare products. ',
-                '#a# went shopping for the latest trendy fashions. ',
+                '#b# noticed that #a# sometimes gave off a mildly unpleasant odor.',
+                f'#a# bragged to #b# about how infrequently {a["their"]} hair needed to be washed.',
+                '#a# met #b# wearing an old college sweatshirt and an ill-fitting pair of jeans.',
+                '#b# noticed #a# went to sleep without washing up first.',
+                '#a# bought more skincare products.',
+                '#a# went shopping for the latest trendy fashions.',
                 '#a# went shopping for organic groceries. That figure didn\'t keep itself in shape!',
                 '#a# spent the #day# at the gym. That body didn\'t keep itself in shape!',
             ], event['threshold']),
             'con': util.rank([
-                '#b# noticed #a# had a lot of dishes piled up in the sink',
-                '#a# decided to call in sick to work. After all, you only live once',
-                '#a# forgot to do their laundry.',
-                '#a# left a couple of dishes piled up in the sink',
-                '#a# noticed they needed to vacuum the carpet',
-                '#a# decided to start keeping a daily todo list',
-                '#a# spent the #day# arranging their books by color and subject',
-                '#a# went shopping and purchased a daily planner',
-                '#a# stayed late at work',
-                '#a# spent the #day# #cleaning# the apartment',
-                '#a# spent the #day #cleaning# the apartment. It was moderately dusty',
-                '#a# spent the #day# #cleaning# the bathroom. It certainly was in need of some attention',
+                '#b# noticed #a# had a lot of dishes piled up in the sink.',
+                '#a# decided to call in sick to work. After all, you only live once.',
+                f'#a# forgot to do {a["their"]} laundry.', 
+                '#a# left a couple of dishes piled up in the sink.',
+                f'#a# noticed {a["they"]} needed to vacuum the carpet.',
+                '#a# decided to start keeping a daily todo list.',
+                f'#a# spent the #day# arranging {a["their"]} books by color and subject.',
+                '#a# went shopping and purchased a daily planner.',
+                '#a# stayed late at work.',
+                '#a# spent the #day# #cleaning# the apartment.',
+                '#a# spent the #day #cleaning# the apartment. It was moderately dusty.',
+                '#a# spent the #day# #cleaning# the bathroom. It certainly was in need of some attention.',
             ], event['threshold']),
             'exp': util.rank([
-                '#a# was upset with #b#, but said nothing. ',
+                '#a# was upset with #b#, but said nothing.',
                 '#a# was jealous of #b#\'s moderately attractive co-worker.',
-                '#a# asked #b# how they were feeling about the relationship. The couple had an earnest conversation about where things were going.',
-                '#a# suggested that they begin a weekly relationship-checkin process. #b# agreed happily. '
+                f'#a# asked #b# how {a["they"]} were feeling about the relationship. The couple had an earnest conversation about where things were going.',
+                f'#a# suggested that they enact weekly relationship check-ins. #b# agreed happily.'
             ], event['threshold']),
             'neuro': util.rank([
                 '#a# fretted. #a# had not heard from #b# for a couple days.',
-                '#b# had a night out with friends planned. #a# was happy to pass the evening doing other things',
+                '#b# had a night out with friends planned. #a# was happy to pass the evening doing other things.',
                 '#b# had not responded to #a#\'s text messages for a few hours. #a# sent a followup.',
-                '#a# worried when #b# said that they sometimes preferred to be alone. ',
+                f'#a# worried when #b# said that {a["they"]} sometimes preferred to be alone.',
                 '#a# worried that #b# did not actually find them to be attractive. '
-                '#b# kept a journal of how long it took for #a# to text them back',
+                '#b# kept a journal of how long it took for #a# to text them back.',
                 '#a# worried that #b# would leave them some day soon. ',
             ], event['threshold']),
             'cleaning': ['tidying', 'cleaning', 'organizing'],
             'day': ['day', 'morning', 'afternoon', 'evening'],
             'a': a['name'],
-            'b': b['name']
+            'b': b['name'],
         }
         print(tracery.Grammar(rules).flatten('#origin#'))
         # logging.debug(f"Event: {event}")

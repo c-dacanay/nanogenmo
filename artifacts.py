@@ -64,14 +64,14 @@ def get_first_date(event):
             f'{preface} #b_msg#', '#b_msg#'
         ],
         'a_msg': [
-            f'<p>#a_pre#<span class="message">#a_start##punc##a_ask#</span></p><p>#b_pre#<span class="message">#b_{response}#</span></p>'
+            f'<p>#a_pre# <span class="message">#a_start##punc# #a_ask#</span></p><p>#b_pre#<span class="message">#b_{response}#</span></p>'
         ],
         'b_msg': [
-            f'<p>#b_pre#<span class="message">#b_start##b_start2##b_ask#</span></p><p>#a_pre#<span class="message">#a_{response}#</span></p>'
+            f'<p>#b_pre# <span class="message">#b_start# #b_start2# #b_ask#</span></p><p>#a_pre#<span class="message">#a_{response}#</span></p>'
         ],
-        'a_pre': f"<span class='user'>{a_nick}</span><span class='time'>({time})</span>: ",
-        'b_pre': f"<span class='user'>{b_nick}</span><span class='time'>({time})</span>: ",
-        'punc': ['. ', '! ', '... ', '#e# ', '#e##e# '],
+        'a_pre': f"<span class='user'>{a_nick}</span> <span class='time'>({time})</span>: ",
+        'b_pre': f"<span class='user'>{b_nick}</span> <span class='time'>({time})</span>: ",
+        'punc': ['. ', '! ', '... ', ' #e# ', ' #e##e# '],
         'e': HEART_EMOJIS,
         'a_start': [
             'it was really nice to spend time with you',
@@ -117,13 +117,14 @@ def get_first_date(event):
             'im kinda busy rn but ill text u',
         ],
         'b_rej': [
-            'Maybe in a bit, I\'m busy this week',
-            'Yeah...',
+            'Hm, my week is looking pretty busy',
+            'Let me get back to you...',
+            'I have a upcoming deadline, can I let you know?'
         ],
         'a_resp': [
-            ":) #suggest#",
+            "#suggest# :)",
             "yeah id love to! #suggest#",
-            "yes!! #suggest#?",
+            "yes!! #suggest#",
         ],
         'b_resp': [
             'Looking forward to it #suggest#',
@@ -168,9 +169,9 @@ def get_fight_trigger(event):
         'origin': ['#preface#\n#a#\n'],
         'preface': f'{get_message_intro(a, b)}',
         'a_lines': [
-            'Hey, there\'s something I want to talk to you about',
+            'Hey, there\'s something I want to talk to you about.',
             'Hey can we talk?',
-            'Hey, I think we should check in later',
+            'Hey, I think we should check in later.',
             'Hey do you have a minute to chat?'
         ],
         'a_pre': f"<span class='user'>{a_nick}</span><span class='time'>({time})</span>: ",
