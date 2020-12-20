@@ -4,6 +4,7 @@ from util import get_ab
 import math
 from relationship import EventType, PROP_NAMES, Relationship, Phase
 import relationship_narrator
+import humanize
 import tracery
 from tracery.modifiers import base_english
 
@@ -43,35 +44,72 @@ def get_message_intro(a, b):
     return grammar.flatten('#origin#\n')
 
 
+def get_message_html(messages):
+    # messages is an array containing objects with keys:
+    #   nickname, time, message, a
+    # given the array of messages, return them encoded in an HTML string
+    time = None
+    messages_html = ''
+    for m in messages:
+        # add timestamp if different day
+        if m['time'] != time:
+            time = m['time']
+            messages_html += f"\n<p class='top-time'>{humanize.naturalday(time)}</p>\n"
+
+        messages_html += f"""
+            <div class="message_{m['a']}">
+                <p class='msg_header'>
+                    <span class='user'>{m['nickname']}</span>
+                </p>
+                <p class="message from_{m['a']}">
+                    {m['text']}
+                </p>
+            </div>
+        """
+    return f'''
+        <div class='artifact'>
+            {messages_html}
+        </div>'''
+
+
 def get_first_date(event):
     a, b = get_ab(event)
-    a_nick = a['nickname']
-    b_nick = b['nickname']
-    a_interest = a['interest']
-    b_interest = b['interest']
-    time = event['date']
+    a_nick = event['protagonist']['nickname']
+    b_nick = event['person']['nickname']
+    a_interest = event['protagonist']['interest']
+    b_interest = event['protagonist']['interest']
 
-    preface = get_message_intro(a, b)
-    response = 'resp'
-    if event['rejected']:
-        response = 'rej'
+    # Create the messages array
+    if event['protagonist_initiated']:
+        messages = [{
+            'text':  '#a_start##punc# #a_ask#',
+            'time': event['date'],
+            'nickname': a_nick,
+            'a': 'a'
+        }, {
+            'text':  '#b_rej#' if event['rejected'] else '#b_resp#',
+            'time': event['date'],
+            'nickname': b_nick,
+            'a': 'b'
+        }]
+    else:
+        messages = [{
+            'text':  '#b_start# #b_start2# #b_ask#',
+            'time': event['date'],
+            'nickname': b_nick,
+            'a': 'b'
+        }, {
+            'text':  '#a_rej#' if event['rejected'] else '#a_resp#',
+            'time': event['date'],
+            'nickname': a_nick,
+            'a': 'a'
+        }]
 
     rules = {
-        'a': [
-            f'{preface} #a_msg#', '#a_msg#'
-        ],
-        'b': [
-            f'{preface} #b_msg#', '#b_msg#'
-        ],
-        'a_msg': [
-            f'<p>#a_pre# <span class="message">#a_start##punc# #a_ask#</span></p><p>#b_pre#<span class="message">#b_{response}#</span></p>'
-        ],
-        'b_msg': [
-            f'<p>#b_pre# <span class="message">#b_start# #b_start2# #b_ask#</span></p><p>#a_pre#<span class="message">#a_{response}#</span></p>'
-        ],
-        'a_pre': f"<span class='user'>{a_nick}</span> <span class='time'>({time})</span>: ",
-        'b_pre': f"<span class='user'>{b_nick}</span> <span class='time'>({time})</span>: ",
-        'punc': ['. ', '! ', '... ', ' #e# ', ' #e##e# '],
+        'origin': ['#preface# #msg#', '#msg#'],
+        'preface': get_message_intro(a, b),
+        'msg': get_message_html(messages),
+        'punc': ['. ', '! ', '... ', '#e# ', '#e##e# '],
         'e': HEART_EMOJIS,
         'a_start': [
             'it was really nice to spend time with you',
@@ -154,29 +192,29 @@ def get_first_date(event):
         ]
     }
     grammar = tracery.Grammar(rules)
-    if event['protagonist_initiated']:
-        return grammar.flatten("#a#\n")
-    else:
-        return grammar.flatten("#b#\n")
+    return grammar.flatten("#origin#\n")
 
 
 def get_fight_trigger(event):
     a, b = get_ab(event)
     a_nick = a['nickname']
     b_nick = b['nickname']
-    time = event['date']
+    messages = [{
+        'text': '#text#',
+        'nickname': a_nick,
+        'a': 'b',
+        'time': event['date']
+    }]
     rules = {
-        'origin': ['#preface#\n#a#\n'],
+        'origin': ['#preface#\n#msg#\n'],
         'preface': f'{get_message_intro(a, b)}',
-        'a_lines': [
+        'msg': get_message_html(messages),
+        'text': [
             'Hey, there\'s something I want to talk to you about.',
             'Hey can we talk?',
             'Hey, I think we should check in later.',
             'Hey do you have a minute to chat?'
         ],
-        'a_pre': f"<span class='user'>{a_nick}</span><span class='time'>({time})</span>: ",
-        'b_pre': f"<span class='user'>{b_nick}</span><span class='time'>({time})</span>: ",
-        'a': '<p>#a_pre#<span class="message">#a_lines#</span></p>',
     }
     grammar = tracery.Grammar(rules)
     return grammar.flatten("#origin#")
