@@ -181,7 +181,7 @@ def get_first_date(event):
         ],
         'day': [
             'tomorrow',
-            'day after tomorrow',
+            'the day after tomorrow',
             'monday',
             'some time next week',
             'tuesday',

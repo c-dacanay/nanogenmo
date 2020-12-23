@@ -13,9 +13,9 @@ def get_problem(a, b, target_p):
         # problems for if a is higher than b
         PROBLEM_NAMES = {
             'open': [
-                'never was interested in doing what #a# wanted to do',
+                'was never interested in doing what #a# wanted to do',
                 'never wanted to try new things',
-                f"only wanted to do things related to {', '.join(b['interests'])}; only things #b# liked to do ",
+                f"only wanted to do activities related to {' or '.join(b['interests'])}; only things #b# liked to do",
                 'was too boring',
             ],
             'extra': [
@@ -220,12 +220,12 @@ def get_response(a, b, event):
             '#b# didn\'t want #a# to be angry#apology#.'
         ],
         'commit': [
-            '#b# wanted to do right by the relationship#apology#',
-            '#b# didn\'t want to lose their partner#apology#',
+            '#b# wanted to do right by the relationship#apology#.',
+            f'#b# didn\'t want to lose {b["their"]} partner#apology#.',
         ],
         'interest': [
-            '#b# didn\'t want to lose #a##apology#',
-            '#b# liked #a# quite a bit#apology#',
+            '#b# didn\'t want to lose #a##apology#.',
+            '#b# liked #a# quite a bit#apology#.',
         ],
         'neuro': [
             '#b# was #angry##worse#',
@@ -272,7 +272,9 @@ def get_outcome(a, b, event):
             'Talking things out drastically improved their relationship.',
             'Things were shaky for a bit, but the relationship soon returned to normal.',
             'Things felt awkward for awhile.',
+            'The two walked on eggshells for awhile.',
             'Things seemed tenuous for a long while after.',
+            'The fight spelled disaster for their relationship.'
         ], 1-event['delta'])
     }
     grammar = tracery.Grammar(rules)
@@ -285,14 +287,14 @@ def get_conflict_thought(a, b, event, problem_phrase):
     if conflicts:
         # There were previous fights about it.
         # One morning, the fight they had in December about Susan's laziness floated into ALex's mind.
-        main = '#time#, the #fight# they had #ago# about how #b# #problem# #floated#.'
+        main = '<br><br>#time#, the #fight# they had #ago# about how #b# #problem# #floated#.'
         ago = humanize.naturaldelta(
             event['date'] - conflicts[len(conflicts) - 1]['date']) + ' ago'
     elif event['prev']:
         # THere were previous aborted fights.
-        main = 'The idea that #b# #problem# came back to #a#\'s #mind#.'
+        main = '<br><br>The idea that #b# #problem# came back to #a#\'s #mind#.'
     else:
-        main = '#time#, #a# #thought# that #perhaps# #b# #problem#.'
+        main = '<br><br>#time#, #a# #thought# that #perhaps# #b# #problem#.'
     but = '#resolve#' if event['initiated'] else '#but#'
 
     rules = {
@@ -306,7 +308,7 @@ def get_conflict_thought(a, b, event, problem_phrase):
         'mind': ['mind', 'head'],
         'ago': ago,
         'floated': ['floated back into #a#\'s #mind#', 'drifted into #a#\'s #mind#'],
-        'perhaps': ['perhaps', 'maybe', '', '', 'compared to previous partners'],
+        'perhaps': ['perhaps', 'maybe', '', '', ',compared to previous partners,'],
         'thought': ['thought', 'considered', 'felt bothered', 'felt concerned', 'had the thought', 'was discussing #b# with a friend and realized'],
         'problem': problem_phrase,
         'pushing': ['pushing', 'telling', 'convincing', 'nagging', 'dragging'],
@@ -332,7 +334,7 @@ def get_conflict_thought(a, b, event, problem_phrase):
             '#texture# #a# resolved to bring it up to #b# next time they saw each other.'
         ],
         'texture': util.rank([
-            '#a# #return#. It wasn\'t a big deal, but nonetheless',
+            '#a# #return#. It wasn\'t a big deal, but nonetheless,',
             '#a# exhaled slowly. Perhaps it could be resolved with a simple conversation. ',
             '#a# bit #a_their# lip. It was becoming more and more bothersome the more #a_they# thought about it.',
             '#a# clenched #a_their# fist. It was really not something #a# valued in a partner. ',
