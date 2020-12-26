@@ -139,12 +139,12 @@ def narrate_reflection(a, b, reflection):
     ref_statement = get_reflection(a, b, reflection)
 
     rules = {
-        'origin': '#afterward# #realized# that #they# #might# #change#. #intent#.',
+        'origin': '#afterward# #realized# that #they# #change#. #intent#.',
         'afterward': ['Immediately after the break up,', 'Later', 'After the relationship ended', 'While the relationship fell apart'],
         'realized': ['#a# realized', '#b# told #a#', '#a# had the dawning realization'],
         'might': ['could be', 'were', 'might be', 'were just', 'had been'],
         'change': ref_statement,
-        'intent': rank(['It hurt to realize', '#a# would have to work on it', '#a# resolved to improve', '#a# decided to change'], a['confidence']),
+        'intent': rank(['#they# journaled about #their# intent to change','It hurt to realize', '#a# would have to work on it', '#a# resolved to improve', '#a# decided to change'], a['confidence']),
         'a': a['name'],
         'they': a['they'],
         'their': a['their'],
@@ -180,7 +180,7 @@ def get_reflection(a, b, reflection):
             ],
             'libido': [
                 'too overt about sex',
-                'asking for physical intimacy too much',
+                'asked for physical intimacy too much',
                 'too physically needy'
             ],
             'con': [

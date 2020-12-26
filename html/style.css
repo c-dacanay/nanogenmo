@@ -6,6 +6,41 @@
       format("woff");
 }
 
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+  Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  display: flex;
+  justify-content: center;
+}
+
+/* Index CSS */
+h4 {
+  text-transform: uppercase;
+  letter-spacing: .09em;
+  padding-top: 2em;
+}
+
+p {
+  font-size: 1.1em;
+  line-height: 1.3em;
+}
+
+a {
+  text-decoration: none;
+  color: #248bf5;
+}
+
+a:hover {
+  color: #666;
+  cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='40' height='48' viewport='0 0 100 100' style='fill:black;font-size:24px;'><text y='50%'>💖</text></svg>") 16 0,auto; 
+}
+
+#info {
+  width: 500px; 
+  display: inline-block;
+ }
+
+/* Story CSS */
 #wrapper {
   width: 600px;
   display: inline-block;
