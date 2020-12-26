@@ -23,7 +23,7 @@ def narrate_month(date, delta=random.random()):
         12: 'winter'
     }
     rules = {
-        'origin': f"\n{date.strftime('%B')} #brought# #{months[date.month]}#.\n",
+        'origin': f"<br><br>{date.strftime('%B')} #brought# #{months[date.month]}#.<br><br>",
         'brought': ['brought'],
         'winter': [
             '#wadj# #wnoun# and #w#',

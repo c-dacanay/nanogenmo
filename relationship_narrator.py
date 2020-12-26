@@ -76,19 +76,19 @@ def narrate_commit(event):
         'dating_result':
         f"#b# agreed {util.enthusiastically(enthusiasm)}. "
         if event['success_ratio'] >= 1 else
-        f'#b# said that perhaps they weren\'t quite ready yet. ',
+        f'#b# said that perhaps {b["they"]} weren\'t quite ready yet. ',
         'ily_challenge':
-        f"#a# said \"I love you\"",
+        f"#a# said \"I love you,\"",
         'ily_result': [
-            '#b# could not say it back. #a# was #hurt#'
+            'but #b# could not say it back. #a# was #hurt#'
             if event['success_ratio'] < 1 else
-            f'#b# returned the words {util.enthusiastically(enthusiasm)}.'
+            f'and #b# returned the words {util.enthusiastically(enthusiasm)}.'
         ],
         'hurt': util.rank(
             [
                 'hurt, but said #a_they# understood.',
                 'wounded. A tear fell from #a#\'s left eye. ',
-                'devasted. #a_they# had hoped #b#\'s response might have been different this time',
+                'devasted. #a_they.capitalize# had hoped #b#\'s response might have been different this time.',
                 'mortified. #a# shouted that #b# was wasting #a#\'s time. #b# shrugged. '
             ],
             util.scale(event.get('prev', 0), 0, 3, 0, 1)
@@ -100,6 +100,7 @@ def narrate_commit(event):
         'a_they': a['they']
     }
     grammar = tracery.Grammar(rules)
+    grammar.add_modifiers(base_english)
     if event['phase'] == Phase.COURTING:
         print(grammar.flatten('#courting_phase#'))
     elif event['phase'] == Phase.DATING:
@@ -165,7 +166,7 @@ def narrate_meeting(event):
         f"{time}{a['name']} giggled {adverb}{followup}",
         f"{time}{a['name']} walked {adverb} toward {b['name']}{followup}"
     ]
-    print(text + random.choice(APPROACHES) + "\n\n")
+    print(text + random.choice(APPROACHES) + "")
 
 
 def narrate_committed(events):
@@ -191,7 +192,7 @@ def narrate_events(a, events):
     # logging.debug(f"Alex's confidence is {a['confidence']}")
     a['confidence'] *= .9 + random.random() * 0.1
     # logging.debug(f"Alex's confidence is {a['confidence']}")
-    print("They never saw each other again.\n\n")
+    print("They never saw each other again.")
 
 
 def narrate_event(event):
@@ -212,13 +213,12 @@ def narrate_event(event):
 
 def narrate_phase(events, phase):
     if events:
-        logging.debug(f'Narrating {len(events)} events in phase {phase}\n')
+        logging.debug(f'Narrating {len(events)} events in phase {phase}')
     if phase == Phase.COURTING:
         for event in events:
             narrate_event(event)
     elif phase == Phase.DATING and events:
         print(prologue.get_prologue(events[0]['person']))
-        print('\n')
         last_event = None
         for event in events:
             narrate_event(event)
@@ -235,7 +235,7 @@ def narrate_experience(event):
         print(artifacts.get_first_date(event))
     if event['rejected']:
         rules = {
-            'origin': "#Onday# #want#, #reject#. \n",
+            'origin': "#Onday# #want#, #reject#.",
             'a': a['name'],
             'b': b['name'],
             'Onday': [
@@ -280,7 +280,7 @@ def narrate_experience(event):
             'response': util.rank([
                 "I'd love to!", "Sounds like fun!", "Yes, let's do it,", "Sure!", "Okay,", "Oh, okay,", "I guess so...", "Do we have to?", "You know I don't like that,"
             ], 1-event['delta']),
-            'reply': ["'#response#' #b# replied."]
+            'reply': ['"#response#" #b# replied.']
         }
         rules.update(getInterestRules(a, b, event['interest']))
         grammar = tracery.Grammar(rules)
@@ -314,7 +314,7 @@ def narrate_experience(event):
                 'lay in bed together, holding hands',
                 'shared a kiss',
                 '#enjoyed# a passionate evening together',
-                '#enjoyed# intensely passionate evening together',
+                '#enjoyed# an intensely passionate evening together',
             ], event['threshold']),
             'they': [
                 'they', 'the couple', '#a# and #b#', 'the two of them',
@@ -322,8 +322,8 @@ def narrate_experience(event):
             ],
             'enjoyed':
             util.rank([
-                'spent', 'were happy to spend', 'enjoyed',
-                'were excited to spend', 'were thrilled to spend', 'savored',
+                'spent', 'happily spent', 'enjoyed',
+                'excitedly spent', 'savored',
                 'reveled in', 'relished'
             ], event['delta']),
             'a':
@@ -371,7 +371,7 @@ def narrate_experience(event):
             'exp': util.rank([
                 '#a# was upset with #b#, but said nothing.',
                 '#a# was jealous of #b#\'s moderately attractive co-worker.',
-                f'#a# asked #b# how {a["they"]} were feeling about the relationship. The couple had an earnest conversation about where things were going.',
+                f'#a# asked #b# how {b["they"]} were feeling about the relationship. The couple had an earnest conversation about where things were going.',
                 f'#a# suggested that they enact weekly relationship check-ins. #b# agreed happily.'
             ], event['threshold']),
             'neuro': util.rank([

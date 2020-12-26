@@ -86,7 +86,7 @@ def get_prologue(person):
             stringArray.append(random.choice(properties[key]['lo']))
 
     # in strArray: [0]hot, [1]open, g[2]con, [3]extra, [4]agree, [5]neuro, [6]commit, [7]exp
-    str0 = "Over time, Alex realized that "
+    str0 = "<br><br>Over time, Alex realized that "
     str1 = f'{person["they"].capitalize()}' + " was a " + stringArray[0] + \
         " person with " + stringArray[3] + "."
     str2 = name + " seemed " + stringArray[7] + \

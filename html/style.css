@@ -25,12 +25,17 @@
 
 .artifact {
   margin: 2em;
+  margin-right: 4em;
 }
 
 .user {
   padding-left: 0.5em;
   font-size: 0.8em;
   color: #666;
+}
+
+.message_a .user {
+  padding-right: 0.5em;
 }
 
 .top-time {
