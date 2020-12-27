@@ -78,9 +78,9 @@ PHASE_COMMIT_THRESHOLDS = {
 }
 
 PHASE_SCORE_THRESHOLDS = {
-    Phase.COURTING: 1.5,
-    Phase.DATING: 2.5,
-    Phase.COMMITTED: 6,
+    Phase.COURTING: 0.3,
+    Phase.DATING: 0.6,
+    Phase.COMMITTED: 0.9,
 }
 
 
@@ -149,7 +149,7 @@ class Relationship:
             exp_type = random.choice(PHASE_EXPERIENCE_TYPES[self.phase])
             thresh = random.gauss(a[exp_type], 0.1)
             logging.debug(
-                f"{a['name']} initiates {exp_type} experience with value {thresh}")
+                f"{a['name']} initiatsPHASE {exp_type} experience with value {thresh}")
             experience = {
                 'type': EventType.EXPERIENCE,
                 'target_property': exp_type,
@@ -380,31 +380,41 @@ class Relationship:
         if protag_init:
             a = self.b
             b = self.a
-        # Roll for whether or not they actually do it
-        logging.debug("BEGIN COMMIT event")
-        logging.debug(
-            f"{a['name']} confidence {a['confidence']}, interest {a['interest']}, commit {a['commit']}")
-        if not binary_roll([a['confidence'], a['interest'], a['commit']]):
-            logging.debug(
-                f"a['name'] wasn't confident/interested/committed enough. COMMIT event failed")
-            return self.simulate_nothing()
-
         event = {
             'type': EventType.COMMIT,
             'protagonist': self.a,
             'person': self.b,
             'protagonist_initiated': protag_init,
+            'phase': self.phase,
+            'delta': 0,
         }
 
-        # Roll for whether commit event succeeds:
-        # TODO add concession damage?
-        score = random.gauss(b['interest'], 0.1) + \
-            random.gauss(b['commit'], 0.1) * 2
-        ratio = score / PHASE_SCORE_THRESHOLDS[self.phase]
-        event['success_ratio'] = ratio
+        logging.debug("BEGIN COMMIT event")
+        logging.debug(
+            f"{a['name']} confidence {a['confidence']}, interest {a['interest']}, commit {a['commit']}")
+
+        # Roll for whether A is committed/interested enough to initiate:
+        event['initiate_ratio'] = a['interest'] * a['commit'] / \
+            PHASE_SCORE_THRESHOLDS[self.phase]
+
+        # Roll for whether or not A is confident enough to initiate
+        event['confidence'] = binary_roll([a['confidence']])
+
+        event['initiated'] = event['confidence'] and event['initiate_ratio'] > 1
+
+        if not event['initiated']:
+            logging.debug(
+                f"COMMIT event failed")
+            return event
+
+        score = b['interest'] * b['commit']
+        success_ratio = score / PHASE_SCORE_THRESHOLDS[self.phase]
+        event['success_ratio'] = success_ratio
+
         logging.debug(
             f"Interest + Commitment roll = f{score}, need {PHASE_SCORE_THRESHOLDS[self.phase]} to succeed")
-        if ratio > 1:
+
+        if success_ratio > 1:
             # Random increase to interest + commitment + confidence if the response was enthusiastic
             logging.debug("COMMIT succeeded, initiate phase change")
             a['commit'] *= 1 + random.random() * 0.1
@@ -431,11 +441,9 @@ class Relationship:
             a['confidence'] *= 0.8 + random.random() * 0.2
             event['delta'] = -2 * (previous_attempts_multiplier + 1)
 
-        event['phase'] = self.phase
-
-        if ratio >= 1 and self.phase == Phase.COURTING:
+        if success_ratio >= 1 and self.phase == Phase.COURTING:
             self.phase = Phase.DATING
-        elif ratio >= 1 and self.phase == Phase.DATING:
+        elif success_ratio >= 1 and self.phase == Phase.DATING:
             self.phase = Phase.COMMITTED
 
         return event

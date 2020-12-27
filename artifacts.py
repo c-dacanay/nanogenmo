@@ -84,8 +84,8 @@ def get_date_artifact(event, events):
     experiences = [e for e in events if e['type'] != EventType.NOTHING]
     recent_experience = experiences[-1]
 
-    if recent_experience.get('initiated'):
-        # This means there was a conflict
+    if recent_experience['type'] == EventType.CONFLICT and recent_experience['initiated']:
+        # This means there was a conflict recently
         message = [
             "Hey, can I cheer you up?",
             "Sorry about the other day. I wanna make it up to you! ",
@@ -105,7 +105,7 @@ def get_date_artifact(event, events):
                 "Ok I'm free now. ",
                 "hey, sorry about that. ",
             ]
-    elif recent_experience['type'] == EventType.COMMIT:
+    elif recent_experience['type'] == EventType.COMMIT and recent_experience['initiated']:
         if recent_experience['success_ratio'] > 1:
             # we only do these texts in COURTING, this is just a placeholder for now
             message = [';)']
@@ -119,7 +119,7 @@ def get_date_artifact(event, events):
     else:
         message = util.rank([
             '#hello#, ',
-            f'#hello# it was really nice to spend time with you!',
+            f'#hello# it was really nice to see you the other day!',
             f'i had fun! ',
             f'i had a lot of fun the other day! ',
             "You're cute. ",
@@ -156,7 +156,7 @@ def get_date_artifact(event, events):
         }]
 
     rules = {
-        'origin': ['#preface# #msg#', '#msg#'],
+        'origin': ['#preface# #msg#', '#msg#', '#msg#'],
         'preface': get_message_intro(a, b),
         'msg': get_message_html(messages),
         'punc': ['', '#e#', '#e##e#', '#e##e##e#'],
