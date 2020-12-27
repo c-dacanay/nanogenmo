@@ -17,9 +17,74 @@ logging.basicConfig(level=logging.DEBUG)
 
 
 def narrate(r: Relationship):
-    return narrate_events(r.a, r.events)
+  # Given a relationship object, break the events within into their distinct
+  # phases and pass them to narrate_phase
+  events = r.events
+  print(f"Alex met {events[0]['person']['name']} {events[0]['location']}. ")
+   for phase in [Phase.COURTING, Phase.DATING, Phase.COMMITTED]:
+        chunk = []
+        while True:
+            if len(events) == 0:
+                break
+            if events[0].get('phase', phase) != phase:
+                # Move on to next phase
+                break
+            event = events.pop(0)
+            chunk.append(event)
+        narrate_phase(chunk, phase)
+
+    # knock alex's confidence just a touch
+    # logging.debug(f"Alex's confidence is {a['confidence']}")
+    r.a['confidence'] *= .9 + random.random() * 0.1
+    # logging.debug(f"Alex's confidence is {a['confidence']}")
+    print("They never saw each other again.")
+
+# Given a chunk of events and phase, narrate events in that style
+# Right now there aren't that many changes to narration based on phase
+# but we keep the infrastructure for now
+def narrate_phase(events, phase):
+    if events:
+        logging.debug(f'Narrating {len(events)} events in phase {phase}')
+    if phase == Phase.COURTING:
+        narrate_events(events)
+    elif phase == Phase.DATING and events:
+        prologue.get_prologue(events[0]['person'])
+        narrate_events(events)
+    elif phase == Phase.COMMITTED and events:
+        narrate_committed(events)
 
 
+# Given a block of events, narrate the next event
+# Maintain an array of events that happened up until that point
+# so the narrator can take them into account.
+def narrate_events(events):
+    current_events = []
+    for event in events:
+        narrate_event(event, current_events)
+        if current_events:
+            narrate_time(current_events[-1], event)
+        current_events.append(event)
+
+
+# Call the appropriate function based on event type
+def narrate_event(event, events):
+    # logging.debug(pprint.pformat(event))
+    if event is None:
+        return
+    if event['type'] == EventType.MEETING:
+        narrate_meeting(event, events)
+    elif event['type'] == EventType.COMMIT:
+        narrate_commit(event, events)
+    elif event['type'] == EventType.EXPERIENCE:
+        narrate_experience(event, events)
+    elif event['type'] == EventType.CONFLICT:
+        narrate_conflict(event, events)
+    else:
+        time_passed(event, events)
+
+
+# Get some basic descriptor based on the property with the highest value
+# This is what Alex notices first about the person
 def get_salient_property(person):
     m = 0
     k = ''
@@ -61,7 +126,7 @@ def get_interest_sentence(a, b, interest):
     return f"{a['name']} {random.choice(adjective)} {prop}. "
 
 
-def narrate_commit(event):
+def narrate_commit(event, events):
     a, b = get_ab(event)
     enthusiasm = util.scale(event['success_ratio'], 1, 3, 0, 1)
     rules = {
@@ -108,7 +173,7 @@ def narrate_commit(event):
     print('\n')
 
 
-def narrate_meeting(event):
+def narrate_meeting(event, events):
     if event['delta'] == -1:
         return
     text = ""
@@ -173,91 +238,47 @@ def narrate_committed(events):
     print("The couple lived happily ever after")
 
 
-def narrate_events(a, events):
-    a = a
-    print(f"Alex met {events[0]['person']['name']} {events[0]['location']}. ")
-    for phase in [Phase.COURTING, Phase.DATING, Phase.COMMITTED]:
-        chunk = []
-        while True:
-            if len(events) == 0:
-                break
-            if events[0].get('phase', phase) != phase:
-                # Move on to next phase
-                break
-            event = events.pop(0)
-            chunk.append(event)
-        narrate_phase(chunk, phase)
-
-    # knock alex's confidence just a touch
-    # logging.debug(f"Alex's confidence is {a['confidence']}")
-    a['confidence'] *= .9 + random.random() * 0.1
-    # logging.debug(f"Alex's confidence is {a['confidence']}")
-    print("They never saw each other again.")
-
-
-def narrate_event(event):
-    # logging.debug(pprint.pformat(event))
-    if event is None:
-        return
-    if event['type'] == EventType.MEETING:
-        narrate_meeting(event)
-    elif event['type'] == EventType.COMMIT:
-        narrate_commit(event)
-    elif event['type'] == EventType.EXPERIENCE:
-        narrate_experience(event)
-    elif event['type'] == EventType.CONFLICT:
-        narrate_conflict(event)
-    else:
-        time_passed(event)
-
-
-def narrate_phase(events, phase):
-    if events:
-        logging.debug(f'Narrating {len(events)} events in phase {phase}')
-    if phase == Phase.COURTING:
-        for event in events:
-            narrate_event(event)
-    elif phase == Phase.DATING and events:
-        prologue.get_prologue(events[0]['person'])
-        last_event = None
-        for event in events:
-            narrate_event(event)
-            narrate_time(last_event, event)
-            last_event = event
-
-    elif phase == Phase.COMMITTED and events:
-        narrate_committed(events)
-
-
-def narrate_experience(event):
+def narrate_rejection(event, events):
     a, b = get_ab(event)
+    rules = {
+        'origin': "#Onday# #want#, #reject#.",
+        'a': a['name'],
+        'b': b['name'],
+        'Onday': [
+            f"On {event['date'].strftime('%A')},",
+            f"{event['date'].strftime('%A')} came around.",
+            "Later that week,"
+        ],
+        'want': [
+            '#a# asked #b# if they wanted to hang out',
+            f'#a# asked #b# if {b["they"]} were free',
+            '#a# wanted to hang out with #b#',
+            '#a# wanted to see #b#',
+        ],
+        'reject': [
+            'but #b# was busy',
+            'but #b# forgot to return #a#\'s message',
+            'but #b# had other plans',
+            'but #b# never responded to #a#\'s message'
+        ]
+    }
     if event.get('phase') == Phase.COURTING and random.random() < 0.6:
-        print(artifacts.get_first_date(event))
-    if event['rejected']:
-        rules = {
-            'origin': "#Onday# #want#, #reject#.",
-            'a': a['name'],
-            'b': b['name'],
-            'Onday': [
-                f"On {event['date'].strftime('%A')},",
-                f"{event['date'].strftime('%A')} came around.",
-                "Later that week,"
-            ],
-            'want': [
-                '#a# asked #b# if they wanted to hang out',
-                f'#a# asked #b# if {b["they"]} were free',
-                '#a# wanted to hang out with #b#',
-                '#a# wanted to see #b#',
-            ],
-            'reject': [
-                'but #b# was busy',
-                'but #b# forgot to return #a#\'s message',
-                'but #b# had other plans',
-                'but #b# never responded to #a#\'s message'
-            ]
-        }
+        print(artifacts.get_date_artifact(event, events))
+    else:
         print(tracery.Grammar(rules).flatten('#origin#'))
+    return
+
+
+def narrate_experience(event, events):
+    a, b = get_ab(event)
+
+    if event['rejected']:
+        narrate_rejection(event, events)
         return
+
+    if event.get('phase') == Phase.COURTING and random.random() < 0.6:
+        print(artifacts.get_date_artifact(event, events))
+
     if event['target_property'] == 'open':
         rules = {
             'mood': util.rank([
@@ -357,7 +378,7 @@ def narrate_experience(event):
             'con': util.rank([
                 '#b# noticed #a# had a lot of dishes piled up in the sink.',
                 '#a# decided to call in sick to work. After all, you only live once.',
-                f'#a# forgot to do {a["their"]} laundry.', 
+                f'#a# forgot to do {a["their"]} laundry.',
                 '#a# left a couple of dishes piled up in the sink.',
                 f'#a# noticed {a["they"]} needed to vacuum the carpet.',
                 '#a# decided to start keeping a daily todo list.',
@@ -392,76 +413,9 @@ def narrate_experience(event):
         # logging.debug(f"Event: {event}")
 
 
-def narrate_experience_DEPRECATED(event):
-    a, b = get_ab(event)
-    if event['rejected']:
-        result = f"{b['name']} refused. "
-    else:
-        lower_dict = {
-            'libido':
-            f'{b["name"]} generally preferred less adventurous sex',
-            'extra':
-            f'{b["name"]} generally preferred a quieter evening',
-            'open':
-            f'{b["name"]} generally preferred to do something they were used to',
-        }
-        higher_dict = {
-            'libido': f'{b["name"]} generally preferred more adventurous sex',
-            'extra': f'{b["name"]} generally preferred to socialize',
-            'open': f'{b["name"]} generally preferred to do something new',
-        }
-        concession = lower_dict[event['target_property']] if event[
-            'concession'] < 0 else higher_dict[event['target_property']]
-        # logging.debug(
-        #    f"Concession damage for {event['target_property']} is {round(event['concession'], 2)}"
-        # )
-        if abs(event['concession']) > 0.2:
-            result = f"{concession}, but agreed anyway. "
-        else:
-            result = f"{b['name']} agreed {util.enthusiastically(1.5 - abs(event['concession']) / 0.2)}. "
-        result += util.rank([
-            f"Unfortunately, {b['name']} ended up wishing {b['they']} had done something else instead. ",
-            "Unfortunately, it was just so-so. ",
-            f"{b['name']} found {b['their']} mind wandering. ",
-            "They had a moderately entertaining time. ",
-            "It was moderately entertaining. ",
-            "They had a wonderful evening. ",
-            "They had a mindblowing evening. ",
-            "They had an incredible time. ",
-            f"It was the most enjoyable time Alex had spent with anyone in a while. ",
-        ], event['delta'])
-
-    experiences = {
-        'open': [f'go on a boring date', 'go on an exciting date'],
-        'libido': [f'have vanilla sex', f'have kinky sex'],
-        'extra': [
-            f'come over and watch Netflix', 'go out to the club',
-            'go to a big party'
-        ],
-    }
-    activity = util.rank(experiences[event['target_property']],
-                         event['threshold'])
-    rules = {
-        'origin': ['#a# #invited# #activity#. #result#'],
-        'invited': ['invited #b# to', 'asked #b# to', 'suggested that they'],
-        'activity': activity,
-        'result': result,
-        'a': f'{a["name"]}',
-        'b': f'{b["name"]}',
-    }
-    if event.get('phase') == Phase.COURTING and random.random() < 0.6:
-        print(artifacts.get_first_date(event))
-
-    grammar = tracery.Grammar(rules)
-    grammar.add_modifiers(base_english)
-    print(grammar.flatten("#origin#"))
-    # logging.debug(
-    #    f"The relationship health changed by {round(event['delta'], 2)}. ")
-
-
-def narrate_conflict(event):
+def narrate_conflict(event, events):
     conflict_narrator.narrate_conflict(event)
 
 
-def time_passed(event):
+def time_passed(event, events):
     return ""

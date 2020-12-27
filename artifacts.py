@@ -10,7 +10,7 @@ from tracery.modifiers import base_english
 
 # def narrate_artifact(evt: Event):
 HEART_EMOJIS = [
-    '💖', '<3', '😍', '🥰', '😘', '👅', '👄', '💋', '👀', '🔥', '💦', '🌶', '🍑', '🍆'	    '💖', '<3', '😍', '🥰', '😘', '👅', '👄', '💋', '👀', '🔥', '💦', '🌶', '🍑', '🍆'
+    '💖', '<3', '😍', '🥰', '😘', '👅', '👄', '💋', '👀', '🔥', '💦', '🌶', '🍑', '🍆', ':)', ';)', ':D',
 ]
 
 
@@ -72,34 +72,84 @@ def get_message_html(messages):
         </div>'''
 
 
-def get_first_date(event):
+def get_date_artifact(event, events):
     a, b = get_ab(event)
     a_nick = event['protagonist']['nickname']
     b_nick = event['person']['nickname']
     a_interest = event['protagonist']['interest']
     b_interest = event['protagonist']['interest']
 
+    # Look for the most recent event and use it to
+    # determine the first message sent
+    experiences = [e for e in events if e['type'] != EventType.NOTHING]
+    recent_experience = experiences[-1]
+
+    if recent_experience.get('initiated'):
+        # This means there was a conflict
+        message = [
+            "Hey, can I cheer you up?",
+            "Sorry about the other day. I wanna make it up to you! ",
+        ]
+    elif recent_experience.get('rejected'):
+        # There was a previous rejection
+        if recent_experience['protagonist_initiated'] == event['protagonist_initiated']:
+            message = [
+                "Hey, uh, ",
+                "are you around? ",
+                "Mm, ",
+                "hello? "
+            ]
+        else:
+            message = [
+                "#hello# sorry again I was busy earlier! "
+                "Ok I'm free now. ",
+                "hey, sorry about that. ",
+            ]
+    elif recent_experience['type'] == EventType.COMMIT:
+        if recent_experience['success_ratio'] > 1:
+            # we only do these texts in COURTING, this is just a placeholder for now
+            message = [';)']
+        else:
+            message = [
+                "Well let's keep hanging out still!",
+                "I still enjoy spending time with you",
+                "I still really like you",
+                "I'm still interested in hanging out more!"
+            ]
+    else:
+        message = util.rank([
+            '#hello#, ',
+            f'#hello# it was really nice to spend time with you!',
+            f'i had fun! ',
+            f'i had a lot of fun the other day! ',
+            "You're cute. ",
+            f"i had a #great# time! ",
+            "You're a cutie. ",
+            f"you are #great#. ",
+            f"can’t stop thinking about you. ",
+        ], random.gauss(a['interest'], 0.3))
+
     # Create the messages array
     if event['protagonist_initiated']:
         messages = [{
-            'text':  '#a_start##punc# #a_ask#',
+            'text':  '#start##punc# #ask#',
             'time': event['date'],
             'nickname': a_nick,
             'a': 'a'
         }, {
-            'text':  '#b_rej#' if event['rejected'] else '#b_resp#',
+            'text':  '#rej#' if event['rejected'] else '#resp#',
             'time': event['date'],
             'nickname': b_nick,
             'a': 'b'
         }]
     else:
         messages = [{
-            'text':  '#b_start# #b_start2# #b_ask#',
+            'text':  '#start##punc# #ask#',
             'time': event['date'],
             'nickname': b_nick,
             'a': 'b'
         }, {
-            'text':  '#a_rej#' if event['rejected'] else '#a_resp#',
+            'text':  '#rej#' if event['rejected'] else '#resp#',
             'time': event['date'],
             'nickname': a_nick,
             'a': 'a'
@@ -109,26 +159,30 @@ def get_first_date(event):
         'origin': ['#preface# #msg#', '#msg#'],
         'preface': get_message_intro(a, b),
         'msg': get_message_html(messages),
-        'punc': ['. ', '! ', '... ', '#e# ', '#e##e# '],
+        'punc': ['', '#e#', '#e##e#', '#e##e##e#'],
         'e': HEART_EMOJIS,
-        'a_start': [
-            'it was really nice to spend time with you',
-            'i had fun tonight',
-            f"can’t stop thinking about you",
-            "i had a great time",
-            "hope you had a nice time",
-            f"you are {util.adverb(a_interest)} great",
-            "hey, thanks for hanging out"
-        ],
-        'a_ask': [
-            'repeat soon?',
+        'start': message,
+        'ask': [
             'can i see you again?',
             'when can i see you again?',
+            'when can i see u next?',
+            'when r u free?',
             'when are u free next?',
-            'again sometime?',
-            'again?'
+            'See me again soon?',
+            'Want to hang out #day#?',
+            'Want to hang out again?',
+            'When are you free next?',
+            'When are you free?',
+            "I'd love to see you again!",
         ],
-        'b_start': [
+        'hello': [
+            'hey',
+            'heyy',
+            'heya',
+            'hi',
+            'hello!',
+            'yo',
+            'sup',
             'Hey!',
             'Heya!',
             'Yo!',
@@ -136,42 +190,35 @@ def get_first_date(event):
             'Whats up!',
             '',
         ],
-        'b_ask': [
-            'See me again soon?',
-            'Want to do it again?',
-            'When are you free next?',
-            "Let's do it again sometime.",
+        'great': [
+            'great',
+            'wonderful',
+            'fantastic',
+            'awesome',
+            'unforgettable'
         ],
-        'b_start2': [
-            f'I had a wonderful time.',
-            f'I had an awesome time.',
-            f'I had a fantastic time.',
-            "You're cute.",
-            "You're a cutie.",
-        ],
-        'a_rej': [
+        'rej': [
             'uhhh let me take a look at my calendar',
             'let me get back to you',
             'im kinda busy rn but ill text u',
-        ],
-        'b_rej': [
             'Hm, my week is looking pretty busy',
             'Let me get back to you...',
             'I have a upcoming deadline, can I let you know?'
         ],
-        'a_resp': [
-            "#suggest# :)",
-            "yeah id love to! #suggest#",
-            "yes!! #suggest#",
-        ],
-        'b_resp': [
-            'Looking forward to it #suggest#',
+        'resp': util.rank([
             '#suggest#',
-            'I\'d love to #suggest#',
+            "#suggest# :)",
+            "#suggest# #e#",
+            'yea, #suggest#',
+            "yes, #suggest#",
+            "yes! #suggest#",
+            "yeah id love to! #suggest#",
+            'Looking forward to it #suggest#',
+            'I\'d love to, #suggest#',
             'Of course! #suggest#',
             'Absolutely! #suggest#',
             'For sure! #suggest#',
-        ],
+        ], random.gauss(b['interest'], 0.3)),
         'suggest': [
             'what about #day#?',
             'im free on #day#!',
