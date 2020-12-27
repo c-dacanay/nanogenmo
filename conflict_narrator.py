@@ -287,14 +287,14 @@ def get_conflict_thought(a, b, event, problem_phrase):
     if conflicts:
         # There were previous fights about it.
         # One morning, the fight they had in December about Susan's laziness floated into ALex's mind.
-        main = '<br><br>#time#, the #fight# they had #ago# about how #b# #problem# #floated#.'
+        main = '#time#, the #fight# they had #ago# about how #b# #problem# #floated#.'
         ago = humanize.naturaldelta(
             event['date'] - conflicts[len(conflicts) - 1]['date']) + ' ago'
     elif event['prev']:
         # THere were previous aborted fights.
-        main = '<br><br>The idea that #b# #problem# came back to #a#\'s #mind#.'
+        main = 'The idea that #b# #problem# came back to #a#\'s #mind#.'
     else:
-        main = '<br><br>#time#, #a# #thought# that #perhaps# #b# #problem#.'
+        main = '#time#, #a# #thought# that #perhaps# #b# #problem#.'
     but = '#resolve#' if event['initiated'] else '#but#'
 
     rules = {
@@ -308,7 +308,7 @@ def get_conflict_thought(a, b, event, problem_phrase):
         'mind': ['mind', 'head'],
         'ago': ago,
         'floated': ['floated back into #a#\'s #mind#', 'drifted into #a#\'s #mind#'],
-        'perhaps': ['perhaps', 'maybe', '', '', ',compared to previous partners,'],
+        'perhaps': ['perhaps', 'maybe', '', '', 'compared to previous partners,'],
         'thought': ['thought', 'considered', 'felt bothered', 'felt concerned', 'had the thought', 'was discussing #b# with a friend and realized'],
         'problem': problem_phrase,
         'pushing': ['pushing', 'telling', 'convincing', 'nagging', 'dragging'],
@@ -342,7 +342,7 @@ def get_conflict_thought(a, b, event, problem_phrase):
         ], (event['target'])),
         'fight': ['fight', 'argument', 'dispute', 'spat']
     }
-    return tracery.Grammar(rules).flatten('#origin#')
+    return tracery.Grammar(rules).flatten('<p>#origin#</p>')
 
 
 def narrate_conflict(event):

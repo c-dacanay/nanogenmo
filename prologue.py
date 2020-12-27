@@ -13,10 +13,10 @@ from tracery.modifiers import base_english
 def get_prologue(person):
     rules = {
         'origin': [
-            "#time#, Alex #realized# that #name# was a #hot# person with #extra#. When it came to their relationship, #name# was #neuro# and #agree#. #they.capitalize# was #con# and #open#." 
+            "#time#, Alex #realized# that #name# was a #hot# person with #extra#. #they.capitalize# was #con# and #open#. When it came to their relationship, #name# was #neuro# and #agree#." 
             ],
-        'time': ["Over time", "Slowly", "As the two got to know each other", "The more they saw #name#"],
-        'realized': ["realized", "noticed", "discovered", "found", "saw that"],
+        'time': ["Over time", "As their relationship progressed", "As the two got to know each other", "The more they saw #name#"],
+        'realized': ["realized", "noticed", "discovered", "found", "saw", "learned"],
         'name': f"{person['name']}",
         'they': f"{person['they']}",
         'hot': util.rank([
@@ -39,13 +39,13 @@ def get_prologue(person):
             "a laid-back demeanor",
             "a relaxed-personality",
             "an easy smile",
-            "an enthusiasstic charm",
+            "an enthusiastic charm",
             "a boisterous laugh",
             "a gregarious personality"
         ], person['extra']),
         'open': util.rank([
             "a picky eater and could not be convinced to try new food",
-            "cautious and hated surprises",
+            "cautious, hating surprises",
             "a creature of habit, inflexible but reliable,"
             "usually stuck to what felt comfortable",
             "enjoyed trying new things occasionally",
@@ -99,7 +99,7 @@ def get_prologue(person):
     }
     grammar = tracery.Grammar(rules)
     grammar.add_modifiers(base_english)
-    print(grammar.flatten('<br><br>#origin#'))
+    print(grammar.flatten('<p>#origin#</p>'))
 
 def get_prologue_DEPRECATED(person):
     # properties

@@ -19,9 +19,9 @@ logging.basicConfig(level=logging.DEBUG)
 def narrate(r: Relationship):
   # Given a relationship object, break the events within into their distinct
   # phases and pass them to narrate_phase
-  events = r.events
-  print(f"Alex met {events[0]['person']['name']} {events[0]['location']}. ")
-   for phase in [Phase.COURTING, Phase.DATING, Phase.COMMITTED]:
+    events = r.events
+    print(f"Alex met {events[0]['person']['name']} {events[0]['location']}. ")
+    for phase in [Phase.COURTING, Phase.DATING, Phase.COMMITTED]:
         chunk = []
         while True:
             if len(events) == 0:
