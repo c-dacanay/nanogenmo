@@ -78,8 +78,8 @@ PHASE_COMMIT_THRESHOLDS = {
 }
 
 PHASE_SCORE_THRESHOLDS = {
-    Phase.COURTING: 0.5,
-    Phase.DATING: 1,
+    Phase.COURTING: 0.4,
+    Phase.DATING: 0.8,
     Phase.COMMITTED: 2,
 }
 
