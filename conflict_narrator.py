@@ -275,7 +275,7 @@ def get_outcome(a, b, event):
             'The two walked on eggshells for awhile.',
             'Things seemed tenuous for a long while after.',
             'The fight spelled disaster for their relationship.'
-        ], 1-event['delta'])
+        ], pow(1-event['delta'], 2))
     }
     grammar = tracery.Grammar(rules)
     return grammar.flatten('#origin#')
