@@ -77,7 +77,7 @@ def get_problem(a, b, target_p):
                 "didn't respect what #a# wanted to do on dates",
             ],
             'extra': [
-                "pushed #a# to socialize when they didn't want to",
+                f"pushed #a# to socialize when {a['they']} didn't want to",
                 "didn't understand that #a# did not enjoy socializing the way #b# did",
                 "didn't respect that sometimes #a# just wanted to stay in",
                 "didn't get that #a# didn't want to go out all the time",

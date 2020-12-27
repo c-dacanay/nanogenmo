@@ -141,7 +141,7 @@ def narrate_commit(event, events):
         'dating_result':
         f"#b# agreed {util.enthusiastically(enthusiasm)}. "
         if event['success_ratio'] >= 1 else
-        f'#b# said that perhaps {b["they"]} weren\'t quite ready yet. ',
+        f'#b# said that {b["they"]} needed more time. ',
         'ily_challenge':
         f"#a# said \"I love you,\"",
         'ily_result': [
@@ -305,7 +305,7 @@ def narrate_experience(event, events):
         }
         rules.update(getInterestRules(a, b, event['interest']))
         grammar = tracery.Grammar(rules)
-        print(grammar.flatten('#hobby_proposal# #reply#'))
+        print(grammar.flatten('<p>#hobby_proposal# #reply#</p>'))
         # logging.debug(
         #    f"OPEN EXPERIENCE {event['interest']} {event['threshold']} a: {a['open']} b: {b['open']}")
     elif event['target_property'] in ['extra', 'libido']:
