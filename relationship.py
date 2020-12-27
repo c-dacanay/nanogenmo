@@ -72,15 +72,15 @@ class Phase(Enum):
 
 
 PHASE_COMMIT_THRESHOLDS = {
-    Phase.COURTING: 2,
-    Phase.DATING: 5,
-    Phase.COMMITTED: 100000000000,
+    Phase.COURTING: 2.0,
+    Phase.DATING: 4.0,
+    Phase.COMMITTED: 100000000000.0,
 }
 
 PHASE_SCORE_THRESHOLDS = {
-    Phase.COURTING: 0.3,
-    Phase.DATING: 0.6,
-    Phase.COMMITTED: 0.9,
+    Phase.COURTING: 0.5,
+    Phase.DATING: 1,
+    Phase.COMMITTED: 2,
 }
 
 
@@ -377,7 +377,7 @@ class Relationship:
         a = self.a
         b = self.b
         protag_init = random.random() > 0.5
-        if protag_init:
+        if not protag_init:
             a = self.b
             b = self.a
         event = {
@@ -386,6 +386,7 @@ class Relationship:
             'person': self.b,
             'protagonist_initiated': protag_init,
             'phase': self.phase,
+            'health': self.health,
             'delta': 0,
         }
 
@@ -394,7 +395,8 @@ class Relationship:
             f"{a['name']} confidence {a['confidence']}, interest {a['interest']}, commit {a['commit']}")
 
         # Roll for whether A is committed/interested enough to initiate:
-        event['initiate_ratio'] = a['interest'] * a['commit'] / \
+        event['initiate_ratio'] = a['interest'] * a['commit'] * self.health / \
+            PHASE_COMMIT_THRESHOLDS[self.phase] / \
             PHASE_SCORE_THRESHOLDS[self.phase]
 
         # Roll for whether or not A is confident enough to initiate
@@ -406,8 +408,8 @@ class Relationship:
             logging.debug(
                 f"COMMIT event failed")
             return event
-
-        score = b['interest'] * b['commit']
+        score = b['interest'] * b['commit'] * \
+            self.health / PHASE_COMMIT_THRESHOLDS[self.phase]
         success_ratio = score / PHASE_SCORE_THRESHOLDS[self.phase]
         event['success_ratio'] = success_ratio
 
@@ -476,7 +478,7 @@ class Relationship:
         chance_conflict = PHASE_CONFLICT_CHANCES[self.phase] * neuro_mod
 
         if self.health > PHASE_COMMIT_THRESHOLDS[self.phase] and event.get(
-                'delta', 0) > 0.25 and event.get('type') != EventType.COMMIT:
+                'delta', 0) > 0.4 and event.get('type') != EventType.COMMIT:
             event = self.simulate_commit(event)
         elif (random.random() < PHASE_EXPERIENCE_CHANCES[self.phase]):
             # A development occurred!
