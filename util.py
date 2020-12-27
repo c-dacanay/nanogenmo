@@ -26,7 +26,14 @@ def get_ab(event):
     b = event['person'] if event['protagonist_initiated'] else event[
         'protagonist']
     return a, b
-    
+
+def joiner(val):
+    return rank([
+        "but",
+        "yet",
+        "and"
+    ], val)
+
 def adverb(val):
     return rank([
         "scarcely",

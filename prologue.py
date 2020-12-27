@@ -13,8 +13,9 @@ from tracery.modifiers import base_english
 def get_prologue(person):
     rules = {
         'origin': [
-            "#time#, Alex #realized# that #name# was a #hot# person with #extra#. #they.capitalize# was #con# and #open#. When it came to their relationship, #name# was #neuro# and #agree#." 
+            "#time#, Alex #realized# that #name# was a #hot# person with #extra#. #they.capitalize# was #con# and #open#. When it came to their relationship, #name# was #neuro# #joiner# #agree#." 
             ],
+        'joiner': f"{util.joiner(pow(1-abs(1-person['neuro']-person['agree']), 2))}",
         'time': ["Over time", "As their relationship progressed", "As the two got to know each other", "The more they saw #name#"],
         'realized': ["realized", "noticed", "discovered", "found", "saw", "learned"],
         'name': f"{person['name']}",
@@ -44,9 +45,9 @@ def get_prologue(person):
             "a gregarious personality"
         ], person['extra']),
         'open': util.rank([
-            "a picky eater and could not be convinced to try new food",
-            "cautious, hating surprises",
-            "a creature of habit, inflexible but reliable,"
+            "could not be convinced to try new food when they ate out together",
+            "cautious in nature, hating surprises",
+            "a creature of habit, inflexible but reliable,",
             "usually stuck to what felt comfortable",
             "enjoyed trying new things occasionally",
             "constantly sought new hobbies and experiences",
@@ -73,9 +74,9 @@ def get_prologue(person):
             "careless",
             "meandering",
             "scattered",
-            "struggled but strove to be organized",
+            "working on being more organized",
             "a bit messy",
-            "tried to keep tidy",
+            "mostly tidy",
             "clean",
             "keen",
             "detail-oriented",
@@ -91,9 +92,10 @@ def get_prologue(person):
             "rude",
             "stubborn",
             "independent",
+            "apathetic",
             "cooperative",
-            "affectionate",
             "empathetic",
+            "deferential",
             "altruistic",
         ], person['agree']),
     }
