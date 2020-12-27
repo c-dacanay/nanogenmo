@@ -26,8 +26,7 @@ def get_ab(event):
     b = event['person'] if event['protagonist_initiated'] else event[
         'protagonist']
     return a, b
-
-
+    
 def adverb(val):
     return rank([
         "scarcely",

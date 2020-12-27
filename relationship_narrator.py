@@ -218,7 +218,7 @@ def narrate_phase(events, phase):
         for event in events:
             narrate_event(event)
     elif phase == Phase.DATING and events:
-        print(prologue.get_prologue(events[0]['person']))
+        prologue.get_prologue(events[0]['person'])
         last_event = None
         for event in events:
             narrate_event(event)

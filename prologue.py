@@ -1,4 +1,7 @@
 import random
+import util
+import tracery
+from tracery.modifiers import base_english
 
 # This is a little too mad-lib-y right now.
 # Could pull some language from a corpus.
@@ -7,8 +10,98 @@ import random
 # Sylvan: could we get a protagonist argument in get_prologue? Or should that be handled elsewhere
 # I just think using protag's name in these strings could add better variation
 
-
 def get_prologue(person):
+    rules = {
+        'origin': [
+            "#time#, Alex #realized# that #name# was a #hot# person with #extra#. When it came to their relationship, #name# was #neuro# and #agree#. #they.capitalize# was #con# and #open#." 
+            ],
+        'time': ["Over time", "Slowly", "As the two got to know each other", "The more they saw #name#"],
+        'realized': ["realized", "noticed", "discovered", "found", "saw that"],
+        'name': f"{person['name']}",
+        'they': f"{person['they']}",
+        'hot': util.rank([
+            "unremarkable",
+            "typical",
+            "plain-looking",
+            "homely",
+            "kind-eyed",
+            "sweet-faced",
+            "attractive",
+            "charming",
+            "beautiful",
+            "gorgeous",
+            "stunning"
+        ], person['hot']),
+        'extra': util.rank([
+            "a reserved manner",
+            "a quiet demeanor",
+            "a cat-like personality",
+            "a laid-back demeanor",
+            "a relaxed-personality",
+            "an easy smile",
+            "an enthusiasstic charm",
+            "a boisterous laugh",
+            "a gregarious personality"
+        ], person['extra']),
+        'open': util.rank([
+            "a picky eater and could not be convinced to try new food",
+            "cautious and hated surprises",
+            "a creature of habit, inflexible but reliable,"
+            "usually stuck to what felt comfortable",
+            "enjoyed trying new things occasionally",
+            "constantly sought new hobbies and experiences",
+            "impulsive in ways, always sensation-seeking,"
+        ], person['open']),
+        'neuro': util.rank([
+            "emotionally attuned",
+            "emotionally stable",
+            "stoic",
+            "grounded",
+            "composed",
+            "well-adjusted",
+            "easygoing",
+            "nonchalant",
+            "jittery",
+            "anxious",
+            "high strung",
+            "emotionally volatile",
+            "emotionally unpredictable",
+            "prone to severe mood swings",
+        ], person['neuro']),
+        'con': util.rank([
+            "disorganized",
+            "careless",
+            "meandering",
+            "scattered",
+            "struggled but strove to be organized",
+            "a bit messy",
+            "tried to keep tidy",
+            "clean",
+            "keen",
+            "detail-oriented",
+            "diligent",
+            "dutiful",
+            "a neat freak",
+            "exacting"
+        ], person['con']),
+        'agree': util.rank([
+            "callous",
+            "combative",
+            "argumentative",
+            "rude",
+            "stubborn",
+            "independent",
+            "cooperative",
+            "affectionate",
+            "empathetic",
+            "altruistic",
+        ], person['agree']),
+    }
+    grammar = tracery.Grammar(rules)
+    grammar.add_modifiers(base_english)
+    print(grammar.flatten('<br><br>#origin#'))
+
+def get_prologue_DEPRECATED(person):
     # properties
     # not currently using neuro or libido
     name = person.get('name')
