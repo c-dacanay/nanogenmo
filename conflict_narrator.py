@@ -28,7 +28,7 @@ def get_problem(a, b, target_p):
                 'didn\'t initiate sex often enough',
                 'didn\'t want to have sex often enough',
                 'didn\'t want to be intimate often enough',
-                'was not passionate enough about the relationship',
+                f'was not sexually compatible with {a["name"]}',
             ],
             'con': [
                 'was too messy',
@@ -40,7 +40,7 @@ def get_problem(a, b, target_p):
                 'was not paying paying enough attention to the relationship',
                 'was not texting often enough',
                 'was not arranging dates often enough',
-                'talked too much to their friends',
+                f'talked too much to {b["their"]} friends',
             ],
             'agree': [
                 'never wanted to adapt for the sake of the relationship',
@@ -52,13 +52,13 @@ def get_problem(a, b, target_p):
                 'was too immature',
                 'was kind of a crybaby',
                 'was too jealous',
-                'didn\'t communicate their needs well'
+                f'didn\'t communicate {b["their"]} needs well'
             ],
             'hot': [
                 'was not attractive enough',
                 'needed to hit the gym',
                 'needed to go on a diet',
-                'needed to take care of themselves better',
+                'needed to take better care of themselves',
             ],
             'commit': [
                 'was not committed enough',
@@ -324,9 +324,9 @@ def get_conflict_thought(a, b, event, problem_phrase):
             '#returned# to #a_their# coffee.',
             '#returned# to #a_their# breakfast.',
             '#returned# to #a_their# work.',
-            f"#returned# to reading about {random.choice(a['hobbies'])}" if a[
+            f"#returned# to reading about {random.choice(a['hobbies'])}." if a[
                 'hobbies'] else 'returned to reading.',
-            f"#returned# to watching Youtube videos about {random.choice(a['hobbies'])}" if a[
+            f"#returned# to watching Youtube videos about {random.choice(a['hobbies'])}." if a[
                 'hobbies'] else 'returned to surfing the Internet.',
         ],
         'returned': ['returned', 'went back'],

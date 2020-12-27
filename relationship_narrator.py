@@ -185,7 +185,7 @@ def narrate_meeting(event, events):
         text += get_interest_sentence(event['person'], event['protagonist'],
                                       event['person']['interest'])
     adverb = util.rank(
-        ['nervously', 'shyly', 'quietly', '', 'gently', 'intently', 'boldly'],
+        ['nervously', 'shyly', 'quietly', 'gently', 'intently', 'boldly'],
         a['interest'])
 
     if event['delta'] <= 0:
@@ -392,7 +392,7 @@ def narrate_experience(event, events):
             'exp': util.rank([
                 '#a# was upset with #b#, but said nothing.',
                 '#a# was jealous of #b#\'s moderately attractive co-worker.',
-                f'#a# asked #b# how {b["they"]} were feeling about the relationship. The couple had an earnest conversation about where things were going.',
+                f'#a# asked #b# how {b["they"]} felt about the relationship. The couple had an earnest conversation about where things were going.',
                 f'#a# suggested that they enact weekly relationship check-ins. #b# agreed happily.'
             ], event['threshold']),
             'neuro': util.rank([
