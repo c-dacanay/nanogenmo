@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap');
+
 @font-face {
   font-family: "SanFrancisco";
   src: url("https://cdn.rawgit.com/AllThingsSmitty/fonts/25983b71/SanFrancisco/sanfranciscodisplay-regular-webfont.woff2")
@@ -6,37 +8,75 @@
       format("woff");
 }
 
-body {
+
+html, body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
   Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
-  display: flex;
-  justify-content: center;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
 }
 
 /* Index CSS */
 h4 {
   text-transform: uppercase;
   letter-spacing: .09em;
-  padding-top: 2em;
+  padding-top: 1.5em;
 }
 
 p {
   line-height: 1.3em;
 }
 
-a {
+a, #startstory {
   text-decoration: none;
   color: #248bf5;
 }
 
+#startstory {
+  text-align: center;
+}
+
+img {
+  width: 100%;
+}
+#startstory:hover {
+  cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='40' height='48' viewport='0 0 100 100' style='fill:black;font-size:24px;'><text y='50%'>😍</text></svg>") 16 0,auto;   
+}
 a:hover {
   color: #666;
   cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='40' height='48' viewport='0 0 100 100' style='fill:black;font-size:24px;'><text y='50%'>💖</text></svg>") 16 0,auto; 
 }
 
+#box {
+  display: flex;
+  justify-content: space-around;
+}
+
 #info {
   width: 500px; 
   display: inline-block;
+ }
+
+ #bar {
+   display: none;
+   position: absolute;
+   z-index: 10;
+   width: 10%;
+   padding: 20px;
+   color: #666;
+    bottom: 10px;
+   font-size: .9em;
+ }
+
+ #story {
+   display: none;
+   z-index: 1;
+   width: 100%;
+   height: 100%;
+   overflow-x: auto;
  }
 
 /* Story CSS */
@@ -53,6 +93,26 @@ a:hover {
 
 #container {
   text-align: center;
+}
+
+/* Process styling */
+.output {
+  font-size: .8em;
+  margin: .5em;
+  display: inline-flex;
+  flex-direction: column;
+  width: 280px;
+  color: #666;
+}
+
+.code {
+  font-family: 'Roboto Mono', monospace;
+  font-size: .65em;
+  display: inline-flex;
+  flex-direction: column;
+  width: 280px;
+  margin: .5em;
+  color: #248bf5;
 }
 
 /* Artifact styling */

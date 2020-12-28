@@ -106,11 +106,9 @@ def generate_book(num):
         date = r.events[len(r.events) - 1]['date']
         relationship_narrator.narrate(r)
 
-        # if r.phase == Phase.COURTING and random.random() < 0.6:
-        #     continue
-        # else:
-        print(f'<h2>Chapter {str(i + 1.5)}</h2>')
-        print(epilogue.get_epilogue(r, date))
+        if (r.phase == Phase.COURTING and random.random() < 0.5) or (r.phase == Phase.DATING):
+            print(f'<h2>Chapter {str(i + 1.5)}</h2>')
+            print(epilogue.get_epilogue(r, date))
 
         # Print HTML closing tags
         print(f'''

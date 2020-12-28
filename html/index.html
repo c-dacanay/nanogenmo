@@ -5,26 +5,57 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="/html/style.css" />
   <meta name="description" content="I'm never gonna know you now / But I'm gonna love you anyhow.">
-  <title>A.L.E.X 1.0</title>
+  <title>ALEX 1.0</title>
 </head>
 <body>
+  <div id="box">
   <div id="info">
-  <!-- <h1>A.L.E.X 1.0</h1> -->
   <h4>alex 1.0: a loving exploration</h4>
-
-  <p>A.L.E.X. is a computationally-generated relationship simulator, focused on narrating the many romantic exploits of our protagonist Alex. A.L.E.X was originally developed for <a href="https://nanogenmo.github.io/">NaNoGenMo</a> for <a href="http://catn.decontextualize.com/">Computational Approaches to Narrative</a>.</p>
+  <!-- <p>A.L.E.X. is a computationally-generated relationship simulator, focused on narrating the many romantic exploits of our protagonist Alex. A.L.E.X was originally developed for <a href="https://nanogenmo.github.io/">NaNoGenMo</a> for <a href="http://catn.decontextualize.com/">Computational Approaches to Narrative</a>.</p>
   <p>By approaching people and relationships computationally we were able to encode our own assumptions and ask if they reflected reality. What damages relationships? What factors into initial attraction? What makes a person stay with someone who’s not interested in them?
-    </p>
+    </p> -->
 
-    <h2 id="begin"><a href="">begin</a></h2>
-
+    <div class="message_b">
+      <p class='msg_header'>
+          <span class='user'>alex</span>
+      </p>
+      <p class="message from_b">
+          Hey, I think we should check in later.
+      </p>
+  </div>
+    <p>Alex is looking for love. Can this computationally-generated individual find a random.random() person to spend their life with?</p>
+    <h2 id="startstory">begin</h2>
   <h4>credits</h4>
   <p>A.L.E.X was made with 😘 👀 🔥 💦 🍑 by <br>
   <a href="http://cdacanay.com/">Christina Dacanay</a>, <a href="https://emilyzhaoblog.wordpress.com/">Emily Zhao</a>, and <a href="http://squidgetx.github.io/">Sylvan Zheng</a></p>
 
-  <p>Read more <a href="/">about our process here</a> and visit the <a href="https://github.com/c-dacanay/nanogenmo">Github repo</a>.</p>
+  <p>Read more <a href="/html/process.html">about our process here</a> and visit the <a href="https://github.com/c-dacanay/nanogenmo">Github repo</a>.</p>
+  </div>
+</div>
 
+  <div id="bar">
+    <h5>ALEX 1.0</h5>
+    <a href="">about the project</a><br>
+    <a href="">github</a>
+    <div id="toc"></div>
+  </div>
+  <div id="story">
+    <object type="text/html" data="/html/0.html" width="100%" height="100%"></object>
   </div>
 
+<script>
+let info = document.getElementById("info")
+let bar = document.getElementById("bar")
+let begin = document.getElementById("startstory")
+let story = document.getElementById("story")
+
+begin.addEventListener("click", () => {
+  info.style.display = "none"
+  bar.style.display = "inline-block"
+  story.style.display = "flex"
+  // if we want a toc on the website we can put it here in the bar innerhtml
+})
+
+</script>
 </body>
 </html>
