@@ -16,8 +16,8 @@ from interests import INTERESTS, getInterestRules
 logging.basicConfig(level=logging.DEBUG)
 
 def narrate(r: Relationship):
-  # Given a relationship object, break the events within into their distinct
-  # phases and pass them to narrate_phase
+    # Given a relationship object, break the events within into their distinct
+    # phases and pass them to narrate_phase
     events = r.events
     print(f"<p>Alex met {events[0]['person']['name']} {events[0]['location']}. ")
     for phase in [Phase.COURTING, Phase.DATING, Phase.COMMITTED]:
@@ -41,6 +41,8 @@ def narrate(r: Relationship):
 # Given a chunk of events and phase, narrate events in that style
 # Right now there aren't that many changes to narration based on phase
 # but we keep the infrastructure for now
+
+
 def narrate_phase(events, phase):
     if events:
         logging.debug(f'Narrating {len(events)} events in phase {phase}')
@@ -128,42 +130,67 @@ def get_interest_sentence(a, b, interest):
 
 def narrate_commit(event, events):
     a, b = get_ab(event)
-    enthusiasm = util.scale(event['success_ratio'], 1, 3, 0, 1)
-    rules = {
-        'courting_phase': ['#dating#'],
-        'dating_phase': ['#iloveyou#'],
-        'dating': ['#dating_challenge# #dating_result#'],
-        'iloveyou': ['#ily_challenge# #ily_result#'],
-        'dating_challenge': [
-            "#a# asked to start dating.",
-            "#a# asked if #b# would be interested in dating.",
-        ],
-        'dating_result':
-        f"#b# agreed {util.enthusiastically(enthusiasm)}. "
-        if event['success_ratio'] >= 1 else
-        f'#b# said that {b["they"]} needed more time. ',
-        'ily_challenge':
-        f"#a# said \"I love you,\"",
-        'ily_result': [
-            'but #b# could not say it back. #a# was #hurt#'
-            if event['success_ratio'] < 1 else
-            f'and #b# returned the words {util.enthusiastically(enthusiasm)}.'
-        ],
-        'hurt': util.rank(
-            [
-                'hurt, but said #a_they# understood.',
-                'wounded. A tear fell from #a#\'s left eye. ',
-                'devasted. #a_they.capitalize# had hoped #b#\'s response might have been different this time.',
-                'mortified. #a# shouted that #b# was wasting #a#\'s time. #b# shrugged. '
+    if event['initiated']:
+        enthusiasm = util.scale(event['success_ratio'], 1, 3, 0, 1)
+        rules = {
+            'courting_phase': ['#dating#'],
+            'dating_phase': ['#iloveyou#'],
+            'dating': ['#dating_challenge# #dating_result#'],
+            'iloveyou': ['#ily_challenge# #ily_result#'],
+            'dating_challenge': [
+                "#a# asked to start dating.",
+                "#a# asked if #b# would be interested in dating.",
             ],
-            util.scale(event.get('prev', 0), 0, 3, 0, 1)
-        ),
-        'a':
-        a['name'],
-        'b':
-        b['name'],
-        'a_they': a['they']
-    }
+            'dating_result':
+            f"#b# agreed {util.enthusiastically(enthusiasm)}. "
+            if event['success_ratio'] >= 1 else
+            f'#b# said that {b["they"]} needed more time. ',
+            'ily_challenge':
+            f"#a# said \"I love you,\"",
+            'ily_result': [
+                'but #b# could not say it back. #a# was #hurt#'
+                if event['success_ratio'] < 1 else
+                f'and #b# returned the words {util.enthusiastically(enthusiasm)}.'
+            ],
+            'hurt': util.rank(
+                [
+                    'hurt, but said #a_they# understood.',
+                    'wounded. A tear fell from #a#\'s left eye. ',
+                    'devasted. #a_they.capitalize# had hoped #b#\'s response might have been different this time.',
+                    'mortified. #a# shouted that #b# was wasting #a#\'s time. #b# shrugged. '
+                ],
+                util.scale(event.get('prev', 0), 0, 3, 0, 1)
+            ),
+            'a': a['name'],
+            'b': b['name'],
+            'a_they': a['they']
+        }
+
+    elif event['initiate_ratio'] > 1:
+        # Narrate a failed commit event held back by confidence
+        rules = {
+            'courting_phase': '#origin#',
+            'dating_phase': '#origin#',
+            'origin': [
+                '#a# felt nervous, but excited. ',
+                "#a# had the urge to ask #b# about how they felt about the relationship, but wasn't quite confident enough to ask. ",
+            ],
+            'a': a['name'],
+            'b': b['name'],
+        }
+    else:
+        # Not interested enough.
+        rules = {
+            'courting_phase': '#origin#',
+            'dating_phase': '#origin#',
+            'origin': [
+                "#a# continued to use dating apps from time to time. ",
+                "#a# had yet to mention #b# to their parents. ",
+            ],
+            'a': a['name'],
+            'b': b['name'],
+            'interest': a['interests'],
+        }
     grammar = tracery.Grammar(rules)
     grammar.add_modifiers(base_english)
     if event['phase'] == Phase.COURTING:
