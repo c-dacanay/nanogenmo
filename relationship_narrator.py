@@ -15,12 +15,11 @@ from interests import INTERESTS, getInterestRules
 
 logging.basicConfig(level=logging.DEBUG)
 
-
 def narrate(r: Relationship):
   # Given a relationship object, break the events within into their distinct
   # phases and pass them to narrate_phase
     events = r.events
-    print(f"Alex met {events[0]['person']['name']} {events[0]['location']}. ")
+    print(f"<p>Alex met {events[0]['person']['name']} {events[0]['location']}. ")
     for phase in [Phase.COURTING, Phase.DATING, Phase.COMMITTED]:
         chunk = []
         while True:
@@ -48,7 +47,7 @@ def narrate_phase(events, phase):
     if phase == Phase.COURTING:
         narrate_events(events)
     elif phase == Phase.DATING and events:
-        prologue.get_prologue(events[0]['person'])
+        prologue.get_partner_description(events[0]['person'])
         narrate_events(events)
     elif phase == Phase.COMMITTED and events:
         narrate_committed(events)
@@ -73,6 +72,7 @@ def narrate_event(event, events):
         return
     if event['type'] == EventType.MEETING:
         narrate_meeting(event, events)
+        prologue.get_initial_impressions(event['person'])
     elif event['type'] == EventType.COMMIT:
         narrate_commit(event, events)
     elif event['type'] == EventType.EXPERIENCE:
@@ -190,9 +190,9 @@ def narrate_meeting(event, events):
 
     if event['delta'] <= 0:
         REJECTIONS = [
-            f", but {b['name']} averted {b['their']} eyes. ",
-            f", but {b['name']} did not respond. ",
-            f", but {b['name']} quickly turned away. ",
+            f", but {b['name']} averted {b['their']} eyes.</p>",
+            f", but {b['name']} did not respond.</p>",
+            f", but {b['name']} quickly turned away.</p>",
         ]
         followup = random.choice(REJECTIONS)
     else:
@@ -213,9 +213,9 @@ def narrate_meeting(event, events):
             f"{b['name']} left with {a['name']}'s {contact}. ",
         ])
         ACCEPTS = [
-            f". {b['name']} returned a flirtatious glance. {follow2}{follow3}",
-            f". {b['name']} waved in return. {follow2}{follow3}",
-            f". {b['name']} smiled back. {follow2}{follow3}"
+            f". {b['name']} returned a flirtatious glance. {follow2}{follow3}</p>",
+            f". {b['name']} waved in return. {follow2}{follow3}</p>",
+            f". {b['name']} smiled back. {follow2}{follow3}</p>"
         ]
         followup = random.choice(ACCEPTS)
     time = random.choice([
@@ -232,6 +232,7 @@ def narrate_meeting(event, events):
         f"{time}{a['name']} walked {adverb} toward {b['name']}{followup}"
     ]
     print(text + random.choice(APPROACHES) + "")
+    
 
 
 def narrate_committed(events):
@@ -271,7 +272,7 @@ def narrate_rejection(event, events):
 
 def narrate_experience(event, events):
     a, b = get_ab(event)
-
+    
     if event['rejected']:
         narrate_rejection(event, events)
         return
