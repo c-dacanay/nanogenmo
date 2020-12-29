@@ -60,6 +60,7 @@ def generate_person():
     name = names.get_first_name(gender=gender)
     personInterests = random.sample(INTERESTS.keys(), random.randint(1, 3))
     personHobbies = getHobbies(personInterests)
+    
     return {
         "name": name,
         "hot": random.random(),

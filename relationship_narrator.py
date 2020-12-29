@@ -13,7 +13,7 @@ from tracery.modifiers import base_english
 from util import get_ab
 from interests import INTERESTS, getInterestRules
 
-logging.basicConfig(level=logging.DEBUG)
+# logging.basicConfig(level=logging.DEBUG)
 
 def narrate(r: Relationship):
     # Given a relationship object, break the events within into their distinct
