@@ -1,3 +1,7 @@
+from relationship import EventType
+import math
+
+
 def clamp(n, smallest, largest):
     return max(smallest, min(n, largest))
 
@@ -27,12 +31,14 @@ def get_ab(event):
         'protagonist']
     return a, b
 
+
 def joiner(val):
     return rank([
         "but",
         "yet",
         "and"
     ], val)
+
 
 def adverb(val):
     return rank([
@@ -94,3 +100,92 @@ def enthusiastically(val):
         'very joyfully',
         'very enthusiastically',
     ], val)
+
+
+def get_event_meta(events):
+    # Return a dict containing some summary statistics about the given array of events
+    # Returns a count of all conflicts and delta changes for each conflict type
+    # Returns a count of all experiences and delta changes for each conflict type
+    concessions = events[-1]['protagonist']['concessions']
+    attr = max(concessions, key=concessions.get)
+    value = concessions[attr]
+    concessions = events[-1]['person']['concessions']
+    b_attr = max(concessions, key=concessions.get)
+    b_value = concessions[attr]
+    if (b_value > value):
+        value = b_value
+        attr = b_attr
+
+    # count fights
+    conflicts = {}
+    for e in events:
+        if e['type'] == EventType.CONFLICT:
+            if e['target_property'] not in conflicts:
+                conflicts[e['target_property']] = {
+                    'count': 0,
+                    'delta': 0,
+                }
+            conflicts[e['target_property']]['count'] += 1
+            conflicts[e['target_property']]['delta'] += e['delta']
+
+    popular_conflict = None
+    best_conflict = None
+    worst_conflict = None
+    max_count = -math.inf
+    max_delta = -math.inf
+    min_delta = math.inf
+    for c in conflicts:
+        if conflicts[c]['count'] > max_count:
+            max_count = conflicts[c]['count']
+            popular_conflict = c
+
+        if conflicts[c]['delta'] > max_delta:
+            max_delta = conflicts[c]['delta']
+            best_conflict = c
+
+        if conflicts[c]['delta'] < min_delta:
+            min_delta = conflicts[c]['delta']
+            worst_conflict = c
+
+    # count experiences
+    experiences = {}
+    for e in events:
+        if e['type'] == EventType.EXPERIENCE:
+            if e['target_property'] not in experiences:
+                experiences[e['target_property']] = {
+                    'count': 0,
+                    'delta': 0,
+                }
+            experiences[e['target_property']]['count'] += 1
+            experiences[e['target_property']]['delta'] += e['delta']
+
+    popular_experience = None
+    best_experience = None
+    worst_experience = None
+    max_count = -math.inf
+    max_delta = -math.inf
+    min_delta = math.inf
+    for c in experiences:
+        if experiences[c]['count'] > max_count:
+            max_count = experiences[c]['count']
+            popular_experience = c
+
+        if experiences[c]['delta'] > max_delta:
+            max_delta = experiences[c]['delta']
+            best_experience = c
+
+        if experiences[c]['delta'] < min_delta:
+            min_delta = experiences[c]['delta']
+            worst_experience = c
+
+    return {
+        'experiences': experiences,
+        'popular_experience': popular_experience,
+        'worst_experience': worst_experience,
+        'best_experience': best_experience,
+        'conflicts': conflicts,
+        'popular_conflict': popular_conflict,
+        'worst_conflict': worst_conflict,
+        'best_conflict': best_conflict,
+        'highest_concession': attr,
+    }

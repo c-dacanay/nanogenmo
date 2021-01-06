@@ -45,15 +45,15 @@ CONFLICT_TARGETS = [
 ]
 
 PROP_NAMES = {
-    'hot': 'hot',
-    'open': 'open',
-    'extra': 'extroverted',
-    'agree': 'nice',
-    'neuro': 'neurotic',
-    'commit': 'serious about the relationship',
-    'libido': 'interested in sex',
-    'exp': 'mature',
-    'con': 'messy'
+    'hot': 'attractiveness',
+    'open': 'openness',
+    'extra': 'introversion and extraversion',
+    'agree': 'agreeability',
+    'neuro': 'neuroticism',
+    'commit': 'level of commitment',
+    'libido': 'interest in sex',
+    'exp': 'relationship experience',
+    'con': 'conscientiousness'
 }
 
 
@@ -63,9 +63,11 @@ class EventType(Enum):
     CONFLICT = 'conflict'
     EXPERIENCE = 'experience'
     NOTHING = 'nothing'
+    DEATH = 'death'
 
 
 class Phase(Enum):
+    MEETING = 'meeting'
     COURTING = 'courting'
     DATING = 'dating'
     COMMITTED = 'committed'
@@ -74,12 +76,12 @@ class Phase(Enum):
 PHASE_COMMIT_THRESHOLDS = {
     Phase.COURTING: 2.0,
     Phase.DATING: 4.0,
-    Phase.COMMITTED: 100000000000.0,
+    Phase.COMMITTED: 6.0,
 }
 
 PHASE_SCORE_THRESHOLDS = {
-    Phase.COURTING: 0.4,
-    Phase.DATING: 0.8,
+    Phase.COURTING: 0.4,  # 0.4
+    Phase.DATING: 0.7,  # 0.8
     Phase.COMMITTED: 2,
 }
 
@@ -91,7 +93,7 @@ def get_interest(a, b):
 
 
 class Relationship:
-    phase = Phase.COURTING
+    phase = Phase.MEETING
     health = 0
     progress = 0
 
@@ -156,7 +158,7 @@ class Relationship:
                 'threshold': thresh,
                 'rejected': False,
                 'bonding': 0,
-                'delta': -0.2,
+                'delta': -0.1,
                 'protagonist': self.a,
                 'person': self.b,
                 'protagonist_initiated': a == self.a
@@ -212,8 +214,8 @@ class Relationship:
             logging.debug(
                 f"{b['name']} takes {exp_type}-damage = {dmg}")
             PHASE_EXPERIENCE_AGREE = {
-                Phase.COURTING: 1.2,
-                Phase.DATING: 1.1,
+                Phase.COURTING: 1.3,
+                Phase.DATING: 1.15,
                 Phase.COMMITTED: 1,
             }
             agree_roll = gauss(
@@ -228,7 +230,8 @@ class Relationship:
                 return experience
             b['concessions'][exp_type] += dmg
             experience['concession'] = dmg
-            experience['delta'] = gauss(1 - concession_roll, 0.2)
+            experience['delta'] = gauss(
+                PHASE_EXPERIENCE_AGREE[self.phase] - concession_roll, 0.2)
             return experience
         logging.debug("EXPERIENCE failed - not sufficient interest")
         return {
@@ -336,9 +339,9 @@ class Relationship:
         logging.debug(
             f"Meeting began, Alex has confidence f{self.a['confidence']} and interest level {self.a['interest']})"
         )
-        if binary_roll([self.a['confidence'], self.a['interest']]):
+        if binary_roll([self.a['confidence'], self.a['interest'], 0.6]):
             logging.debug("Meeting succeded! Alex initiates contact")
-            delta = random.gauss(self.b['interest'], 0.3) - 0.5
+            delta = random.gauss(self.b['interest'], 0.2)
             return {
                 'type': EventType.MEETING,
                 'location': get_location(),
@@ -349,10 +352,10 @@ class Relationship:
             }
         logging.debug(
             f"Alex didn't initiate contact. {self.b['name']} has an opportunity to")
-        if binary_roll([self.b['confidence'], self.b['interest']]):
+        if binary_roll([self.b['confidence'], self.b['interest'], 0.6]):
             logging.debug(
                 f"Meeting succeded! {self.b['name']} initiates contact")
-            delta = random.gauss(self.a['interest'], 0.3) - 0.5
+            delta = random.gauss(self.a['interest'], 0.2)
             return {
                 'type': EventType.MEETING,
                 'location': get_location(),
@@ -472,6 +475,18 @@ class Relationship:
             Phase.DATING: 0.5,
             Phase.COMMITTED: 0.8,
         }
+
+        # If in COMMIT phase introduce random chance of death
+        if self.phase == Phase.COMMITTED:
+            if random.random() < 0.001:
+                return {
+                    'type': EventType.DEATH,
+                    'protagonist': self.a,
+                    'person': self.b,
+                    'phase': self.phase,
+                    'delta': self.health * -1,
+                }
+
         # odds of conflict increase based on neuro
         neuro_mod = util.scale((self.a['neuro'] + self.b['neuro']) / 2, 0, 1,
                                0.7, 1.3)
@@ -560,6 +575,8 @@ class Relationship:
         meeting['date'] = self.date
         self.events.append(meeting)
         self.health += meeting['delta']
+        if (self.health > 0):
+            self.phase = Phase.COURTING
 
         PHASE_TIMEDELTA = {
             Phase.COURTING: datetime.timedelta(days=1),

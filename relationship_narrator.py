@@ -4,6 +4,7 @@ import business_gen
 import prologue
 import random
 import logging
+import humanize
 import conflict_narrator
 from relationship import EventType, PROP_NAMES, Relationship, Phase
 from narrate_time import narrate_time
@@ -15,11 +16,13 @@ from interests import INTERESTS, getInterestRules
 
 # logging.basicConfig(level=logging.DEBUG)
 
+
 def narrate(r: Relationship):
     # Given a relationship object, break the events within into their distinct
     # phases and pass them to narrate_phase
     events = r.events
-    print(f"<p>Alex met {events[0]['person']['name']} {events[0]['location']}. ")
+    print(
+        f"<p>Alex met {events[0]['person']['name']} {events[0]['location']}. ")
     for phase in [Phase.COURTING, Phase.DATING, Phase.COMMITTED]:
         chunk = []
         while True:
@@ -36,7 +39,9 @@ def narrate(r: Relationship):
     # logging.debug(f"Alex's confidence is {a['confidence']}")
     r.a['confidence'] *= .9 + random.random() * 0.1
     # logging.debug(f"Alex's confidence is {a['confidence']}")
-    print("They never saw each other again.")
+    print(f"<p>They never saw each other again.</p>")
+    print(
+        f"<p>Their relationship managed to reached the <tt>{r.phase.value}</tt> stage</p>")
 
 # Given a chunk of events and phase, narrate events in that style
 # Right now there aren't that many changes to narration based on phase
@@ -133,8 +138,8 @@ def narrate_commit(event, events):
     if event['initiated']:
         enthusiasm = util.scale(event['success_ratio'], 1, 3, 0, 1)
         rules = {
-            'courting_phase': ['#dating#'],
-            'dating_phase': ['#iloveyou#'],
+            'courting_phase': ['<p>#dating#</p>'],
+            'dating_phase': ['<p>#iloveyou#</p>'],
             'dating': ['#dating_challenge# #dating_result#'],
             'iloveyou': ['#ily_challenge# #ily_result#'],
             'dating_challenge': [
@@ -259,11 +264,29 @@ def narrate_meeting(event, events):
         f"{time}{a['name']} walked {adverb} toward {b['name']}{followup}"
     ]
     print(text + random.choice(APPROACHES) + "")
-    
 
 
 def narrate_committed(events):
-    print("The couple lived happily ever after")
+    print(
+        f"<p>{humanize.naturaldelta(events[-1]['date'] - events[0]['date'])} passed. ")
+    summary = util.get_event_meta(events)
+    rules = {
+        'origin': ['#best_exp# #conflict#'],
+        'conflict': ['#best_conflict#', '#best_conflict#, but #worst_conflict#', '#best_conflict#, but #popular_conflict#'],
+        'best_exp': f"Their similar levels in {PROP_NAMES[summary['best_experience']]} facilitated a healthy growth in their relationship.",
+        'worst_conflict': f"their fights over their difference in {PROP_NAMES[summary['worst_conflict']]} were #bitter#",
+        'best_conflict': f"The couple was proud of their ability to work through their differences in {PROP_NAMES[summary['best_conflict']]}.",
+        'popular_conflict': f"the couple fought often because of differences in {PROP_NAMES[summary['popular_conflict']]}. ",
+        'bitter': ['acrid', 'virulent', 'bitter', 'harsh', 'difficult', 'hard to recover from', 'emotionally exhausting']
+    }
+    print(tracery.Grammar(rules).flatten('#origin#</p>'))
+
+    if events[-1]['type'] == EventType.DEATH:
+        print(
+            f"Unfortunately, {events[-1]['person']['name']} died tragically due to a meteroite striking the Earth.")
+    else:
+        print(
+            f"Ultimately their differences proved too great to overcome. ")
 
 
 def narrate_rejection(event, events):
@@ -299,7 +322,7 @@ def narrate_rejection(event, events):
 
 def narrate_experience(event, events):
     a, b = get_ab(event)
-    
+
     if event['rejected']:
         narrate_rejection(event, events)
         return
