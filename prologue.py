@@ -10,7 +10,40 @@ from tracery.modifiers import base_english
 # Sylvan: could we get a protagonist argument in get_prologue? Or should that be handled elsewhere
 # I just think using protag's name in these strings could add better variation
 
-def get_prologue(person):
+def get_initial_impressions(person):
+    rules = {
+        'origin': "#communication# #status# #hobbies#",
+        'communication': "#before# #medium# #frequently#.",
+        'before': ["Before meeting up, #they#", "Leading up to their first date, #they#", "#they.capitalize#"],
+        'they': ["the two", "they", f"Alex and {person['name']}"],
+        'medium': ["texted", "exchanged messages", "chatted", "called", "video-called"],
+        'frequently': ["a lot", "a few times", "incessantly", "once"],
+        'status': f"Alex #gathered# that {person['name']} was #exp# romantic relationships. With Alex, {person['they']} seemed to #commit#.",
+        'gathered': ["could gather", "sensed", "was told"],
+        'commit': util.rank([
+            'want something casual', 
+            'be up for anything', 
+            'be ready for something serious'
+        ], person['commit']),
+        'exp': util.rank([
+            'insecure about', 
+            'nervous about', 
+            'timid in', 
+            'unsure of', 
+            'open to', 
+            'relaxed about', 
+            'secure in', 
+            'well-versed in', 
+            'experienced in'
+        ], person['exp']),
+        'hobbies': f"{person['name']} #shared# {' and '.join(person['interests'])}.",
+        'shared': ["was excited to tell Alex about", "talked a lot about", f"shared {person['their']} interest in"]
+    }
+    grammar = tracery.Grammar(rules)
+    grammar.add_modifiers(base_english)
+    print(grammar.flatten('<p>#origin#</p>'))
+
+def get_partner_description(person):
     rules = {
         'origin': [
             "#time#, Alex #realized# that #name# was a #hot# person with #extra#. #they.capitalize# was #con# and #open#. When it came to their relationship, #name# was #neuro# #joiner# #agree#." 
@@ -51,7 +84,7 @@ def get_prologue(person):
             "usually stuck to what felt comfortable",
             "enjoyed trying new things occasionally",
             "constantly sought new hobbies and experiences",
-            "impulsive in ways, always sensation-seeking,"
+            "impulsive in ways, always sensation-seeking"
         ], person['open']),
         'neuro': util.rank([
             "emotionally attuned",
