@@ -1,4 +1,5 @@
 import util
+import statistics
 import pprint
 import business_gen
 import prologue
@@ -21,8 +22,9 @@ def narrate(r: Relationship):
     # Given a relationship object, break the events within into their distinct
     # phases and pass them to narrate_phase
     events = r.events
+    saved_events = []
     print(
-        f"<p>Alex met {events[0]['person']['name']} {events[0]['location']}. ")
+        f"<p>Alex met {events[0]['person']['name']} {events[0]['location']}.</p>")
     for phase in [Phase.COURTING, Phase.DATING, Phase.COMMITTED]:
         chunk = []
         while True:
@@ -33,15 +35,19 @@ def narrate(r: Relationship):
                 break
             event = events.pop(0)
             chunk.append(event)
+            saved_events.append(event)
         narrate_phase(chunk, phase)
+    r.events = saved_events
+    events = saved_events
 
     # knock alex's confidence just a touch
     # logging.debug(f"Alex's confidence is {a['confidence']}")
     r.a['confidence'] *= .9 + random.random() * 0.1
     # logging.debug(f"Alex's confidence is {a['confidence']}")
     print(f"<p>They never saw each other again.</p>")
-    print(
-        f"<p>Their relationship managed to reached the <tt>{r.phase.value}</tt> stage</p>")
+    if len(events) > 0:
+        print(
+            f"<p class='system'>This relationship lasted for only {humanize.naturaldelta(events[-1]['date'] - events[0]['date'])}, reaching the <tt>{r.phase.value}</tt> stage before ending.</p>")
 
 # Given a chunk of events and phase, narrate events in that style
 # Right now there aren't that many changes to narration based on phase
@@ -79,7 +85,6 @@ def narrate_event(event, events):
         return
     if event['type'] == EventType.MEETING:
         narrate_meeting(event, events)
-        prologue.get_initial_impressions(event['person'])
     elif event['type'] == EventType.COMMIT:
         narrate_commit(event, events)
     elif event['type'] == EventType.EXPERIENCE:
@@ -203,13 +208,59 @@ def narrate_commit(event, events):
     elif event['phase'] == Phase.DATING:
         print(grammar.flatten('#dating_phase#'))
     print('\n')
+    narrate_commit_system(event)
+
+
+def narrate_commit_system(event):
+    a, b = get_ab(event)
+    print(
+        f"""<p class='system'>Current relationship health of {round(event['health'], 2)} exceeds threshold of {event['health_threshold']} and last event improved relationship health over 0.4.</p>"""
+    )
+    print(
+        f"""<p class='system'>
+        {a['name']} with interest {round(a['interest'], 2)} and commitment {round(a['commit'], 2)}
+        produces relationship advancement interest score of {round(event['initiate_ratio'])}.</p>""")
+    if event['initiate_ratio'] < 1:
+        print(f"""<p class='system'>Interest score did not exceed threshold of 1.0. Relationship advancement failed.</p>""")
+        return
+    print(
+        f"""<p class='system'>Interest score exceeded threshold of 1.0. Next, {a['name']} with confidence of {round(a['confidence'], 2)}, has {int(a['confidence'] * 100)}% chance of initiating relationship advancement.</p>""")
+    if not event['confidence']:
+        print(
+            f"""<p class='system'>Confidence test failed. {a['name']} remains silent. Relationship advancement failed.</p>""")
+        return
+    print(
+        f"<p class='system'>{a['name']} successfully initiated relationship advancement.</p>")
+    print(
+        f"""<p class='system'>
+        {b['name']} with interest {round(b['interest'], 2)} and commitment {round(b['commit'], 2)}
+        produces relationship advancement interest score of {round(event['success_ratio'])}.</p>""")
+    if event['success_ratio'] > 1:
+        print(
+            f"""<p class='system'>
+            Relationship advancement succeeded. The relationship has reached the {event['phase'].value} stage.
+            {a['name']} experienced growth in commitment, interest, and confidence, as well as a reduction in neuroticism.
+            {b['name']} experienced growth in commitment, interest, and confidence.</p>""")
+    else:
+        print(
+            f"""<p class='system'>
+            Relationship advancement failed. There were {event['prev']} previous failed attempts. 
+            {b['name']} experienced withdrawal from the relationship, manifesting in reduced interest.
+            {a['name']} experienced an increase in neuroticism and a decline in confidence.
+            </p>""")
+    print(
+        f"<p class='system'>The relationship health is {round(event['health'], 2)}."
+    )
 
 
 def narrate_meeting(event, events):
-    if event['delta'] == -1:
-        return
-    text = ""
     a, b = get_ab(event)
+    if event['delta'] == -1:
+        print(
+            f"<p class='system'>Neither {a['name']} nor {b['name']} attempted to contact the other.</p>")
+        return
+
+    text = ""
     if event['protagonist_initiated']:
         text += get_interest_sentence(event['protagonist'], event['person'],
                                       event['protagonist']['interest'])
@@ -222,9 +273,9 @@ def narrate_meeting(event, events):
 
     if event['delta'] <= 0:
         REJECTIONS = [
-            f", but {b['name']} averted {b['their']} eyes.</p>",
-            f", but {b['name']} did not respond.</p>",
-            f", but {b['name']} quickly turned away.</p>",
+            f", but {b['name']} averted {b['their']} eyes.",
+            f", but {b['name']} did not respond.",
+            f", but {b['name']} quickly turned away.",
         ]
         followup = random.choice(REJECTIONS)
     else:
@@ -245,9 +296,9 @@ def narrate_meeting(event, events):
             f"{b['name']} left with {a['name']}'s {contact}. ",
         ])
         ACCEPTS = [
-            f". {b['name']} returned a flirtatious glance. {follow2}{follow3}</p>",
-            f". {b['name']} waved in return. {follow2}{follow3}</p>",
-            f". {b['name']} smiled back. {follow2}{follow3}</p>"
+            f". {b['name']} returned a flirtatious glance. {follow2}{follow3}",
+            f". {b['name']} waved in return. {follow2}{follow3}",
+            f". {b['name']} smiled back. {follow2}{follow3}"
         ]
         followup = random.choice(ACCEPTS)
     time = random.choice([
@@ -264,19 +315,18 @@ def narrate_meeting(event, events):
         f"{time}{a['name']} walked {adverb} toward {b['name']}{followup}"
     ]
     print(text + random.choice(APPROACHES) + "")
+    prologue.get_initial_impressions(event['person'])
 
 
 def narrate_committed(events):
-    print(
-        f"<p>{humanize.naturaldelta(events[-1]['date'] - events[0]['date'])} passed. ")
     summary = util.get_event_meta(events)
     rules = {
-        'origin': ['#best_exp# #conflict#'],
-        'conflict': ['#best_conflict#', '#best_conflict#, but #worst_conflict#', '#best_conflict#, but #popular_conflict#'],
-        'best_exp': f"Their similar levels in {PROP_NAMES[summary['best_experience']]} facilitated a healthy growth in their relationship.",
+        'origin': ['<p>#best_exp# #conflict#</p>'],
+        'conflict': ['#best_conflict#.', '#best_conflict#, but #worst_conflict#.', '#best_conflict#, but #popular_conflict#.'],
+        'best_exp': f"Their similar levels in {PROP_NAMES[summary['best_experience']]} facilitated a healthy growth in their relationship",
         'worst_conflict': f"their fights over their difference in {PROP_NAMES[summary['worst_conflict']]} were #bitter#",
-        'best_conflict': f"The couple was proud of their ability to work through their differences in {PROP_NAMES[summary['best_conflict']]}.",
-        'popular_conflict': f"the couple fought often because of differences in {PROP_NAMES[summary['popular_conflict']]}. ",
+        'best_conflict': f"The couple was proud of their ability to work through their differences in {PROP_NAMES[summary['best_conflict']]}",
+        'popular_conflict': f"the couple fought often because of differences in {PROP_NAMES[summary['popular_conflict']]}",
         'bitter': ['acrid', 'virulent', 'bitter', 'harsh', 'difficult', 'hard to recover from', 'emotionally exhausting']
     }
     print(tracery.Grammar(rules).flatten('#origin#</p>'))
@@ -320,14 +370,41 @@ def narrate_rejection(event, events):
     return
 
 
+def narrate_experience_system(event):
+    a, b = get_ab(event)
+    print(
+        f"""<p class='system'>{a['name']} invited {b['name']} to a 
+        {round(event['threshold'],2)}-{event['target_property']} experience.</p>""")
+    print(
+        f"""<p class='system'>{b['name']} has {event['target_property']} 
+        {round(b[event['target_property']],2)}. 
+        Reluctance to accept invitation is {round(event['concession_roll'], 2)}.</p>""")
+    print(
+        f"""<p class='system'>{b['name']} with interest {round(b['interest'], 2)}, 
+        commit {round(b['commit'], 2)}, agreeability {round(b['agree'], 2)} 
+        produces motivation to accept {round(event['agree_roll'], 2)}.</p>""")
+
+    if event['rejected']:
+        print(
+            f"<p class='system'>Motivation did not exceed reluctance. {b['name']} rejected the invitation.</p>")
+    else:
+        print(
+            f"<p class='system'>Motivation exceeded reluctance. {b['name']} accepted the invitation. Due to difference in {event['target_property']}, took {round(event['concession'], 2)} concession damage.</p>")
+    print(
+        f"<p class='system'>The relationship health is {round(event['health'], 2)}.</p>")
+
+
 def narrate_experience(event, events):
     a, b = get_ab(event)
 
     if event['rejected']:
         narrate_rejection(event, events)
+        narrate_experience_system(event)
         return
 
+    artifact = False
     if event.get('phase') == Phase.COURTING and random.random() < 0.6:
+        artifact = True
         print(artifacts.get_date_artifact(event, events))
 
     if event['target_property'] == 'open':
@@ -364,7 +441,9 @@ def narrate_experience(event, events):
             'origin':
             f"#Onday# #{event['target_property']}#.",
             'day': ['day', 'morning', 'afternoon', 'evening'],
-            'Onday': [
+            'Onday': '#artifact#' if artifact else '#later#',
+            'artifact': 'That night, #they#',
+            'later': [
                 f"On {event['date'].strftime('%A')}, #they#",
                 f"{event['date'].strftime('%A')} came around. #they.capitalize#",
                 "Later that week, #they#"
@@ -463,9 +542,12 @@ def narrate_experience(event, events):
         print(tracery.Grammar(rules).flatten('#origin#'))
         # logging.debug(f"Event: {event}")
 
+    narrate_experience_system(event)
+
 
 def narrate_conflict(event, events):
     conflict_narrator.narrate_conflict(event)
+    conflict_narrator.narrate_conflict_system(event)
 
 
 def time_passed(event, events):

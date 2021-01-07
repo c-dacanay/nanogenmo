@@ -223,13 +223,15 @@ class Relationship:
                 0.1,
             ) * PHASE_EXPERIENCE_AGREE[self.phase]
 
+            experience['agree_roll'] = agree_roll
+            experience['concession_roll'] = concession_roll
+            experience['concession'] = dmg
             if agree_roll < concession_roll:
                 logging.debug(f"{b['name']} rejected the offer")
                 # reject experience
                 experience['rejected'] = True
                 return experience
             b['concessions'][exp_type] += dmg
-            experience['concession'] = dmg
             experience['delta'] = gauss(
                 PHASE_EXPERIENCE_AGREE[self.phase] - concession_roll, 0.2)
             return experience
@@ -305,6 +307,7 @@ class Relationship:
 
         score = rolls['agree'] + rolls['commit'] + \
             rolls['interest'] + rolls['neuro']
+        e['score'] = score
         logging.debug(
             f"{b['name']} rolls {score}, needs to match {e['target'] - e['target']}")
 
@@ -327,10 +330,10 @@ class Relationship:
         if delta > 0:
             # They resolved the argument!
             # A feels better and recovers some concession damage
-            a['concessions'][target_property] *= 0.5
+            a['concessions'][target_property] *= 0.25
         else:
-            # b is pissed and loses interest in the relationship
-            b['interest'] *= 0.9
+            # a is pissed and loses interest in the relationship
+            a['interest'] *= 0.9
         e['delta'] = delta
 
         return e
@@ -344,6 +347,7 @@ class Relationship:
             delta = random.gauss(self.b['interest'], 0.2)
             return {
                 'type': EventType.MEETING,
+                'protagonist_chance': statistics.mean([self.a['confidence'], self.a['interest'], 0.6]),
                 'location': get_location(),
                 'protagonist': self.a,
                 'person': self.b,
@@ -391,6 +395,8 @@ class Relationship:
             'phase': self.phase,
             'health': self.health,
             'delta': 0,
+            'health_threshold': PHASE_COMMIT_THRESHOLDS[self.phase],
+            'score_threshold': PHASE_SCORE_THRESHOLDS[self.phase],
         }
 
         logging.debug("BEGIN COMMIT event")
@@ -424,11 +430,13 @@ class Relationship:
             logging.debug("COMMIT succeeded, initiate phase change")
             a['commit'] *= 1 + random.random() * 0.1
             a['interest'] *= 1 + random.random() * 0.1
-            a['commit'] *= 1 + random.random() * 0.1
+            b['commit'] *= 1 + random.random() * 0.1
             b['interest'] *= 1 + random.random() * 0.1
-            a['neuro'] *= 0.9 + random.random() * 0.1
-            b['confidence'] *= 1 + random.random() * 0.1
             a['confidence'] *= 1 + random.random() * 0.1
+            b['confidence'] *= 1 + random.random() * 0.1
+
+            a['neuro'] *= 0.9 + random.random() * 0.1
+
             event['delta'] = 2
         else:
             logging.debug("COMMIT failed")
@@ -442,7 +450,6 @@ class Relationship:
             # Debuffs if response was not enthusiastic:
             b['interest'] *= 0.8 + random.random() * 0.2
             a['neuro'] *= 1 + random.random() * 0.1
-            b['confidence'] *= 0.8 + random.random() * 0.2
             a['confidence'] *= 0.8 + random.random() * 0.2
             event['delta'] = -2 * (previous_attempts_multiplier + 1)
 
@@ -492,8 +499,8 @@ class Relationship:
                                0.7, 1.3)
         chance_conflict = PHASE_CONFLICT_CHANCES[self.phase] * neuro_mod
 
-        if self.health > PHASE_COMMIT_THRESHOLDS[self.phase] and event.get(
-                'delta', 0) > 0.4 and event.get('type') != EventType.COMMIT:
+        if self.health > PHASE_COMMIT_THRESHOLDS[self.phase] and (event.get(
+                'delta', 0) > 0.4) and (event.get('type') != EventType.COMMIT):
             event = self.simulate_commit(event)
         elif (random.random() < PHASE_EXPERIENCE_CHANCES[self.phase]):
             # A development occurred!

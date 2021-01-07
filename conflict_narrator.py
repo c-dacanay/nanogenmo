@@ -266,6 +266,7 @@ def get_response(a, b, event):
     else:
         return grammar.flatten('#neg#')
 
+
 def get_outcome(a, b, event):
     rules = {
         'origin': util.rank([
@@ -279,6 +280,7 @@ def get_outcome(a, b, event):
     }
     grammar = tracery.Grammar(rules)
     return grammar.flatten('#origin#')
+
 
 def get_conflict_thought(a, b, event, problem_phrase):
     logging.debug("FIGHT ABORTED")
@@ -343,6 +345,35 @@ def get_conflict_thought(a, b, event, problem_phrase):
         'fight': ['fight', 'argument', 'dispute', 'spat']
     }
     return tracery.Grammar(rules).flatten('<p>#origin#</p>')
+
+
+def narrate_conflict_system(event):
+    a, b = get_ab(event)
+
+    print(f"<p class='system'>The date is {event['date']}.</p>")
+    print(
+        f"""<p class='system'>{a['name']} has concession damage in category <tt>{event['target_property']}</tt> of {round(event['target'], 2)}
+         and neuroticism {round(event['neuro_roll'], 2)}.</p>""")
+
+    if not event['initiated']:
+        print(
+            f"<p class='system'>Neither were sufficiently high to start a conflict.</p>")
+        return
+
+    print(f"<p class='system'>One of previous scores exceeded 0.5 threshold. Conflict initiated.</p>")
+    print(f"""<p class='system'>{b['name']} with agreeability {round(b['agree'], 2)},
+        commitment {round(b['commit'], 2)}, interest {round(b['interest'], 2)}, and
+        neuroticism {round(b['neuro'], 2)}, contributed {round(event['score'], 2)} to conflict mitigation.
+        </p>""")
+    if event['delta'] < 0:
+        print(
+            f"<p class='system'>Contribution does not exceed concession damage. {a['name']}'s interest in relationship declined to {round(a['interest'], 2)}</p>")
+    else:
+        print(
+            f"<p class='system'>Contribution exceeds concession damage, {a['name']}'s concession damage reduced to {round(a['concessions'][event['target_property']], 2)}</p>")
+
+    print(
+        f"<p class='system'>The relationship health is {round(event['health'], 2)}.</p>")
 
 
 def narrate_conflict(event):
