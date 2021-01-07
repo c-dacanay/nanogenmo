@@ -276,9 +276,9 @@ class Relationship:
         # A chooses whether or not to actually fight about it.
         # Fighting is more likely if concession damage is high or
         # if A's neuroticism is high.
-        e['concession_roll'] = gauss(a['concessions'][target_property], 0.2)
-        e['neuro_roll'] = gauss(a['neuro'], 0.2)
-        e['target'] = a['concessions'][e['target_property']]
+        e['concession_roll'] = gauss(a['concessions'][target_property], 0.1)
+        e['neuro_roll'] = gauss(a['neuro'], 0.1)
+        e['target'] = a['concessions'][target_property]
 
         logging.debug(
             f"{target_property} is chosen, a rolls {e['concession_roll']} for existing damage and {e['neuro_roll']} for neuroticism")
@@ -599,10 +599,10 @@ class Relationship:
             if not event:
                 continue
             event['date'] = self.date
-            event['health'] = self.health
             self.date += PHASE_TIMEDELTA[self.phase]
-            self.events.append(event)
             self.health += event['delta']
+            event['health'] = self.health
+            self.events.append(event)
             self.a = event['protagonist']
             self.b = event['person']
             logging.debug(f"relationship health is {self.health}")

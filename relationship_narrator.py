@@ -25,6 +25,13 @@ def narrate(r: Relationship):
     saved_events = []
     print(
         f"<p>Alex met {events[0]['person']['name']} {events[0]['location']}.</p>")
+    print(
+        f"<p class='system'>{events[0]['person']['name']}:</p>")
+    for prop in r.b:
+        if (type(r.b[prop]) == float):
+            print(f"<p class='system prop'>{prop}: {round(r.b[prop], 2)}</p>")
+    print(
+        f"<p class='system prop'>interests: {', '.join(r.b['interests'])}</p><br />")
     for phase in [Phase.COURTING, Phase.DATING, Phase.COMMITTED]:
         chunk = []
         while True:
@@ -244,7 +251,7 @@ def narrate_commit_system(event):
     else:
         print(
             f"""<p class='system'>
-            Relationship advancement failed. There were {event['prev']} previous failed attempts. 
+            Relationship advancement failed. There were {event['prev']} previous failed attempts.
             {b['name']} experienced withdrawal from the relationship, manifesting in reduced interest.
             {a['name']} experienced an increase in neuroticism and a decline in confidence.
             </p>""")
@@ -253,11 +260,35 @@ def narrate_commit_system(event):
     )
 
 
-def narrate_meeting(event, events):
+def narrate_meeting_system(event):
     a, b = get_ab(event)
     if event['delta'] == -1:
         print(
             f"<p class='system'>Neither {a['name']} nor {b['name']} attempted to contact the other.</p>")
+    else:
+        print(f"""
+            <p class='system'>{a['name']} with confidence
+            {round(a['confidence'], 2)}, interest
+            {round(a['interest'], 2)} initiates contact.
+            </p>""")
+        print(f"""
+            <p class='system'>{b['name']} with interest
+            {round(a['interest'], 2)} responds with
+            {round(event['delta'], 2)} enthusiasm.
+            </p>""")
+        if (event['delta'] > 0):
+            print(
+                "<p class='system'>Relationship successfully advanced to the courting stage.</p>")
+        else:
+            print(
+                "<p class='system'>Relationship failed to advance to the courting stage.</p>")
+
+
+def narrate_meeting(event, events):
+    a, b = get_ab(event)
+    if event['delta'] == -1:
+
+        narrate_meeting_system(event)
         return
 
     text = ""
@@ -315,6 +346,8 @@ def narrate_meeting(event, events):
         f"{time}{a['name']} walked {adverb} toward {b['name']}{followup}"
     ]
     print(text + random.choice(APPROACHES) + "")
+
+    narrate_meeting_system(event)
     prologue.get_initial_impressions(event['person'])
 
 
@@ -373,15 +406,16 @@ def narrate_rejection(event, events):
 def narrate_experience_system(event):
     a, b = get_ab(event)
     print(
-        f"""<p class='system'>{a['name']} invited {b['name']} to a 
+        f"""<p class='system'>{a['name']} invited {b['name']} to a
         {round(event['threshold'],2)}-{event['target_property']} experience.</p>""")
     print(
-        f"""<p class='system'>{b['name']} has {event['target_property']} 
-        {round(b[event['target_property']],2)}. 
+        f"""<p class='system'>{b['name']} has {event['target_property']}
+        {round(b[event['target_property']],2)} and current concession damage 
+        {round(b['concessions'][event['target_property']],2)}.
         Reluctance to accept invitation is {round(event['concession_roll'], 2)}.</p>""")
     print(
-        f"""<p class='system'>{b['name']} with interest {round(b['interest'], 2)}, 
-        commit {round(b['commit'], 2)}, agreeability {round(b['agree'], 2)} 
+        f"""<p class='system'>{b['name']} with interest {round(b['interest'], 2)},
+        commit {round(b['commit'], 2)}, agreeability {round(b['agree'], 2)}
         produces motivation to accept {round(event['agree_roll'], 2)}.</p>""")
 
     if event['rejected']:
