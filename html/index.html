@@ -34,8 +34,8 @@
   <div id="bar">
     <h4>ALEX 1.0</h4>
     <h5 id="debug">Show debug 😛</h5>
-    <p class='system'></p>
-    <a href="process.html">about the project</a><br>
+
+    <a href="process.html">about A.L.E.X</a><br>
     <a href="https://github.com/c-dacanay/nanogenmo">github</a>
     <div id="toc"></div>
   </div>
@@ -52,7 +52,7 @@ let debug = document.getElementById("debug")
 let page = document.getElementById("page")
 let sys = document.getElementsByClassName("system")
 
-let testing = true;
+let testing = false;
 let showDebug = true;
 
 if (testing) {
@@ -71,7 +71,6 @@ begin.addEventListener("click", () => {
 debug.addEventListener("click", () => {
   // this is so fuckin hacky lmao
   showDebug = !showDebug;
-  console.log(showDebug)
   var style = document.createElement('style');
   if (showDebug) {
   debug.innerHTML = "Show debug 😛"
