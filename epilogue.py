@@ -170,7 +170,6 @@ def narrate_reflection(a, b, reflection):
         'breakup': rank(['#a# took the break up hard', '#a# had a hard time when #b# stopped talking to them', '#a# struggled to cut #b# out of #their# life', '#a# knew the break up was for the best, but it didn\'t feel that way', '#a# felt like a great weight lifted off #their# shoulders after the relationship ended', '#a# was happy to be out of that relationship'], a['commit']),
         'afterward': ['Immediately after the break up,', 'Later', 'After the relationship ended', 'While the relationship fell apart'],
         'realized': ['#a# realized', '#b# told #a#', '#a# had the dawning realization'],
-        'might': ['could be', 'were', 'might be', 'were just', 'had been'],
         'change': ref_statement,
         'intent': rank([' and #a_they# journaled about #their# intent to change','. It hurt to realize', '. #a# would have to work on it', ' and #they# resolved to improve', '. #a# decided to change'], a['confidence']),
         'a': a['name'],
@@ -196,94 +195,101 @@ def get_reflection(a, b, reflection):
         # if prop went down
         PROP_CHANGE = {
             'open': [
-                'obsessed with novely',
-                'overly interested in new activities all the time',
-                'too eccentric',
-                'excessively impulsive'
+                '#might# obsessed with novely',
+                '#might# overly interested in new activities all the time',
+                '#might# too eccentric',
+                '#might# excessively impulsive'
             ],
             'extra': [
-                'overly gregarious',
-                'too much of a social butterfly',
-                'insensitive to #their# partners social needs'
+                '#might# overly gregarious',
+                '#might# too much of a social butterfly',
+                '#might# insensitive to #their# partners social needs'
             ],
             'libido': [
-                'too overt about sex',
+                '#might# too overt about sex',
                 'asked for physical intimacy too much',
-                'too physically needy'
+                '#might# too physically needy'
             ],
             'con': [
-                'excessively nitpicky',
-                'too critical of #their# partners work ethic',
-                'too particular about being clean'
+                '#might# excessively nitpicky',
+                '#might# too critical of #their# partners work ethic',
+                '#might# too particular about being clean'
             ],
             'agree': [
-                'a door mat in relationships',
+                '#might# a door mat in relationships',
                 'never stood up for #their# needs',
-                'too obliging to #their# romantic partners'
+                '#might# too obliging to #their# romantic partners'
             ],
             'exp': [
-                'too particular about #their# partners',
-                'too harsh about #their# parthers relationship experience'
+                '#might# too particular about #their# partners',
+                '#might# too harsh about #their# parthers relationship experience'
             ],
             'hot': [
-                'not attracting the type of person #they# want',
-                'vain during #their# relationship with #b#'
+                '#might# too superficial about picking partners',
+                '#might# vain during #their# relationship with #b#'
             ],
             'neuro': [
-                'too insecure',
-                'overly controlling',
-                'not tending to #their# mental health'
+                '#might# too insecure',
+                '#might# overly controlling',
+                '#might# neglecting #their# mental health'
             ],
             'commit': [
-                'too invested in the idea of a long term relationship',
-                'overly committed',
+                '#might# too invested in the idea of a long term relationship',
+                '#might# overly committed',
                 'rushed in too quickly'
             ]
         }
-        return random.choice(PROP_CHANGE[reflection['prop']])
+
+        changeStatement = random.choice(PROP_CHANGE[reflection['prop']])
+        rules = {
+            'origin': changeStatement,
+            'might': ['could be', 'were', 'might be', 'were just', 'had been'],
+        }
+        return tracery.Grammar(rules).flatten('#origin#')
+
     else:
         # prop went up
         PROP_CHANGE = {
             'open': [
-                'really closed off to new things',
-                'stuck in #their# on ways',
-                'unenthusiasatic about #their# partners interests'
+                '#might# really closed off to new things',
+                '#might# stuck in #their# on ways',
+                '#might# unenthusiasatic about #their# partners interests'
             ],
             'extra': [
-                'always holding #b# back from socializing',
-                'afraid of social engagements',
-                'too introverted'
+                '#might# always holding #b# back from socializing',
+                '#might# afraid of social engagements',
+                '#might# too introverted'
             ],
             'libido': [
-                'insecure about physical intimacy',
-                'too physically distant'
+                '#might# insecure about physical intimacy',
+                '#might# too physically distant'
             ],
             'con': [
-                'excessively messy',
-                'lazy and inconsiderate in #their# relationships',
+                '#might# excessively messy',
+                '#might# lazy and inconsiderate in #their# relationships',
                 'did not put in enough effort'
             ],
             'agree': [
-                'too stubborn about #their# needs',
+                '#might# too stubborn about #their# needs',
                 'never adapted to what #b# wanted',
                 'refused to adapt for #b#'
             ],
             'exp': [
-                'naive about relationships',
-                'not reflecting about #their# previous relationship experiences'
+                '#might# naive about relationships',
+                'failed to see the patterns in #their# previous relationship experiences'
             ],
             'hot': [
-                'not taking care of #their# physical apperance',
-                'not attracting the type of people #they# wanted'
+                'should have put more effort in taking care of #their# physical apperance',
+                'might not be attracting the type of people #they# wanted'
             ],
             'neuro': [
-                'too easygoing',
-                'too apathetic about the relationship'
+                '#might# too easygoing',
+                '#might# too apathetic about the relationship'
             ],
             'commit': [
                 'did not value #b#\'s dedication',
                 'were constantly holding #their# relationship back',
-                'afraid of commitment'
+                '#might# afraid of commitment'
             ]
         }
 
