@@ -11,9 +11,6 @@
   <div id="box">
   <div id="info">
   <h4>alex 1.0: a loving exploration</h4>
-  <!-- <p>A.L.E.X. is a computationally-generated relationship simulator, focused on narrating the many romantic exploits of our protagonist Alex. A.L.E.X was originally developed for <a href="https://nanogenmo.github.io/">NaNoGenMo</a> for <a href="http://catn.decontextualize.com/">Computational Approaches to Narrative</a>.</p>
-  <p>By approaching people and relationships computationally we were able to encode our own assumptions and ask if they reflected reality. What damages relationships? What factors into initial attraction? What makes a person stay with someone who’s not interested in them?
-    </p> -->
 
     <div class="message_b">
       <p class='msg_header'>
@@ -35,13 +32,15 @@
 </div>
 
   <div id="bar">
-    <h5>ALEX 1.0</h5>
+    <h4>ALEX 1.0</h4>
+    <h5 id="debug">Show debug 😛</h5>
+    <p class='system'></p>
     <a href="process.html">about the project</a><br>
     <a href="https://github.com/c-dacanay/nanogenmo">github</a>
     <div id="toc"></div>
   </div>
   <div id="story">
-    <object type="text/html" data="0.html" width="100%" height="100%"></object>
+    <object type="text/html" id="page" data="0.html" width="100%" height="100%"></object>
   </div>
 
 <script>
@@ -49,6 +48,18 @@ let info = document.getElementById("info")
 let bar = document.getElementById("bar")
 let begin = document.getElementById("startstory")
 let story = document.getElementById("story")
+let debug = document.getElementById("debug")
+let page = document.getElementById("page")
+let sys = document.getElementsByClassName("system")
+
+let testing = true;
+let showDebug = true;
+
+if (testing) {
+  info.style.display = "none"
+  bar.style.display = "inline-block"
+  story.style.display = "flex"
+}
 
 begin.addEventListener("click", () => {
   info.style.display = "none"
@@ -57,6 +68,28 @@ begin.addEventListener("click", () => {
   // if we want a toc on the website we can put it here in the bar innerhtml
 })
 
+debug.addEventListener("click", () => {
+  // this is so fuckin hacky lmao
+  showDebug = !showDebug;
+  console.log(showDebug)
+  var style = document.createElement('style');
+  if (showDebug) {
+  debug.innerHTML = "Show debug 😛"
+  style.textContent =
+    '.system {' +
+    '  display: none' +
+    '}' 
+  } else {
+  debug.innerHTML = "Hide debug 🥵"
+  style.textContent =
+    '.system {' +
+    '  display: block' +
+    '}' 
+  } 
+  page.contentDocument.head.appendChild(style);
+
+
+})
 </script>
 </body>
 </html>

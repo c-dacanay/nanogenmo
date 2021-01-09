@@ -22,8 +22,13 @@ body {
 /* Index CSS */
 h4 {
   text-transform: uppercase;
-  letter-spacing: 0.09em;
+  font-size: 1.4em;
+  letter-spacing: 0.1em;
   padding-top: 1.5em;
+}
+
+h5 {
+ font-size: 1em;
 }
 
 p {
@@ -38,6 +43,15 @@ a,
 
 #startstory {
   text-align: center;
+}
+
+#debug {
+  color: #248bf5;
+  text-transform: uppercase;
+}
+
+#debug:hover {
+color: red;
 }
 
 img {
@@ -189,9 +203,12 @@ a:hover {
 }
 
 .system {
+  margin-left: 1em;
+  display: none;
   color: #777;
   font-size: 0.8em;
   font-family: "Inconsolata", Courier, monospace;
+  line-height: 1.1em;
 }
 
 .prop {
