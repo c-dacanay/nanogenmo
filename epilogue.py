@@ -60,7 +60,7 @@ def narrate_memory(a, b, reflection, interest):
             'b_they': b['they'],
             'time': ['Every now and then when #a# was #action#', 'Some mornings, in those tender moments between sleep and wake,', 'One night, while #a# was #action#', 'Randomly when #a# was #action#', 'When #a# was #action#', 'One evening while #a# was #action#'],
             'action': ['going to bed', 'getting groceries', f"going to {random.choice(INTERESTS[interest]['location'])}", 'daydreaming', 'getting ready for work', 'making plans for a vacation', f"reading about {interest}"],
-            'remembered': ['#a_they# couldn\'t help but think about', '#a_they# remebered', '#a# recalled', '#a_they# imagined', '#a_they# thought about'],
+            'remembered': ['#a_they# couldn\'t help but think about', '#a_they# remembered', '#a# recalled', '#a_they# imagined', '#a_they# thought about'],
             'open': ['#b#\'s enthusiastic charm', '#b#\'s gentle hand on #a_their#\'s, beckoning', '#b#\'s open and excited response when trying something new together'],
             'extra': ['#b#\'s melodic laughter', 'watching #b# at a party while #b_they# charmed the whole room'],
             'libido': ['the curve #b#\'s neck as #b_they# undressed', 'the smell of #b#\'s skin as they held each other', '#b#\'s electric touch against #a_their# skin', '#b#\'s body silhouetted against the moonlight'],
@@ -86,10 +86,10 @@ def narrate_alex(a, interest, hobby):
     a_verb = random.choice(INTERESTS[interest]['location'])
     rules = {
         'origin': ['#texture##a_does#', '#statement#'],
-        'texture': ['Everything felt harder for a while. ', 'Time seemed to pass in slow motion. ', '#a# couldn\'t deny slow monotony of their life—in attempt to improve it ', 
+        'texture': ['Everything felt harder for a while. ', 'Time seemed to pass in slow motion. ', '#a# couldn\'t deny the slow monotony of their life—in attempt to improve it, ', 
         'The days felt shorter without a partner to fill them. ', 'Alex\'s calendar filled up with ease and '],
         'statement': ['#a# wondered if they were going to spend the rest of their life in search for someone who might understand them.', '#a# listened to #music# and thought about their future.', 'While #a# aimed to be independent and confident alone, #a_they# were sometimes struck with the cold shock of solitude.', '#a# journaled about #event#.', '#a# deleted all the dating apps off their phone (again).'],
-        'music': ['Mitski', 'The National', 'Broken Social Scene', 'Pheobe Bridgers', 'Frank Ocean', 'SZA', 'Carly Rae Jepsen', 'Lorde', 'Fleetwood Mac', 'Robyn'] ,
+        'music': ['Mitski', 'The National', 'Broken Social Scene', 'Phoebe Bridgers', 'Frank Ocean', 'SZA', 'Carly Rae Jepsen', 'Lorde', 'Fleetwood Mac', 'Robyn'] ,
         'event': ['recent workplace drama', 'achieving their goals', 'current events', 'their political perspective', 'their fraught familial relationships', 'the futility of online dating'],
         'a_does':
         [f'#a# took time #doing# {hobby}.', f'#a# #started# {a_verb} #amount#.'],
@@ -165,6 +165,7 @@ def narrate_reflection(a, b, reflection):
     ref_statement = get_reflection(a, b, reflection)
 
     rules = {
+        'a_they': a['they'],
         'origin': '#breakup#. #afterward# #realized# that #they# #change##intent#.',
         'breakup': rank(['#a# took the break up hard', '#a# had a hard time when #b# stopped talking to them', '#a# struggled to cut #b# out of #their# life', '#a# knew the break up was for the best, but it didn\'t feel that way', '#a# felt like a great weight lifted off #their# shoulders after the relationship ended', '#a# was happy to be out of that relationship'], a['commit']),
         'afterward': ['Immediately after the break up,', 'Later', 'After the relationship ended', 'While the relationship fell apart'],
@@ -276,8 +277,8 @@ def get_reflection(a, b, reflection):
                 'not attracting the type of people #they# wanted'
             ],
             'neuro': [
-                'boring',
-                'too relaxed'
+                'too easygoing',
+                'too apathetic about the relationship'
             ],
             'commit': [
                 'did not value #b#\'s dedication',
