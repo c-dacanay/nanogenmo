@@ -353,13 +353,15 @@ def narrate_meeting(event, events):
 
 def narrate_committed(events):
     summary = util.get_event_meta(events)
+
     rules = {
-        'origin': ['<p>#best_exp# #conflict#</p>'],
-        'conflict': ['#best_conflict#.', '#best_conflict#, but #worst_conflict#.', '#best_conflict#, but #popular_conflict#.'],
-        'best_exp': f"Their similar levels in {PROP_NAMES[summary['best_experience']]} facilitated a healthy growth in their relationship",
-        'worst_conflict': f"their fights over their difference in {PROP_NAMES[summary['worst_conflict']]} were #bitter#",
-        'best_conflict': f"The couple was proud of their ability to work through their differences in {PROP_NAMES[summary['best_conflict']]}",
-        'popular_conflict': f"the couple fought often because of differences in {PROP_NAMES[summary['popular_conflict']]}",
+        'origin': ['<p>#exp# #conflict#</p>'],
+        'exp': '#best_exp#' if summary['best_experience'] else 'The couple unfortunately never spent more time together',
+        'conflict': ['#best_conflict#.', '#best_conflict#, but #worst_conflict#.', '#best_conflict#, but #popular_conflict#.'] if summary['worst_conflict'] else 'The couple never clashed.'
+        'best_exp': f"Their similar levels in {PROP_NAMES.get(summary['best_experience'])} facilitated a healthy growth in their relationship",
+        'worst_conflict': f"their fights over their difference in {PROP_NAMES.get(summary['worst_conflict'])} were #bitter#",
+        'best_conflict': f"The couple was proud of their ability to work through their differences in {PROP_NAMES.get(summary['best_conflict'])}",
+        'popular_conflict': f"the couple fought often because of differences in {PROP_NAMES.get(summary['popular_conflict'])}",
         'bitter': ['acrid', 'virulent', 'bitter', 'harsh', 'difficult', 'hard to recover from', 'emotionally exhausting']
     }
     print(tracery.Grammar(rules).flatten('#origin#</p>'))
@@ -408,6 +410,11 @@ def narrate_experience_system(event):
     print(
         f"""<p class='system'>{a['name']} invited {b['name']} to a
         {round(event['threshold'],2)}-{event['target_property']} experience.</p>""")
+    if 'interest' in event:
+        print(
+            f"""<p class='system'>activity proposed: {event['interest']}.
+            {b['name']} interests: {', '.join(b['interests'])}.</p>
+        """)
     print(
         f"""<p class='system'>{b['name']} has {event['target_property']}
         {round(b[event['target_property']],2)} and current concession damage 
