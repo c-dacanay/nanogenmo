@@ -364,7 +364,7 @@ def narrate_committed(events):
     summary = util.get_event_meta(events)
 
     rules = {
-        'origin': ['<p>#exp# #conflict#</p>'],
+        'origin': ['<p>#exp#. #conflict#</p>'],
         'exp': '#best_exp#' if summary['best_experience'] else 'The couple unfortunately never spent more time together',
         'conflict': ['#best_conflict#.', '#best_conflict#, but #worst_conflict#.', '#best_conflict#, but #popular_conflict#.'] if summary['worst_conflict'] else 'The couple never clashed.',
         'best_exp': f"Their similar levels in {PROP_NAMES.get(summary['best_experience'])} facilitated a healthy growth in their relationship",
