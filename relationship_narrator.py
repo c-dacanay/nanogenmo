@@ -190,19 +190,28 @@ def narrate_commit(event, events):
             'dating_phase': '#origin#',
             'origin': [
                 '#a# felt nervous, but excited. ',
+                '#a# sighed. #b# seemed so amazing. But would #b_they# return #a#\'s feelings?',
+                '#a# smiled quietly to themselves. Perhaps the right time to talk to #b# would come some day. ',
                 "#a# had the urge to ask #b# about how they felt about the relationship, but wasn't quite confident enough to ask. ",
             ],
             'a': a['name'],
             'b': b['name'],
+            'b_they': b['they'],
         }
     else:
         # Not interested enough.
         rules = {
-            'courting_phase': '#origin#',
-            'dating_phase': '#origin#',
-            'origin': [
+            'courting_phase': [
                 "#a# continued to use dating apps from time to time. ",
+                "#a# considered about sending #b# a message, but decided not to. ",
+                "#a# noticed a message from #b#. #a# ignored it. ",
+                "#b# had yet to meet most of #a#'s friends. ",
+            ],
+            'dating_phase': [
+                "#a#'s Facebook relationship status still read 'Single'. ",
                 "#a# had yet to mention #b# to their parents. ",
+                "#a# told #b# they were busy, but in fact #a# had no concrete plans that day. ",
+                "#a# lay awake at night, mulling over exes from previous relationships. ",
             ],
             'a': a['name'],
             'b': b['name'],
