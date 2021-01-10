@@ -256,7 +256,7 @@ def narrate_commit_system(event):
             {a['name']} experienced an increase in neuroticism and a decline in confidence.
             </p>""")
     print(
-        f"<p class='system'>The relationship health is {round(event['health'], 2)}."
+        f"<p class='system'>The relationship health is {round(event['health'], 2)}.</p>"
     )
 
 
