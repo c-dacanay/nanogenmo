@@ -144,7 +144,7 @@ class Relationship:
         if binary_roll([a['interest'], a['commit']]):
             PHASE_EXPERIENCE_TYPES = {
                 Phase.COURTING: ['open', 'extra', 'libido'],
-                Phase.DATING: ['open', 'extra', 'libido', 'hot', 'con', 'exp'],
+                Phase.DATING: ['open', 'extra', 'libido', 'con', 'exp', 'neuro'],
                 Phase.COMMITTED:
                 ['open', 'extra', 'libido', 'hot', 'con', 'exp', 'commit'],
             }
@@ -233,7 +233,7 @@ class Relationship:
                 return experience
             b['concessions'][exp_type] += dmg
             experience['delta'] = gauss(
-                PHASE_EXPERIENCE_AGREE[self.phase] - concession_roll, 0.2)
+                PHASE_EXPERIENCE_AGREE[self.phase] - concession_roll, 0.3)
             return experience
         logging.debug("EXPERIENCE failed - not sufficient interest")
         return {

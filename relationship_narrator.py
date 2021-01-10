@@ -190,19 +190,28 @@ def narrate_commit(event, events):
             'dating_phase': '#origin#',
             'origin': [
                 '#a# felt nervous, but excited. ',
+                '#a# sighed. #b# seemed so amazing. But would #b_they# return #a#\'s feelings?',
+                '#a# smiled quietly to themselves. Perhaps the right time to talk to #b# would come some day. ',
                 "#a# had the urge to ask #b# about how they felt about the relationship, but wasn't quite confident enough to ask. ",
             ],
             'a': a['name'],
             'b': b['name'],
+            'b_they': b['they'],
         }
     else:
         # Not interested enough.
         rules = {
-            'courting_phase': '#origin#',
-            'dating_phase': '#origin#',
-            'origin': [
+            'courting_phase': [
                 "#a# continued to use dating apps from time to time. ",
+                "#a# considered about sending #b# a message, but decided not to. ",
+                "#a# noticed a message from #b#. #a# ignored it. ",
+                "#b# had yet to meet most of #a#'s friends. ",
+            ],
+            'dating_phase': [
+                "#a#'s Facebook relationship status still read 'Single'. ",
                 "#a# had yet to mention #b# to their parents. ",
+                "#a# told #b# they were busy, but in fact #a# had no concrete plans that day. ",
+                "#a# lay awake at night, mulling over exes from previous relationships. ",
             ],
             'a': a['name'],
             'b': b['name'],
@@ -211,9 +220,9 @@ def narrate_commit(event, events):
     grammar = tracery.Grammar(rules)
     grammar.add_modifiers(base_english)
     if event['phase'] == Phase.COURTING:
-        print(grammar.flatten('#courting_phase#'))
+        print(grammar.flatten('<p>#courting_phase#</p>'))
     elif event['phase'] == Phase.DATING:
-        print(grammar.flatten('#dating_phase#'))
+        print(grammar.flatten('<p>#dating_phase#</p>'))
     print('\n')
     narrate_commit_system(event)
 
@@ -355,7 +364,7 @@ def narrate_committed(events):
     summary = util.get_event_meta(events)
 
     rules = {
-        'origin': ['<p>#exp# #conflict#</p>'],
+        'origin': ['<p>#exp#. #conflict#</p>'],
         'exp': '#best_exp#' if summary['best_experience'] else 'The couple unfortunately never spent more time together',
         'conflict': ['#best_conflict#.', '#best_conflict#, but #worst_conflict#.', '#best_conflict#, but #popular_conflict#.'] if summary['worst_conflict'] else 'The couple never clashed.',
         'best_exp': f"Their similar levels in {PROP_NAMES.get(summary['best_experience'])} facilitated a healthy growth in their relationship",
@@ -367,8 +376,17 @@ def narrate_committed(events):
     print(tracery.Grammar(rules).flatten('#origin#</p>'))
 
     if events[-1]['type'] == EventType.DEATH:
+        death = random.choice([
+            "a meteroite striking the Earth",
+            "a global pandemic",
+            "an infected paper cut",
+            "a falling grand piano",
+            "a poorly placed pothole in the road",
+            "a stroke caused by the erroneous publication of their own obituary",
+            "the collapse of the Marxist state"
+        ])
         print(
-            f"Unfortunately, {events[-1]['person']['name']} died tragically due to a meteroite striking the Earth.")
+            f"Unfortunately, {events[-1]['person']['name']} died tragically due to {death}.")
     else:
         print(
             f"Ultimately their differences proved too great to overcome. ")
@@ -417,7 +435,7 @@ def narrate_experience_system(event):
         """)
     print(
         f"""<p class='system'>{b['name']} has {event['target_property']}
-        {round(b[event['target_property']],2)} and current concession damage 
+        {round(b[event['target_property']],2)} and current concession damage
         {round(b['concessions'][event['target_property']],2)}.
         Reluctance to accept invitation is {round(event['concession_roll'], 2)}.</p>""")
         # how much you don't want to do the activity due to difference 
@@ -440,17 +458,18 @@ def narrate_experience_system(event):
 def narrate_experience(event, events):
     a, b = get_ab(event)
 
-    if event['rejected']:
+    if event['rejected'] and event['target_property'] not in ['con', 'exp', 'neuro']:
         narrate_rejection(event, events)
         narrate_experience_system(event)
         return
 
-    # 50% chance to show the detail of the experience in the artifact
-    detail = random.random() < 0.5
+    detail = False
 
     artifact = False
     if event.get('phase') == Phase.COURTING and random.random() < 0.6:
         artifact = True
+        # 50% chance to show the detail of the experience in the artifact
+        detail = random.random() < 0.5
         print(artifacts.get_date_artifact(event, events, detail))
 
     # openness activities can fall 3 different ways
@@ -563,7 +582,7 @@ def narrate_experience(event, events):
     else:
         rules = {
             'origin': [
-                f"#Onday# #{event['target_property']}#",
+                f"#Onday# #{event['target_property']}# #next#",
             ],
             'Onday': [
                 f"On {event['date'].strftime('%A')}, ",
@@ -613,6 +632,15 @@ def narrate_experience(event, events):
             'day': ['day', 'morning', 'afternoon', 'evening'],
             'a': a['name'],
             'b': b['name'],
+            'response': util.rank([
+                '#b# was happy that the two of them shared similar habits.',
+                '#b# was perfectly willing to support #a# when this happened.',
+                '#b# didn\'t always understand #a#\'s actions.',
+                '#b# did not appreciate #a# when things like this happened.',
+            ], event['concession']),
+            'rejection':
+                '#b# refused to participate in this kind of behavior.',
+            'next': '#rejection#' if event['rejected'] else '#response#'
         }
         print(tracery.Grammar(rules).flatten('#origin#'))
         # logging.debug(f"Event: {event}")

@@ -53,7 +53,7 @@ let page = document.getElementById("page")
 let sys = document.getElementsByClassName("system")
 
 let testing = false;
-let showDebug = true;
+let hideDebug = false;
 
 if (testing) {
   info.style.display = "none"
@@ -68,26 +68,32 @@ begin.addEventListener("click", () => {
   // if we want a toc on the website we can put it here in the bar innerhtml
 })
 
-debug.addEventListener("click", () => {
-  // this is so fuckin hacky lmao
-  showDebug = !showDebug;
-  var style = document.createElement('style');
-  if (showDebug) {
-  debug.innerHTML = "Show debug 😛"
-  style.textContent =
-    '.system {' +
-    '  display: none' +
-    '}' 
+page.addEventListener("load", () => {
+  applyDebugStyle()
+})
+
+function applyDebugStyle() {
+  let style = document.createElement('style');
+  if (hideDebug) {
+    debug.innerHTML = "Show debug 😛"
+    style.textContent =
+      '.system {' +
+      '  display: none' +
+      '}' 
   } else {
-  debug.innerHTML = "Hide debug 🥵"
-  style.textContent =
-    '.system {' +
-    '  display: block' +
-    '}' 
+    debug.innerHTML = "Hide debug 🥵"
+    style.textContent =
+      '.system {' +
+      '  display: block' +
+      '}' 
   } 
   page.contentDocument.head.appendChild(style);
+}
 
-
+debug.addEventListener("click", () => {
+  // this is so fuckin hacky lmao
+  hideDebug = !hideDebug;
+  applyDebugStyle()
 })
 </script>
 </body>
