@@ -233,7 +233,7 @@ class Relationship:
                 return experience
             b['concessions'][exp_type] += dmg
             experience['delta'] = gauss(
-                PHASE_EXPERIENCE_AGREE[self.phase] - concession_roll, 0.2)
+                PHASE_EXPERIENCE_AGREE[self.phase] - concession_roll, 0.3)
             return experience
         logging.debug("EXPERIENCE failed - not sufficient interest")
         return {

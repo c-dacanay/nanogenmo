@@ -264,7 +264,7 @@ def get_date_artifact(event, events, detail):
             'I cant stay over tonight though',
             "Id be interested in getting to know you better! #e#",
             '#e##e##e#',
-            '#e##e##e##e##e##e#'
+            'wanna get freaky? #e##e##e#',
         ], event['threshold']),
         'hobby_location': INTERESTS[event['interest']]['location'] if 'interest' in event else '',
         'hobby_verb': INTERESTS[event['interest']]['verb'] if 'interest' in event else '',
