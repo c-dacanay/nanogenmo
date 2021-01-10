@@ -408,6 +408,11 @@ def narrate_experience_system(event):
     print(
         f"""<p class='system'>{a['name']} invited {b['name']} to a
         {round(event['threshold'],2)}-{event['target_property']} experience.</p>""")
+    if 'interest' in event:
+        print(
+            f"""<p class='system'>activity proposed: {event['interest']}.
+            {b['name']} interests: {', '.join(b['interests'])}.</p>
+        """)
     print(
         f"""<p class='system'>{b['name']} has {event['target_property']}
         {round(b[event['target_property']],2)} and current concession damage 
