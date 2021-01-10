@@ -252,7 +252,7 @@ def get_date_artifact(event, events, detail):
         'open': [
             'Wanna go #hobby_verb#?',
             'We could #hobby_verb#?',
-            'Wanna go to #hobby_location#?'
+            'Wanna go to #hobby_location#?',
             'We could check out #hobby_location#?'
         ], 'extra': util.rank([
             'We could do something quiet at my place?',
