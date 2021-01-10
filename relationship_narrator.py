@@ -366,7 +366,7 @@ def narrate_committed(events):
     rules = {
         'origin': ['<p>#exp# #conflict#</p>'],
         'exp': '#best_exp#' if summary['best_experience'] else 'The couple unfortunately never spent more time together',
-        'conflict': ['#best_conflict#.', '#best_conflict#, but #worst_conflict#.', '#best_conflict#, but #popular_conflict#.'] if summary['worst_conflict'] else 'The couple never clashed.'
+        'conflict': ['#best_conflict#.', '#best_conflict#, but #worst_conflict#.', '#best_conflict#, but #popular_conflict#.'] if summary['worst_conflict'] else 'The couple never clashed.',
         'best_exp': f"Their similar levels in {PROP_NAMES.get(summary['best_experience'])} facilitated a healthy growth in their relationship",
         'worst_conflict': f"their fights over their difference in {PROP_NAMES.get(summary['worst_conflict'])} were #bitter#",
         'best_conflict': f"The couple was proud of their ability to work through their differences in {PROP_NAMES.get(summary['best_conflict'])}",
@@ -384,17 +384,16 @@ def narrate_committed(events):
             "a poorly placed pothole in the road",
             "a stroke caused by the erroneous publication of their own obituary",
             "the collapse of the Marxist state"
-        print(random.choice([
-            f"Unfortunately, {events[-1]['person']['name']} died tragically due to {death}.")
         ])
-        )
+        print(
+            f"Unfortunately, {events[-1]['person']['name']} died tragically due to {death}.")
     else:
         print(
             f"Ultimately their differences proved too great to overcome. ")
 
 
 def narrate_rejection(event, events):
-    a, b= get_ab(event)
+    a, b = get_ab(event)
     rules = {
         'origin': "#Onday# #want#, #reject#.",
         'a': a['name'],
