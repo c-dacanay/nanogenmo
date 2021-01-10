@@ -220,9 +220,9 @@ def narrate_commit(event, events):
     grammar = tracery.Grammar(rules)
     grammar.add_modifiers(base_english)
     if event['phase'] == Phase.COURTING:
-        print(grammar.flatten('#courting_phase#'))
+        print(grammar.flatten('<p>#courting_phase#</p>'))
     elif event['phase'] == Phase.DATING:
-        print(grammar.flatten('#dating_phase#'))
+        print(grammar.flatten('<p>#dating_phase#</p>'))
     print('\n')
     narrate_commit_system(event)
 
@@ -456,17 +456,18 @@ def narrate_experience_system(event):
 def narrate_experience(event, events):
     a, b = get_ab(event)
 
-    if event['rejected']:
+    if event['rejected'] and event['target_property'] not in ['con', 'exp', 'neuro']:
         narrate_rejection(event, events)
         narrate_experience_system(event)
         return
 
-    # 50% chance to show the detail of the experience in the artifact
-    detail = random.random() < 0.5
+    detail = False
 
     artifact = False
     if event.get('phase') == Phase.COURTING and random.random() < 0.6:
         artifact = True
+        # 50% chance to show the detail of the experience in the artifact
+        detail = random.random() < 0.5
         print(artifacts.get_date_artifact(event, events, detail))
 
     if event['target_property'] == 'open':
@@ -556,7 +557,7 @@ def narrate_experience(event, events):
     else:
         rules = {
             'origin': [
-                f"#Onday# #{event['target_property']}#",
+                f"#Onday# #{event['target_property']}# #next#",
             ],
             'Onday': [
                 f"On {event['date'].strftime('%A')}, ",
@@ -606,6 +607,15 @@ def narrate_experience(event, events):
             'day': ['day', 'morning', 'afternoon', 'evening'],
             'a': a['name'],
             'b': b['name'],
+            'response': util.rank([
+                '#b# was happy that the two of them shared similar habits.',
+                '#b# was perfectly willing to support #a# when this happened.',
+                '#b# didn\'t always understand #a#\'s actions.',
+                '#b# did not appreciate #a# when things like this happened.',
+            ], event['concession']),
+            'rejection':
+                '#b# refused to participate in this kind of behavior.',
+            'next': '#rejection#' if event['rejected'] else '#response#'
         }
         print(tracery.Grammar(rules).flatten('#origin#'))
         # logging.debug(f"Event: {event}")

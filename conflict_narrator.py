@@ -172,16 +172,25 @@ def get_problem_statement(a, b, problem_phrase, event):
             f'#a# {again}told #b# that #b# #problem#',
         ],
         'anger': util.rank([
-            "#a# emphasized that they weren't angry. They just wanted the best for the relationship.",
-            "#a# wondered if #b# would be willing to do things differently.",
-            "It just wouldn't do.",
-            "#a# was angry.",
-            "Something had to change.",
+            "#it_seemd# just the smallest difference in expectations. ",
+            "#it_seemd# a modest gap in expectations",
+            "#it_seemd# some difference in this regard.",
+            "#it_seemd# a gap in expectations.",
+            "#it_seemd# a serious gap.",
+            "#it_seemd# a chasm in understanding.",
+            "#it_seemd# an insurmountable gulf of incompatibility.",
         ], event['target']),
+        'it_seemd': [
+            'It seemed like there was',
+            'There was',
+            "It seemed like",
+            '#b# had to admit that #b_they# and #a# had ',
+        ],
         'upset': ['upset', 'frustrated', 'mad', 'angry'],
         'a': a['name'],
         'a_they': a['they'],
         'b': b['name'],
+        'b_they': b['they'],
         'problem': problem_phrase,
         'pushing': ['pushing', 'telling', 'convincing', 'nagging', 'dragging'],
         'reaction': util.rank([
@@ -262,9 +271,9 @@ def get_response(a, b, event):
     }
     grammar = tracery.Grammar(rules)
     if (event['delta'] > 0):
-        return grammar.flatten('#pos#')
+        return grammar.flatten('#pos# ')
     else:
-        return grammar.flatten('#neg#')
+        return grammar.flatten('#neg# ')
 
 
 def get_outcome(a, b, event):

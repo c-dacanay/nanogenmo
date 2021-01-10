@@ -144,7 +144,7 @@ class Relationship:
         if binary_roll([a['interest'], a['commit']]):
             PHASE_EXPERIENCE_TYPES = {
                 Phase.COURTING: ['open', 'extra', 'libido'],
-                Phase.DATING: ['open', 'extra', 'libido', 'hot', 'con', 'exp'],
+                Phase.DATING: ['open', 'extra', 'libido', 'con', 'exp', 'neuro'],
                 Phase.COMMITTED:
                 ['open', 'extra', 'libido', 'hot', 'con', 'exp', 'commit'],
             }
