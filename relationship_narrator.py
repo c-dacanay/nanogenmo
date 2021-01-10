@@ -476,10 +476,14 @@ def narrate_experience(event, events):
             f"#Onday# #{event['target_property']}#.",
             'day': ['day', 'morning', 'afternoon', 'evening'],
             'Onday': '#artifact#' if artifact else '#later#',
-            'artifact': 'That night, #they#',
-            'later': [
+            'artifact': [
                 f"On {event['date'].strftime('%A')}, #they#",
                 f"{event['date'].strftime('%A')} came around. #they.capitalize#",
+                f"{event['date'].strftime('%A')} arrived. #they.capitalize#",
+            ],
+            'later': [
+                '#artifact#',
+                '#artifact#',
                 "Later that week, #they#"
             ],
             'extra':

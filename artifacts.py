@@ -229,13 +229,8 @@ def get_date_artifact(event, events):
         'day': [
             'tomorrow',
             'the day after tomorrow',
-            'monday',
             'some time next week',
-            'tuesday',
-            'after work on thursday',
-            'wednesday',
-            'this weekend',
-            'friday',
+            event['date'].strftime('%A')
         ]
     }
     grammar = tracery.Grammar(rules)
