@@ -367,15 +367,25 @@ def narrate_committed(events):
     print(tracery.Grammar(rules).flatten('#origin#</p>'))
 
     if events[-1]['type'] == EventType.DEATH:
-        print(
-            f"Unfortunately, {events[-1]['person']['name']} died tragically due to a meteroite striking the Earth.")
+        death = random.choice([
+            "a meteroite striking the Earth",
+            "a global pandemic",
+            "an infected paper cut",
+            "a falling grand piano",
+            "a poorly placed pothole in the road",
+            "a stroke caused by the erroneous publication of their own obituary",
+            "the collapse of the Marxist state"
+        print(random.choice([
+            f"Unfortunately, {events[-1]['person']['name']} died tragically due to {death}.")
+        ])
+        )
     else:
         print(
             f"Ultimately their differences proved too great to overcome. ")
 
 
 def narrate_rejection(event, events):
-    a, b = get_ab(event)
+    a, b= get_ab(event)
     rules = {
         'origin': "#Onday# #want#, #reject#.",
         'a': a['name'],
@@ -417,7 +427,7 @@ def narrate_experience_system(event):
         """)
     print(
         f"""<p class='system'>{b['name']} has {event['target_property']}
-        {round(b[event['target_property']],2)} and current concession damage 
+        {round(b[event['target_property']],2)} and current concession damage
         {round(b['concessions'][event['target_property']],2)}.
         Reluctance to accept invitation is {round(event['concession_roll'], 2)}.</p>""")
     print(

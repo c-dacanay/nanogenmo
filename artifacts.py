@@ -126,7 +126,7 @@ def get_date_artifact(event, events, detail):
             ]
     else:
         message = util.rank([
-            '#hello#, ',
+            '#hello# ',
             f'#hello# it was really nice to see you the other day!',
             f'i had fun! ',
             f'i had a lot of fun the other day! ',
