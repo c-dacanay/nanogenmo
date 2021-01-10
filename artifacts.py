@@ -251,7 +251,9 @@ def get_date_artifact(event, events, detail):
         'date_suggest': f"#{event['target_property']}#",
         'open': [
             'Wanna go #hobby_verb#?',
+            'We could #hobby_verb#?',
             'Wanna go to #hobby_location#?'
+            'We could check out #hobby_location#?'
         ], 'extra': util.rank([
             'We could do something quiet at my place?',
             'We could do something chill',
@@ -259,9 +261,10 @@ def get_date_artifact(event, events, detail):
             'We could go out!!',
         ], event['threshold']), 'libido': util.rank([
             'But lets not jump right into bed?',
+            'I cant stay over tonight though',
             "Id be interested in getting to know you better! #e#",
-            '#e##e#',
-            '#e##e##e##e#'
+            '#e##e##e#',
+            '#e##e##e##e##e##e#'
         ], event['threshold']),
         'hobby_location': INTERESTS[event['interest']]['location'] if 'interest' in event else '',
         'hobby_verb': INTERESTS[event['interest']]['verb'] if 'interest' in event else '',
