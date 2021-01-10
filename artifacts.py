@@ -8,6 +8,8 @@ import humanize
 import tracery
 from tracery.modifiers import base_english
 
+from interests import INTERESTS, getInterestRules
+
 # def narrate_artifact(evt: Event):
 HEART_EMOJIS = [
     '💖', '<3', '😍', '🥰', '😘', '👅', '👄', '💋', '👀', '🔥', '💦', '🌶', '🍑', '🍆', ':)', ';)', ':D',
@@ -50,29 +52,35 @@ def get_message_html(messages):
     # given the array of messages, return them encoded in an HTML string
     time = None
     messages_html = ''
+    last_sender = None
     for m in messages:
         # add timestamp if different day
         if m['time'] != time:
             time = m['time']
             messages_html += f"\n<p class='top-time'>{humanize.naturalday(time)}</p>\n"
 
+        username = f"""
+            <p class='msg_header'>
+                <span class='user'>{m['nickname']}</span>
+            </p>
+        """
+
         messages_html += f"""
             <div class="message_{m['a']}">
-                <p class='msg_header'>
-                    <span class='user'>{m['nickname']}</span>
-                </p>
+                {username if last_sender != m['nickname'] else ''}
                 <p class="message from_{m['a']}">
                     {m['text']}
                 </p>
             </div>
         """
+        last_sender = m['nickname']
     return f'''
         <div class='artifact'>
             {messages_html}
         </div>'''
 
 
-def get_date_artifact(event, events):
+def get_date_artifact(event, events, detail):
     a, b = get_ab(event)
     a_nick = event['protagonist']['nickname']
     b_nick = event['person']['nickname']
@@ -130,36 +138,44 @@ def get_date_artifact(event, events):
         ], random.gauss(a['interest'], 0.3))
 
     # Create the messages array
-    if event['protagonist_initiated']:
-        messages = [{
-            'text':  '#start##punc# #ask#',
+    # Initial message asks for the date
+    messageA = '#start##punc# #ask#'
+
+    # Always provide detail if rejecting
+    if event['rejected']:
+        detail = True
+
+    # Set the response appropriately...
+    messageB = '#resp#'
+    if detail:
+        messageB = '#rej#' if event['rejected'] else '#response#'
+
+    messages = [{
+        'text':  messageA,
+        'time': event['date'],
+        'nickname': a_nick if event['protagonist_initiated'] else b_nick,
+        'a': 'a' if event['protagonist_initiated'] else 'b'
+    }, {
+        'text':  messageB,
+        'time': event['date'],
+        'nickname': b_nick if event['protagonist_initiated'] else a_nick,
+        'a': 'b' if event['protagonist_initiated'] else 'a'
+    }]
+
+    if detail:
+        # Splice in another message
+        messages.insert(1, {
+            'text': '#date_suggest#',
             'time': event['date'],
-            'nickname': a_nick,
-            'a': 'a'
-        }, {
-            'text':  '#rej#' if event['rejected'] else '#resp#',
-            'time': event['date'],
-            'nickname': b_nick,
-            'a': 'b'
-        }]
-    else:
-        messages = [{
-            'text':  '#start##punc# #ask#',
-            'time': event['date'],
-            'nickname': b_nick,
-            'a': 'b'
-        }, {
-            'text':  '#rej#' if event['rejected'] else '#resp#',
-            'time': event['date'],
-            'nickname': a_nick,
-            'a': 'a'
-        }]
+            'nickname': messages[0]['nickname'],
+            'a': messages[0]['a']
+        })
 
     rules = {
         'origin': ['#preface# #msg#', '#msg#', '#msg#'],
         'preface': get_message_intro(a, b),
         'msg': get_message_html(messages),
-        'punc': ['', '#e#', '#e##e#', '#e##e##e#'],
+        'punc': ['', '#e#'],
         'e': HEART_EMOJIS,
         'start': message,
         'ask': [
@@ -231,8 +247,38 @@ def get_date_artifact(event, events):
             'the day after tomorrow',
             'some time next week',
             event['date'].strftime('%A')
-        ]
+        ],
+        'date_suggest': f"#{event['target_property']}#",
+        'open': [
+            'Wanna go #hobby_verb#?',
+            'Wanna go to #hobby_location#?'
+        ], 'extra': util.rank([
+            'We could do something quiet at my place?',
+            'We could do something chill',
+            'Lets go out somewhere?',
+            'We could go out!!',
+        ], event['threshold']), 'libido': util.rank([
+            'But lets not jump right into bed?',
+            "Id be interested in getting to know you better! #e#",
+            '#e##e#',
+            '#e##e##e##e#'
+        ], event['threshold']),
+        'hobby_location': INTERESTS[event['interest']]['location'] if 'interest' in event else '',
+        'hobby_verb': INTERESTS[event['interest']]['verb'] if 'interest' in event else '',
+        'response': util.rank([
+            "I'd love to! #suggest#",
+            "Sounds like fun! #suggest#",
+            "Yes, let's do it, #suggest#",
+            "Sure! #suggest#",
+            "Okay",
+            "Oh, okay",
+            "I guess so...",
+            "Do we have to?",
+            "You know I don't like that"
+        ], event['concession']),
     }
+    if 'interest' in event:
+        rules.update(getInterestRules(a, b, event['interest']))
     grammar = tracery.Grammar(rules)
     return grammar.flatten("#origin#\n")
 

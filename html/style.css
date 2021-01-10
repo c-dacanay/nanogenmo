@@ -148,6 +148,7 @@ a:hover {
   padding-left: 0.5em;
   font-size: 0.8em;
   color: #666;
+  margin-top: 0.5em;
 }
 
 .message_a .user {
@@ -165,9 +166,10 @@ a:hover {
   display: block;
   border-radius: 1em;
   padding: 0.6em;
-  max-width: 400px;
+  max-width: 350px;
   font-size: 0.9em;
   margin-top: 0.1em;
+  margin-bottom: 0.1em;
 }
 
 .from_a {

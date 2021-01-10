@@ -397,7 +397,7 @@ def narrate_rejection(event, events):
         ]
     }
     if event.get('phase') == Phase.COURTING and random.random() < 0.6:
-        print(artifacts.get_date_artifact(event, events))
+        print(artifacts.get_date_artifact(event, events, True))
     else:
         print(tracery.Grammar(rules).flatten('#origin#'))
     return
@@ -436,13 +436,17 @@ def narrate_experience(event, events):
         narrate_experience_system(event)
         return
 
+    # 50% chance to show the detail of the experience in the artifact
+    detail = random.random() < 0.5
+
     artifact = False
     if event.get('phase') == Phase.COURTING and random.random() < 0.6:
         artifact = True
-        print(artifacts.get_date_artifact(event, events))
+        print(artifacts.get_date_artifact(event, events, detail))
 
     if event['target_property'] == 'open':
         rules = {
+            'origin': '<p>#hobby_proposal# #reply#</p>',
             'mood': util.rank([
                 "Having a strong preference for what #they# wanted to do for date night,",
                 f"Having been obsessed with {event['interest']} more than ever lately,",
@@ -467,7 +471,8 @@ def narrate_experience(event, events):
         }
         rules.update(getInterestRules(a, b, event['interest']))
         grammar = tracery.Grammar(rules)
-        print(grammar.flatten('<p>#hobby_proposal# #reply#</p>'))
+        if not detail:
+            print(grammar.flatten('#origin#'))
         # logging.debug(
         #    f"OPEN EXPERIENCE {event['interest']} {event['threshold']} a: {a['open']} b: {b['open']}")
     elif event['target_property'] in ['extra', 'libido']:
