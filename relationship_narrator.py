@@ -31,7 +31,7 @@ def narrate(r: Relationship):
         if (type(r.b[prop]) == float):
             print(f"<p class='system prop'>{prop}: {round(r.b[prop], 2)}</p>")
     print(
-        f"<p class='system prop'>interests: {', '.join(r.b['interests'])}</p><br />")
+        f"<p class='system prop'>interests: {', '.join(r.b['interests'])}</p>")
     for phase in [Phase.COURTING, Phase.DATING, Phase.COMMITTED]:
         chunk = []
         while True:
@@ -291,7 +291,7 @@ def narrate_meeting(event, events):
         narrate_meeting_system(event)
         return
 
-    text = ""
+    text = "<p>"
     if event['protagonist_initiated']:
         text += get_interest_sentence(event['protagonist'], event['person'],
                                       event['protagonist']['interest'])
@@ -345,7 +345,7 @@ def narrate_meeting(event, events):
         f"{time}{a['name']} giggled {adverb}{followup}",
         f"{time}{a['name']} walked {adverb} toward {b['name']}{followup}"
     ]
-    print(text + random.choice(APPROACHES) + "")
+    print(text + random.choice(APPROACHES) + "" + "</p>")
 
     narrate_meeting_system(event)
     prologue.get_initial_impressions(event['person'])
@@ -357,7 +357,7 @@ def narrate_committed(events):
     rules = {
         'origin': ['<p>#exp# #conflict#</p>'],
         'exp': '#best_exp#' if summary['best_experience'] else 'The couple unfortunately never spent more time together',
-        'conflict': ['#best_conflict#.', '#best_conflict#, but #worst_conflict#.', '#best_conflict#, but #popular_conflict#.'] if summary['worst_conflict'] else 'The couple never clashed.'
+        'conflict': ['#best_conflict#.', '#best_conflict#, but #worst_conflict#.', '#best_conflict#, but #popular_conflict#.'] if summary['worst_conflict'] else 'The couple never clashed.',
         'best_exp': f"Their similar levels in {PROP_NAMES.get(summary['best_experience'])} facilitated a healthy growth in their relationship",
         'worst_conflict': f"their fights over their difference in {PROP_NAMES.get(summary['worst_conflict'])} were #bitter#",
         'best_conflict': f"The couple was proud of their ability to work through their differences in {PROP_NAMES.get(summary['best_conflict'])}",
@@ -412,7 +412,7 @@ def narrate_experience_system(event):
         {round(event['threshold'],2)}-{event['target_property']} experience.</p>""")
     if 'interest' in event:
         print(
-            f"""<p class='system'>activity proposed: {event['interest']}.
+            f"""<p class='system'>Activity proposed: {event['interest']}.
             {b['name']} interests: {', '.join(b['interests'])}.</p>
         """)
     print(
@@ -420,10 +420,12 @@ def narrate_experience_system(event):
         {round(b[event['target_property']],2)} and current concession damage 
         {round(b['concessions'][event['target_property']],2)}.
         Reluctance to accept invitation is {round(event['concession_roll'], 2)}.</p>""")
+        # how much you don't want to do the activity due to difference 
     print(
         f"""<p class='system'>{b['name']} with interest {round(b['interest'], 2)},
         commit {round(b['commit'], 2)}, agreeability {round(b['agree'], 2)}
         produces motivation to accept {round(event['agree_roll'], 2)}.</p>""")
+        # motivation is determined by other factors and can outweight reluctance
 
     if event['rejected']:
         print(
@@ -451,9 +453,14 @@ def narrate_experience(event, events):
         artifact = True
         print(artifacts.get_date_artifact(event, events, detail))
 
+    # openness activities can fall 3 different ways
+    # <.33 proposer suggests activity they like
+    # <.66 proposer suggest an activity that their partner likes
+    # < 1 proposer suggests any activity
+
     if event['target_property'] == 'open':
         rules = {
-            'origin': '<p>#hobby_proposal# #reply#</p>',
+            'origin': '<p>#hobby_proposal# #reply# #outcome# </p>',
             'mood': util.rank([
                 "Having a strong preference for what #they# wanted to do for date night,",
                 f"Having been obsessed with {event['interest']} more than ever lately,",
@@ -472,14 +479,32 @@ def narrate_experience(event, events):
                 f"#mood# #a# #proposed# {random.choice(INTERESTS[event['interest']]['verb'])} together."
             ],
             'response': util.rank([
-                "I'd love to!", "Sounds like fun!", "Yes, let's do it,", "Sure!", "Okay,", "Oh, okay,", "I guess so...", "Do we have to?", "You know I don't like that,"
+                "I'd love to!", "Sounds like fun!", "Yes, let's do it,", 
+                "Sure!", "Okay,", "Oh, okay,", "I guess so...", 
+                "Do we have to?", "You know I don't like that,"
             ], 1-event['delta']),
-            'reply': ['"#response#" #b# replied.']
+            'reply': ['"#response#" #b# replied.'],
+            'quality': util.rank([
+                'terrible', 'pretty bad', 'okay',
+                'decent', 'good',
+                'joyous', 'fantastic', 'outstanding'
+            ], event['delta']),
+            'verdict': util.rank([
+                '#b# would rather not spend their time like this in the future.',
+                'Perhaps, they should try something else next time.',
+                '#b# would consider doing a similar activity again.',
+                f'#b# enjoyed {b["themself"]}.',
+                '#b# could see the two of them doing this often.',
+                '#b# loved the date.'
+            ], 1 - event['concession_roll']),
+            'match': f"#b# loved {event['interest']}",
+            'outcome': "The two had a #quality# time. #verdict#"
         }
         rules.update(getInterestRules(a, b, event['interest']))
         grammar = tracery.Grammar(rules)
+        print(grammar.flatten('<p>#outcome#</p>'))
         if not detail:
-            print(grammar.flatten('#origin#'))
+            print(grammar.flatten('<p>#origin#</p>'))
         # logging.debug(
         #    f"OPEN EXPERIENCE {event['interest']} {event['threshold']} a: {a['open']} b: {b['open']}")
     elif event['target_property'] in ['extra', 'libido']:

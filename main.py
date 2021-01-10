@@ -33,6 +33,7 @@ protagonist = {
     'confidence': 0.7,
     'their': 'their',
     'they': 'they',
+    'themself': 'themself',
     'nickname': 'alex',
     'interests': random.sample(INTERESTS.keys(), random.randint(1, 3)),
     'hobbies': ''
@@ -52,10 +53,12 @@ def generate_person():
         they = "he"
         their = "his"
         them = "him"
+        themself = "himself"
     else:
         they = "she"
         their = "her"
         them = "her"
+        themself = "herself"
 
     name = names.get_first_name(gender=gender)
     personInterests = random.sample(INTERESTS.keys(), random.randint(1, 3))
@@ -76,6 +79,7 @@ def generate_person():
         'they': they,
         'their': their,
         'them': them,
+        'themself': themself,
         'nickname': artifacts.get_nickname(name),
         'interests': personInterests,
         'hobbies': personHobbies
