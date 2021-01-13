@@ -1,5 +1,6 @@
 import random
 import util
+from relationship import EventType
 import tracery
 from tracery.modifiers import base_english
 
@@ -10,9 +11,40 @@ from tracery.modifiers import base_english
 # Sylvan: could we get a protagonist argument in get_prologue? Or should that be handled elsewhere
 # I just think using protag's name in these strings could add better variation
 
-def get_initial_impressions(person):
+#only narrate during first event/date
+#event has a, b, target_property, threshold
+def narrate_interests(event, events):
+    
+    # check whether previous events contain a non-rejected experience
+    # if none found, this is the first date
+    # and we want to trigger the interests narration
+    prev_experiences = [e for e in events if e['type'] == EventType.EXPERIENCE and e['rejected'] == False]
+    
+    a, b = util.get_ab(event)
+    
+    person = event["person"]
+    
     rules = {
-        'origin': "#communication# #status# #hobbies#",
+        'origin': [f" #{event['target_property']}#, {person['name']} #shared# {' and '.join(person['interests'])}."],
+        'libido': util.rank([
+            "As they held hands", "While cuddling", "While laying in bed"
+        ], event["threshold"]),
+        'shared': ["was excited to tell Alex about", "talked a lot about", f"shared {person['their']} interest in"]
+    }
+   
+    if len(prev_experiences) == 0:
+         grammar = tracery.Grammar(rules)
+         grammar.add_modifiers(base_english)
+         print(grammar.flatten('#origin#'))
+
+    if len(prev_experiences) == 3:
+        get_first_impressions(person)
+
+    
+
+def get_first_impressions(person):
+    rules = {
+        'origin': "#status#",
         'communication': "#before# #medium# #frequently#.",
         'before': ["Before meeting up, #they#", "Leading up to their first date, #they#", "#they.capitalize#"],
         'they': ["the two", "they", f"Alex and {person['name']}"],
@@ -36,8 +68,7 @@ def get_initial_impressions(person):
             'well-versed in', 
             'experienced in'
         ], person['exp']),
-        'hobbies': f"{person['name']} #shared# {' and '.join(person['interests'])}.",
-        'shared': ["was excited to tell Alex about", "talked a lot about", f"shared {person['their']} interest in"]
+        
     }
     grammar = tracery.Grammar(rules)
     grammar.add_modifiers(base_english)

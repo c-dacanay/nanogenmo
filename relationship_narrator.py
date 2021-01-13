@@ -357,7 +357,6 @@ def narrate_meeting(event, events):
     print(text + random.choice(APPROACHES) + "" + "</p>")
 
     narrate_meeting_system(event)
-    prologue.get_initial_impressions(event['person'])
 
 
 def narrate_committed(events):
@@ -644,7 +643,7 @@ def narrate_experience(event, events):
         }
         print(tracery.Grammar(rules).flatten('#origin#'))
         # logging.debug(f"Event: {event}")
-
+    prologue.narrate_interests(event, events)
     narrate_experience_system(event)
 
 
