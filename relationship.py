@@ -498,7 +498,7 @@ class Relationship:
                 return {
                     'type': EventType.DEATH,
                     'protagonist': self.a,
-                    'person': sel,
+                    'person': self.b,
                     'phase': self.phase,
                     'delta': self.health * -1,
                 }

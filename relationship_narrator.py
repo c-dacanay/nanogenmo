@@ -527,9 +527,12 @@ def narrate_experience(event, events):
         # logging.debug(
         #    f"OPEN EXPERIENCE {event['interest']} {event['threshold']} a: {a['open']} b: {b['open']}")
     elif event['target_property'] in ['extra', 'libido']:
+        #compare the target_properties of the characters
+        #create boolean that asks if b > a
+        
         rules = {
             'origin':
-            f"#Onday# #{event['target_property']}#.",
+            f"#Onday# #{event['target_property']}#. #{event['target_property']}_response#",
             'day': ['day', 'morning', 'afternoon', 'evening'],
             'Onday': '#artifact#' if artifact else '#later#',
             'artifact': [
@@ -559,6 +562,8 @@ def narrate_experience(event, events):
                 'lay in bed together, holding hands',
                 'cuddled on the couch',
                 'shared a kiss',
+                'made out #vigorously# #location# together before parting ways',
+                'sneakily groped #b#\'s body #in_public#'
                 '#enjoyed# a steamy evening together',
                 '#enjoyed# an intensely passionate evening together',
             ], event['threshold']),
@@ -566,12 +571,21 @@ def narrate_experience(event, events):
                 'they', 'the couple', '#a# and #b#', 'the two of them',
                 'the pair'
             ],
-            'enjoyed':
-            util.rank([
+            'enjoyed': util.rank([
                 'spent', 'happily spent', 'enjoyed',
                 'excitedly spent', 'savored',
                 'reveled in', 'relished'
             ], event['delta']),
+            'vigorously': util.rank([
+                'awkwardly', 'briefly', '', 'passionately', 'vigorously'
+            ], event['delta']),
+            'location': [
+                "on the street", "outside #a#'s apartment", "on #b#'s doorstep", "in the back of the rideshare", 
+                "outside the subway", 
+            ],
+            'in_public': [
+                "while walking down the street", "while waiting in line at checkout"
+            ]
             'a':
             a['name'],
             'b':
