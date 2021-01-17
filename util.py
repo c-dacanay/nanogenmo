@@ -39,14 +39,15 @@ def joiner(val):
         "and"
     ], val)
 
-def oxford_comma(list):
+def oxford_comma(list, conj):
+    assert conj == "and" or conj == "or"
     if len(list) == 0:
         return ''
     if len(list) == 1:
         return list[0]
     if len(list) == 2:
-        return list[0] + ' and ' + list[1]
-    return ', '.join(list[:-1]) + ', and ' + list[-1]
+        return list[0] + f' {conj} ' + list[1]
+    return ', '.join(list[:-1]) + f', {conj} ' + list[-1]
 
 def adverb(val):
     return rank([

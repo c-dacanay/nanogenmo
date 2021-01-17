@@ -2,7 +2,7 @@ import tracery
 import humanize
 import random
 import business_gen
-from util import get_ab
+from util import get_ab, oxford_comma
 import util
 import logging
 import artifacts
@@ -15,7 +15,7 @@ def get_problem(a, b, target_p):
             'open': [
                 'was never interested in doing what #a# wanted to do',
                 'never wanted to try new things',
-                f"only wanted to do activities related to {' or '.join(b['interests'])}; only things #b# liked to do",
+                f"only wanted to do activities related to {oxford_comma(b['interests'], conj = 'or')}; only things #b# liked to do",
                 'was too boring',
             ],
             'extra': [
