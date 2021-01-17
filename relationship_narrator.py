@@ -203,7 +203,7 @@ def narrate_commit(event, events):
         rules = {
             'courting_phase': [
                 "#a# continued to use dating apps from time to time. ",
-                "#a# considered about sending #b# a message, but decided not to. ",
+                "#a# considered sending #b# a message, but decided not to. ",
                 "#a# noticed a message from #b#. #a# ignored it. ",
                 "#b# had yet to meet most of #a#'s friends. ",
             ],
@@ -418,7 +418,7 @@ def narrate_rejection(event, events):
     if event.get('phase') == Phase.COURTING and random.random() < 0.6:
         print(artifacts.get_date_artifact(event, events, True))
     else:
-        print(tracery.Grammar(rules).flatten('#origin#'))
+        print(tracery.Grammar(rules).flatten('<p>#origin#</p>'))
     return
 
 
@@ -509,7 +509,7 @@ def narrate_experience(event, events):
             ], event['delta']),
             'verdict': util.rank([
                 '#b# would rather not spend their time like this in the future.',
-                'Perhaps, they should try something else next time.',
+                'Perhaps, they could try something else next time.',
                 '#b# would consider doing a similar activity again.',
                 f'#b# enjoyed {b["themself"]}.',
                 '#b# could see the two of them doing this often.',
@@ -557,8 +557,9 @@ def narrate_experience(event, events):
             util.rank([
                 'lay in bed together, but without touching',
                 'lay in bed together, holding hands',
+                'cuddled on the couch',
                 'shared a kiss',
-                '#enjoyed# a passionate evening together',
+                '#enjoyed# a steamy evening together',
                 '#enjoyed# an intensely passionate evening together',
             ], event['threshold']),
             'they': [
@@ -610,7 +611,7 @@ def narrate_experience(event, events):
                 '#a# went shopping and purchased a daily planner.',
                 '#a# stayed late at work.',
                 '#a# spent the #day# #cleaning# the apartment.',
-                '#a# spent the #day #cleaning# the apartment. It was moderately dusty.',
+                '#a# spent the #day# #cleaning# the apartment. It was moderately dusty.',
                 '#a# spent the #day# #cleaning# the bathroom. It certainly was in need of some attention.',
             ], event['threshold']),
             'exp': util.rank([

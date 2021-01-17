@@ -5,12 +5,14 @@ import random
 # take a person's hobby and generate a hobby event
 
 
-def getInterestRules(a, b, interest):
+def getInterestRules(a, b, interest, pov = 3):
+
     rules = {
         'a': a['name'],
-        'b': b['name'],
-        'their': a['their'],
-        'they': a['they'],
+        '#a_posses': 'my' if pov == 1 else f'{a["name"]}\'s',
+        'b': 'you' if pov == 1 else b['name'],
+        'their': 'my' if pov == 1 else a['their'],
+        'they': 'I' if pov == 1 else a['they'],
         # 'their_hobby': f"{a['hobbies']
         'hobby': [f"{random.choice(INTERESTS[interest]['hobbies'])}"],
         # types of classes
@@ -40,19 +42,19 @@ INTERESTS = {
         'verb': ["watch #hobby# replays on Youtube", "watch the game at a bar"],
         'solo': ["watching the game", "thinking about how he could improve his #hobby# game", "getting ready for #hobby# practice"]
     },
-    'outdoors': {
+    'the outdoors': {
         'hobbies': ["camping", "hiking", "rock climbing", "backpacking", "canoeing", "rappelling", "caving", "hiking", "mountainbiking", "kayaking", "rafting"],
         'location': ["the state park", "a hiking trail", "the outdoor gear shop"],
         'verb': ["get out of the city", "go on a #hobby# trip"],
         'solo': ["planning for #their# next #hobby# trip", "#hobby#"]
     },
-    'husbandry': {
+    'plants and animals': {
         'hobbies': ["bonsai", "fostering animals", "birdwatching", "beekeeping", "composting", "vegetable gardening", "houseplants"],
         'location': ["the botanic garden", "the farmer's market", "the park", "the animal shelter", "the cat cafe", "the dog park", "a nearby garden center"],
         'verb': ["volunteer at the animal shelter", "go WWOOFing"],
         'solo': ["working a shift at the animal shelter", "birdwatching", "tending to #their# plants", "gardening", "repotting a plant"]
     },
-    'food and drink': {
+    'food': {
         'hobbies': ["bartending", "competitive eating", "beer", "wine", "coffee", "cocktails", "grilling", "cheese", "cooking", "baking", "tea", "bread", "kombucha"],
         'location': ["a winery", "a restaurant that just opened", "a #food_class# class"],
         'verb': ["cook dinner", "try a new recipe", "make fancy cocktails"],
@@ -61,14 +63,14 @@ INTERESTS = {
     'music': {
         # plays instrument, listening to #music-genre#]
         'hobbies': ["composition", "DJing", "singing", "beat boxing", "audio-tech"],
-        'location': ["a concert", "a music store", "a music festival", "the record shop", "#a#'s next show", "a songwriting class"],
+        'location': ["a concert", "a music store", "a music festival", "the record shop", "#a_posses# next show", "a songwriting class"],
         'verb': ["listen to an album #they# recently discovered"],
         'solo': ["practicing the #instrument#", "listening to music", "making beats", "recording a song", "browsing new music", "writing a song"]
     },
     'gaming': {
         'hobbies': ["arcade games", "card games", "board games", "video games", "roleplaying games"],
-        'location': ["boardgame cafe", "a boardgame meet up", "a LAN party", "a game night at #a#'s friend's house", "a barcade"],
-        'verb': ["play #game_type# game", "watch a Twitch stream", "learn #a#'s favorite game"],
+        'location': ["boardgame cafe", "a boardgame meet up", "a LAN party", "a game night at #a_posses# friend's house", "a barcade"],
+        'verb': ["play #game_type# game", "watch a Twitch stream", "learn #a_posses# favorite game"],
         'solo': ["gaming online", "playing a videogame", "watching a Twitch stream"]
     },
     'performing arts': {

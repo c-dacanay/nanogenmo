@@ -259,7 +259,8 @@ def get_date_artifact(event, events, detail):
             'We could do something chill',
             'Lets go out somewhere?',
             'We could go out!!',
-        ], event['threshold']), 'libido': util.rank([
+        ], event['threshold']), 
+        'libido': util.rank([
             'But lets not jump right into bed?',
             'I cant stay over tonight though',
             "Id be interested in getting to know you better! #e#",
@@ -281,7 +282,7 @@ def get_date_artifact(event, events, detail):
         ], event['concession']),
     }
     if 'interest' in event:
-        rules.update(getInterestRules(a, b, event['interest']))
+        rules.update(getInterestRules(a, b, event['interest'], pov=1))
     grammar = tracery.Grammar(rules)
     return grammar.flatten("#origin#\n")
 

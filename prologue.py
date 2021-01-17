@@ -16,7 +16,7 @@ from tracery.modifiers import base_english
 def narrate_interests(event, events):
     
     # check whether previous events contain a non-rejected experience
-    # if none found, this is the first date
+    # if none found, this is the first d    ate
     # and we want to trigger the interests narration
     prev_experiences = [e for e in events if e['type'] == EventType.EXPERIENCE and e['phase'] == Phase.COURTING and e['rejected'] == False]
     
@@ -25,20 +25,25 @@ def narrate_interests(event, events):
     person = event["person"]
     
     rules = {
-        'origin': [f" #{event['target_property']}#, {person['name']} #shared# {' and '.join(person['interests'])}."],
+        'origin': [f"#{event['target_property']}#, {person['name']} #shared# #interests#."],
+        'interests': f"{util.oxford_comma(person['interests'])}",
         'libido': util.rank([
             "As they held hands", "While cuddling", "While laying in bed"
         ], event["threshold"]),
         'extra': util.rank([
             "While they hung out", "Throughout the evening", "All night"
         ], event["threshold"]),
-        'shared': ["was excited to tell Alex about", "talked a lot about", f"shared {person['their']} interest in"]
+        'open': [
+            "While on their date"
+        ],
+        'shared': ["was excited to tell Alex about", "talked a lot about", "gushed about", f"shared {person['their']} interest in"]
     }
    
-    if len(prev_experiences) == 0:
+    if len(prev_experiences) == 0 and event['phase'] == Phase.COURTING:
          grammar = tracery.Grammar(rules)
          grammar.add_modifiers(base_english)
          print(grammar.flatten('#origin#'))
+         print(f"""<p class='system'>{event['phase']}</p>""")
 
     if len(prev_experiences) == 3:
         get_first_impressions(person)
@@ -115,7 +120,7 @@ def get_partner_description(person):
         'open': util.rank([
             "could not be convinced to try new food when they ate out together",
             "cautious in nature, hating surprises",
-            "a creature of habit, inflexible but reliable,",
+            "a creature of habit, inflexible but reliable",
             "usually stuck to what felt comfortable",
             "enjoyed trying new things occasionally",
             "constantly sought new hobbies and experiences",
