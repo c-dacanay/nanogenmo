@@ -520,9 +520,10 @@ def narrate_experience(event, events):
         }
         rules.update(getInterestRules(a, b, event['interest']))
         grammar = tracery.Grammar(rules)
-        print(grammar.flatten('<p>#outcome#</p>'))
         if not detail:
             print(grammar.flatten('<p>#origin#</p>'))
+        else:
+            print(grammar.flatten('<p>#outcome#</p>'))
         # logging.debug(
         #    f"OPEN EXPERIENCE {event['interest']} {event['threshold']} a: {a['open']} b: {b['open']}")
     elif event['target_property'] in ['extra', 'libido']:
@@ -619,13 +620,13 @@ def narrate_experience(event, events):
                 f'#a# suggested that they enact weekly relationship check-ins. #b# agreed happily.'
             ], event['threshold']),
             'neuro': util.rank([
-                '#a# fretted. #a# had not heard from #b# for a couple days.',
                 '#b# had a night out with friends planned. #a# was happy to pass the evening doing other things.',
                 '#b# had not responded to #a#\'s text messages for a few hours. #a# sent a followup.',
-                f'#a# worried when #b# said that {a["they"]} sometimes preferred to be alone.',
-                '#a# worried that #b# did not actually find them to be attractive. '
+                '#a# fretted. #a# had not heard from #b# for a couple days.',
+                f'#a# worried when #b# said that {b["they"]} sometimes preferred to be alone.',
+                '#a# worried that #b# did not actually find them to be attractive.'
                 '#b# kept a journal of how long it took for #a# to text them back.',
-                '#a# worried that #b# would leave them some day soon. ',
+                '#a# worried that #b# would leave them some day soon.',
             ], event['threshold']),
             'cleaning': ['tidying', 'cleaning', 'organizing'],
             'day': ['day', 'morning', 'afternoon', 'evening'],
