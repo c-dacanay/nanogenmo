@@ -102,26 +102,26 @@ class Relationship:
         self.a = a
         self.b = b
         self.a['concessions'] = {
-            'open': 0.01,
-            'extra': 0.01,
-            'libido': 0.01,
-            'commit': 0.01,
-            'con': 0.01,
-            'hot': 0.01,
-            'neuro': 0.01,
-            'agree': 0.01,
-            'exp': 0.01,
+            'open': 0,
+            'extra': 0,
+            'libido': 0,
+            'commit': 0,
+            'con': 0,
+            'hot': 0,
+            'neuro': 0,
+            'agree': 0,
+            'exp': 0,
         }
         self.b['concessions'] = {
-            'open': 0.01,
-            'extra': 0.01,
-            'libido': 0.01,
-            'commit': 0.01,
-            'con': 0.01,
-            'hot': 0.01,
-            'neuro': 0.01,
-            'agree': 0.01,
-            'exp': 0.01,
+            'open': 0,
+            'extra': 0,
+            'libido': 0,
+            'commit': 0,
+            'con': 0,
+            'hot': 0,
+            'neuro': 0,
+            'agree': 0,
+            'exp': 0,
         }
 
     def simulate_experience(self):
@@ -144,7 +144,7 @@ class Relationship:
         if binary_roll([a['interest'], a['commit']]):
             PHASE_EXPERIENCE_TYPES = {
                 Phase.COURTING: ['open', 'extra', 'libido'],
-                #no neuro events currently
+                # no neuro events currently
                 Phase.DATING: ['open', 'extra', 'libido', 'con', 'exp'],
                 Phase.COMMITTED:
                 ['open', 'extra', 'libido', 'hot', 'con', 'exp', 'commit'],
@@ -262,11 +262,19 @@ class Relationship:
             'protagonist_initiated': a == self.a
         }
 
+        total_concession = sum(a['concessions'].values())
+        # Don't fight if there's nothing to fight about,
+        # this will really only apply for the very first event
+        # in the relationship
+        if total_concession == 0:
+            return self.simulate_nothing()
+
         # A chooses a thing to conflict about. Weighted sample based on concession damage,
         # so A more likely to choose 'libido' if a high level of existing libido concession.
         target_property = random.choices(
             population=list(a['concessions'].keys()),
-            weights=list(a['concessions'].values()))[0]
+            weights=list(a['concessions'].values())
+        )[0]
 
         e['target_property'] = target_property
 
@@ -490,7 +498,7 @@ class Relationship:
                 return {
                     'type': EventType.DEATH,
                     'protagonist': self.a,
-                    'person': self.b,
+                    'person': sel,
                     'phase': self.phase,
                     'delta': self.health * -1,
                 }

@@ -230,7 +230,7 @@ def narrate_commit(event, events):
 def narrate_commit_system(event):
     a, b = get_ab(event)
     print(
-        f"""<p class='system'>Current relationship health of {round(event['health'], 2)} exceeds threshold of {event['health_threshold']} and last event improved relationship health over 0.4.</p>"""
+        f"""<p class='system'>Current relationship health of {round(event['health'] - event['delta'], 2)} exceeds threshold of {event['health_threshold']} and last event improved relationship health over 0.4.</p>"""
     )
     print(
         f"""<p class='system'>
