@@ -28,7 +28,8 @@ def narrate_interests(event, events):
         'origin': [f"#{event['target_property']}#, {person['name']} #shared# #interests#."],
         'interests': f"{util.oxford_comma(person['interests'], conj = 'and')}",
         'libido': util.rank([
-            "As they held hands", "While cuddling", "While laying in bed"
+            "As they held hands", "While cuddling", "Later", "After they cooled down", 
+            "Later", "While laying in bed", "With their faces pressed together"
         ], event["threshold"]),
         'extra': util.rank([
             "While they hung out", "Throughout the evening", "All night" 
