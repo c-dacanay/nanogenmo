@@ -1,0 +1,7 @@
+.DS_Store
+.venv/*
+__pycache__/*
+
+html/[0-9].html
+html/[0-9][0-9].html
+html/[0-9][0-9][0-9].html
