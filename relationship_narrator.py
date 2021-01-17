@@ -471,6 +471,10 @@ def narrate_experience(event, events):
         detail = random.random() < 0.5
         print(artifacts.get_date_artifact(event, events, detail))
 
+    # compare the target_properties of the characters
+    # create boolean that asks if b > a
+    b_greaterthan_a = b[event['target_property']] > a[event['target_property']]
+
     # openness activities can fall 3 different ways
     # <.33 proposer suggests activity they like
     # <.66 proposer suggest an activity that their partner likes
@@ -527,12 +531,9 @@ def narrate_experience(event, events):
         # logging.debug(
         #    f"OPEN EXPERIENCE {event['interest']} {event['threshold']} a: {a['open']} b: {b['open']}")
     elif event['target_property'] in ['extra', 'libido']:
-        #compare the target_properties of the characters
-        #create boolean that asks if b > a
-        
         rules = {
             'origin':
-            f"#Onday# #{event['target_property']}#. #{event['target_property']}_response#",
+            f"#Onday# #{event['target_property']}#. #{event['target_property']}_{b_greaterthan_a}_response#.",
             'day': ['day', 'morning', 'afternoon', 'evening'],
             'Onday': '#artifact#' if artifact else '#later#',
             'artifact': [
@@ -551,18 +552,17 @@ def narrate_experience(event, events):
                 '#enjoyed# a tranquil #day# watching Youtube videos',
                 '#enjoyed# a tranquil #day# watching a movie',
                 '#enjoyed# a quiet #day# reading together',
-                '#enjoyed# a night out together at the bar',
-                '#enjoyed# a #day# hanging out with friends',
                 '#enjoyed# a #day# of people-watching',
+                '#enjoyed# a #day# hanging out with friends',
+                '#enjoyed# a night out together at the bar',
                 '#enjoyed# a night out at the club',
             ], event['threshold']),
             'libido':
             util.rank([
-                'lay in bed together, but without touching',
-                'lay in bed together, holding hands',
+                'held hands',
                 'cuddled on the couch',
                 'shared a kiss',
-                'made out #vigorously# #location# together before parting ways',
+                'made out #vigorously# #location# upon seeing each other',
                 'sneakily groped #b#\'s body #in_public#'
                 '#enjoyed# a steamy evening together',
                 '#enjoyed# an intensely passionate evening together',
@@ -580,16 +580,52 @@ def narrate_experience(event, events):
                 'awkwardly', 'briefly', '', 'passionately', 'vigorously'
             ], event['delta']),
             'location': [
-                "on the street", "outside #a#'s apartment", "on #b#'s doorstep", "in the back of the rideshare", 
-                "outside the subway", 
+                "on the street", "outside #a#'s apartment", "on #b#'s doorstep", "in the back of the rideshare",
+                "outside the subway",
             ],
             'in_public': [
                 "while walking down the street", "while waiting in line at checkout"
-            ]
-            'a':
-            a['name'],
-            'b':
-            b['name'],
+            ],
+            # if B has higher libido than A:
+            'libido_True_response': util.rank([
+                '#b# was enraptured',
+                '#b# sighed with pleasure',
+                '#b# smiled coyly',
+                f'"How nice", #b# thought to {b["themself"]}',
+                '#b# was left wanting more',
+                '#b# wanted to go further, but #a# pulled away',
+                '#b# excitedly attempted to push things further, but #a# pulled away',
+                '#b# was left to take care of their needs alone',
+            ], event['concession']),
+            'libido_False_response': util.rank([
+                '#b# gasped with excitement',
+                '#b# sighed with pleasure',
+                '#b# smiled coyly',
+                f'"How nice", #b# thought to {b["themself"]}',
+                '#b# felt a little uncomfortable with how fast things were moving',
+                '#b# felt that #a# was pushing things further than #b# would have liked',
+                '#a# sure loved getting it on! #b# sighed',
+                f'#b# wanted to pushed #a# away. "There\'s more to me than my body," #b# thought to {b["themself"]}'
+            ], event['concession']),
+            # b has higher extra
+            'extra_True_response': util.rank([
+                '#b# loved hanging out with #a# this way',
+                '#b# was happy to hang out with #a# this way',
+                'while #b# enjoyed #a#\'s company, #b# yearned for a more lively social experience',
+                '#b# felt that it was a little bit boring',
+                '#b# felt the urge to fill the silence with conversation',
+                '#b# wished they had gone out to a more lively environment',
+            ], event['concession']),
+            'extra_False_response': util.rank([
+                '#b# loved hanging out with #a# this way',
+                '#b# was quiet, but happy to hang out with #a# this way',
+                'while #b# enjoyed #a#\'s company, #b# yearned for a quieter social experience',
+                f'#b# felt a bit awkward. "What should I be doing with my hands?" #b# thought to {b["themself"]}',
+                'After a few hours, #b# was spent and made excuses to head home',
+                '#b# collapsed on arriving home. How exhausting',
+            ], event['concession']),
+            'a': a['name'],
+            'b': b['name'],
         }
         grammar = tracery.Grammar(rules)
         grammar.add_modifiers(base_english)
