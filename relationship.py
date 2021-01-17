@@ -89,7 +89,7 @@ PHASE_SCORE_THRESHOLDS = {
 def get_interest(a, b):
     # Function describing how interested a is in b
     d_hotness = b['hot'] * b['hot'] / a['hot']
-    return util.clamp(random.gauss(d_hotness, 0.1), 0, 1)
+    return util.clamp(random.gauss(d_hotness, 0.1), 0.0, 1.0)
 
 
 class Relationship:
