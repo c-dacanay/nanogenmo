@@ -282,7 +282,7 @@ def narrate_meeting_system(event):
             </p>""")
         print(f"""
             <p class='system'>{b['name']} with interest
-            {round(a['interest'], 2)} responds with
+            {round(b['interest'], 2)} responds with
             {round(event['delta'], 2)} enthusiasm.
             </p>""")
         if (event['delta'] > 0):
@@ -437,12 +437,12 @@ def narrate_experience_system(event):
         {round(b[event['target_property']],2)} and current concession damage
         {round(b['concessions'][event['target_property']],2)}.
         Reluctance to accept invitation is {round(event['concession_roll'], 2)}.</p>""")
-        # how much you don't want to do the activity due to difference 
+    # how much you don't want to do the activity due to difference
     print(
         f"""<p class='system'>{b['name']} with interest {round(b['interest'], 2)},
         commit {round(b['commit'], 2)}, agreeability {round(b['agree'], 2)}
         produces motivation to accept {round(event['agree_roll'], 2)}.</p>""")
-        # motivation is determined by other factors and can outweight reluctance
+    # motivation is determined by other factors and can outweight reluctance
 
     if event['rejected']:
         print(
@@ -497,8 +497,8 @@ def narrate_experience(event, events):
                 f"#mood# #a# #proposed# {random.choice(INTERESTS[event['interest']]['verb'])} together."
             ],
             'response': util.rank([
-                "I'd love to!", "Sounds like fun!", "Yes, let's do it,", 
-                "Sure!", "Okay,", "Oh, okay,", "I guess so...", 
+                "I'd love to!", "Sounds like fun!", "Yes, let's do it,",
+                "Sure!", "Okay,", "Oh, okay,", "I guess so...",
                 "Do we have to?", "You know I don't like that,"
             ], 1-event['delta']),
             'reply': ['"#response#" #b# replied.'],
