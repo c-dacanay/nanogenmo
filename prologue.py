@@ -1,6 +1,6 @@
 import random
 import util
-from relationship import EventType
+from relationship import EventType, Phase
 import tracery
 from tracery.modifiers import base_english
 
@@ -18,7 +18,7 @@ def narrate_interests(event, events):
     # check whether previous events contain a non-rejected experience
     # if none found, this is the first date
     # and we want to trigger the interests narration
-    prev_experiences = [e for e in events if e['type'] == EventType.EXPERIENCE and e['rejected'] == False]
+    prev_experiences = [e for e in events if e['type'] == EventType.EXPERIENCE and e['phase'] == Phase.COURTING and e['rejected'] == False]
     
     a, b = util.get_ab(event)
     
@@ -28,6 +28,9 @@ def narrate_interests(event, events):
         'origin': [f" #{event['target_property']}#, {person['name']} #shared# {' and '.join(person['interests'])}."],
         'libido': util.rank([
             "As they held hands", "While cuddling", "While laying in bed"
+        ], event["threshold"]),
+        'extra': util.rank([
+            "While they hung out", "Throughout the evening", "All night"
         ], event["threshold"]),
         'shared': ["was excited to tell Alex about", "talked a lot about", f"shared {person['their']} interest in"]
     }
@@ -50,8 +53,9 @@ def get_first_impressions(person):
         'they': ["the two", "they", f"Alex and {person['name']}"],
         'medium': ["texted", "exchanged messages", "chatted", "called", "video-called"],
         'frequently': ["a lot", "a few times", "incessantly", "once"],
-        'status': f"Alex #gathered# that {person['name']} was #exp# romantic relationships. With Alex, {person['they']} seemed to #commit#.",
-        'gathered': ["could gather", "sensed", "was told"],
+        'status': f"#over_time#, Alex #gathered# that {person['name']} was #exp# romantic relationships. With Alex, {person['they']} seemed to #commit#.",
+        'over_time': ["After a couple dates", "The more they talked", "As they got to know each other better"],
+        'gathered': ["could gather", "sensed", "realized", "felt"],
         'commit': util.rank([
             'want something casual', 
             'be up for anything', 
@@ -68,7 +72,7 @@ def get_first_impressions(person):
             'well-versed in', 
             'experienced in'
         ], person['exp']),
-        
+
     }
     grammar = tracery.Grammar(rules)
     grammar.add_modifiers(base_english)
