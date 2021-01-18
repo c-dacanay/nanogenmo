@@ -2,6 +2,6 @@
 .venv/*
 __pycache__/*
 
-html/[0-9].html
-html/[0-9][0-9].html
-html/[0-9][0-9][0-9].html
+docs/[0-9].html
+docs/[0-9][0-9].html
+docs/[0-9][0-9][0-9].html
