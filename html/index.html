@@ -21,9 +21,9 @@
       </p>
   </div>
     <p>Alex is just an average person looking for love. Can a series of computationally simulated relationships help Alex find what they're looking for?</p>
-    <p>A.L.E.X 1.0: A Loving EXploration is a generated novel about missed connetions, rules of attraction, and how relationships last and fizzle.</p>
+    <p>A.L.E.X 1.0: A Loving EXploration is a generated novel about missed connections, rules of attraction, and how relationships last and fizzle.</p>
 
-    <a href="/html/0.html"><h2>begin</h2></a>
+    <a href="/0.html"><h2>begin</h2></a>
   <h4>credits</h4>
   <p>A.L.E.X was made with 😘 👀 🔥 💦 🍑 by <br>
   <a href="http://cdacanay.com/">Christina Dacanay</a>, <a href="https://emilyzhaoblog.wordpress.com/">Emily Zhao</a>, and <a href="http://squidgetx.github.io/">Sylvan Zheng</a></p>
@@ -36,58 +36,5 @@
     <object type="text/html" id="page" data="0.html" width="100%" height="100%"></object>
   </div>
 
-<script>
-let info = document.getElementById("info")
-let bar = document.getElementById("bar")
-let begin = document.getElementById("startstory")
-let story = document.getElementById("story")
-
-let testing = false;
-console.log(sys)
-if (testing) {
-  info.style.display = "none"
-  bar.style.display = "inline-block"
-  story.style.display = "flex"
-}
-
-begin.addEventListener("click", () => {
-  info.style.display = "none"
-  bar.style.display = "inline-block"
-  story.style.display = "flex"
-  // if we want a toc on the website we can put it here in the bar innerhtml
-})
-
-page.addEventListener("load", () => {
-  applyDebugStyle()
-})
-
-function applyDebugStyle() {
-  let style = document.createElement('style');
-
-  if (hideDebug) {
-    console.log(sys)
-    debug.innerHTML = "Show debug 😛"
-    sys.style.display = "none"
-    // style.textContent =
-    //   '.system {' +
-    //   '  display: none' +
-    //   '}' 
-  } else {
-    debug.innerHTML = "Hide debug 🥵"
-    sys.style.display = "block"
-    // style.textContent =
-    //   '.system {' +
-    //   '  display: block' +
-    //   '}' 
-  } 
-  page.contentDocument.head.appendChild(style);
-}
-
-debug.addEventListener("click", () => {
-  // this is so fuckin hacky lmao
-  hideDebug = !hideDebug;
-  applyDebugStyle()
-})
-</script>
 </body>
 </html>
