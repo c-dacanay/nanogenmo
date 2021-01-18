@@ -293,4 +293,9 @@ def get_reflection(a, b, reflection):
             ]
         }
 
-        return random.choice(PROP_CHANGE[reflection['prop']])
+        changeStatement = random.choice(PROP_CHANGE[reflection['prop']])
+        rules = {
+            'origin': changeStatement,
+            'might': ['could be', 'were', 'might be', 'were just', 'had been'],
+        }
+        return tracery.Grammar(rules).flatten('#origin#')
