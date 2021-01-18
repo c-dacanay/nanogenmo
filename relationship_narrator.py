@@ -563,7 +563,7 @@ def narrate_experience(event, events):
                 'cuddled on the couch',
                 'shared a kiss',
                 'made out #vigorously# #location# upon seeing each other',
-                'sneakily groped #b#\'s body #in_public#'
+                'sneakily groped each other #in_public#',
                 '#enjoyed# a steamy evening together',
                 '#enjoyed# an intensely passionate evening together',
             ], event['threshold']),
@@ -611,7 +611,7 @@ def narrate_experience(event, events):
             'extra_True_response': util.rank([
                 '#b# loved hanging out with #a# this way',
                 '#b# was happy to hang out with #a# this way',
-                'while #b# enjoyed #a#\'s company, #b# yearned for a more lively social experience',
+                'While #b# enjoyed #a#\'s company, #b# yearned for a more lively social experience',
                 '#b# felt that it was a little bit boring',
                 '#b# felt the urge to fill the silence with conversation',
                 '#b# wished they had gone out to a more lively environment',
