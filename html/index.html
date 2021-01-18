@@ -12,17 +12,18 @@
   <div id="info">
   <h4>alex 1.0: a loving exploration</h4>
 
-    <div class="message_b">
+    <div class="message_a">
       <p class='msg_header'>
           <span class='user'>alex</span>
       </p>
-      <p class="message from_b">
+      <p class="message from_a">
           Hey, I think we should check in later.
       </p>
   </div>
     <p>Alex is just an average person looking for love. Can a series of computationally simulated relationships help Alex find what they're looking for?</p>
     <p>A.L.E.X 1.0: A Loving EXploration is a generated novel about missed connetions, rules of attraction, and how relationships last and fizzle.</p>
-    <h2 id="startstory">begin</h2>
+
+    <a href="/html/0.html"><h2>begin</h2></a>
   <h4>credits</h4>
   <p>A.L.E.X was made with 😘 👀 🔥 💦 🍑 by <br>
   <a href="http://cdacanay.com/">Christina Dacanay</a>, <a href="https://emilyzhaoblog.wordpress.com/">Emily Zhao</a>, and <a href="http://squidgetx.github.io/">Sylvan Zheng</a></p>
@@ -31,14 +32,6 @@
   </div>
 </div>
 
-  <div id="bar">
-    <h4><a href='/'>ALEX 1.0</a></h4>
-    <h5 id="debug">Show debug 😛</h5>
-
-    <a href="process.html">about A.L.E.X</a><br>
-    <a href="https://github.com/c-dacanay/nanogenmo">github</a>
-    <div id="toc"></div>
-  </div>
   <div id="story">
     <object type="text/html" id="page" data="0.html" width="100%" height="100%"></object>
   </div>
@@ -48,13 +41,9 @@ let info = document.getElementById("info")
 let bar = document.getElementById("bar")
 let begin = document.getElementById("startstory")
 let story = document.getElementById("story")
-let debug = document.getElementById("debug")
-let page = document.getElementById("page")
-let sys = document.getElementsByClassName("system")
 
 let testing = false;
-let hideDebug = false;
-
+console.log(sys)
 if (testing) {
   info.style.display = "none"
   bar.style.display = "inline-block"
@@ -74,18 +63,22 @@ page.addEventListener("load", () => {
 
 function applyDebugStyle() {
   let style = document.createElement('style');
+
   if (hideDebug) {
+    console.log(sys)
     debug.innerHTML = "Show debug 😛"
-    style.textContent =
-      '.system {' +
-      '  display: none' +
-      '}' 
+    sys.style.display = "none"
+    // style.textContent =
+    //   '.system {' +
+    //   '  display: none' +
+    //   '}' 
   } else {
     debug.innerHTML = "Hide debug 🥵"
-    style.textContent =
-      '.system {' +
-      '  display: block' +
-      '}' 
+    sys.style.display = "block"
+    // style.textContent =
+    //   '.system {' +
+    //   '  display: block' +
+    //   '}' 
   } 
   page.contentDocument.head.appendChild(style);
 }

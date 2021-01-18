@@ -117,9 +117,17 @@ def generate_book(num):
 
         # Print HTML closing tags
         print(f'''
-                    <p><a href="{i+1}.html">Next</a></p>
+                <p><a href="{i+1}.html">Next</a></p>
                 </div>
                 </div>
+                <div id="bar">
+                <h4><a href='/'>ALEX 1.0</a></h4>
+                <h5 id="debug">Hide debug 🥵</h5>
+                <a href="process.html">about A.L.E.X</a><br>
+                <a href="https://github.com/c-dacanay/nanogenmo"><img id="github" src="https://image.flaticon.com/icons/png/512/25/25231.png" width="20" height="20"></a>
+                <div id="toc"></div>
+                </div>
+                <script src="script.js"></script>
             </body>
         </html>
         ''')

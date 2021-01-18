@@ -46,12 +46,12 @@ a,
 }
 
 #debug {
-  color: #248bf5;
+  color: red;
   text-transform: uppercase;
 }
 
 #debug:hover {
-  color: red;
+  color: 248bf5;
   cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='32' height='32' viewport='0 0 100 100' style='fill:black;font-size:19px;'><text y='50%'>💖</text></svg>")
       16 0,
     auto;
@@ -60,6 +60,13 @@ a,
 img {
   width: 100%;
 }
+
+#github {
+  width: 20px;
+  height: 20px;
+  padding-top: 10px;
+}
+
 #startstory:hover {
   cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='32' height='32' viewport='0 0 100 100' style='fill:black;font-size:19px;'><text y='50%'>😍</text></svg>")
       16 0,
@@ -83,7 +90,7 @@ a:hover {
 }
 
 #bar {
-  display: none;
+  display: inline-block;
   position: absolute;
   z-index: 10;
   width: 10%;
@@ -116,26 +123,6 @@ a:hover {
 #container {
   text-align: center;
 }
-
-/* Process styling */
-/* .output {
-  font-size: 0.8em;
-  margin: 0.5em;
-  display: inline-flex;
-  flex-direction: column;
-  width: 280px;
-  color: #666;
-}
-
-.code {
-  font-family: "Roboto Mono", monospace;
-  font-size: 0.65em;
-  display: inline-flex;
-  flex-direction: column;
-  width: 280px;
-  margin: 0.5em;
-  color: #248bf5;
-} */
 
 /* Artifact styling */
 
@@ -209,7 +196,7 @@ a:hover {
 
 .system {
   margin-left: 1em;
-  display: none;
+  display: block;
   color: #777;
   font-size: 0.8em;
   font-family: "Inconsolata", Courier, monospace;
