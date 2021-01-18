@@ -63,7 +63,7 @@ def generate_person():
     name = names.get_first_name(gender=gender)
     personInterests = random.sample(INTERESTS.keys(), random.randint(1, 3))
     personHobbies = getHobbies(personInterests)
-    
+
     return {
         "name": name,
         "hot": random.random(),
@@ -100,9 +100,10 @@ def generate_book(num):
                 <body>
                     <div id='container'>
                     <div id='wrapper'>
-            ''')
+            '''
+              )
 
-        print(f'<h1>Chapter {str(i + 1)}</h1>')
+        print(f'<h4>Chapter {str(i + 1)}</h4>')
 
         new_person = generate_person()
         r = Relationship(protagonist, new_person, date)
@@ -112,7 +113,7 @@ def generate_book(num):
         relationship_narrator.narrate(r)
 
         if (r.phase == Phase.COURTING and random.random() < 0.5) or (r.phase == Phase.DATING):
-            print(f'<h2>Chapter {str(i + 1.5)}</h2>')
+            print(f'<h4>Chapter {str(i + 1.5)}</h4>')
             print(epilogue.get_epilogue(r, date))
 
         # Print HTML closing tags
@@ -122,8 +123,9 @@ def generate_book(num):
                 </div>
                 <div id="bar">
                 <h5 id="debug">Hide debug 🥵</h5>
-                <h4><a href='/'>A.L.E.X 1.0</a></h4>
-                <a href="process.html">about A.L.E.X</a><br>
+                <h4>ALEX 1.0</h4>
+                <a href="/">home</a><br>
+                <a href="process.html">about</a><br>
                 <a href="https://github.com/c-dacanay/nanogenmo"><img id="github" src="https://image.flaticon.com/icons/png/512/25/25231.png" width="20" height="20"></a>
                 <div id="toc"></div>
                 </div>
