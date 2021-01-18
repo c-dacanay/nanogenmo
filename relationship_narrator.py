@@ -271,26 +271,30 @@ def narrate_commit_system(event):
 
 def narrate_meeting_system(event):
     a, b = get_ab(event)
-    if event['delta'] == -1:
-        print(
-            f"<p class='system'>Neither {a['name']} nor {b['name']} attempted to contact the other.</p>")
-    else:
-        print(f"""
+    print(f"""
             <p class='system'>{a['name']} with confidence
             {round(a['confidence'], 2)}, interest
-            {round(a['interest'], 2)} initiates contact.
-            </p>""")
-        print(f"""
+            {round(a['interest'], 2)} has
+            {round((a['interest'] + a['confidence'])/2 * 100, 1)}% chance to initiate contact.
+        </p>""")
+    if event['delta'] == -1:
+        print(
+            f"<p class='system'>{a['name']} declined to initiate contact.</p>")
+    else:
+        print(
+            f"<p class='system'>{a['name']} successfully initiates contact.</p>")
+
+    print(f"""
             <p class='system'>{b['name']} with interest
             {round(b['interest'], 2)} responds with
             {round(event['delta'], 2)} enthusiasm.
             </p>""")
-        if (event['delta'] > 0):
-            print(
-                "<p class='system'>Relationship successfully advanced to the courting stage.</p>")
-        else:
-            print(
-                "<p class='system'>Relationship failed to advance to the courting stage.</p>")
+    if (event['delta'] > 0):
+        print(
+            "<p class='system'>Relationship successfully advanced to the courting stage.</p>")
+    else:
+        print(
+            "<p class='system'>Relationship failed to advance to the courting stage.</p>")
 
 
 def narrate_meeting(event, events):

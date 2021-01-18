@@ -1,7 +1,6 @@
 #!/bin/bash -e
 
-# Make the html folder if it doesnt exist
-mkdir -p html;
+mkdir -p html
 python3 main.py -n 100 > out
 python3 split_html.py < out
 echo "100 chapters"

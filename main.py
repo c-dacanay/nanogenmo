@@ -21,7 +21,7 @@ def getHobbies(ints):
 
 protagonist = {
     "name": "Alex",
-    "hot": 0.8,
+    "hot": 0.5,
     "open": .5,
     "con": .5,
     "extra": .5,
@@ -30,7 +30,7 @@ protagonist = {
     "commit": .5,
     "libido": .5,
     "exp": .5,
-    'confidence': 0.7,
+    'confidence': 0.5,
     'their': 'their',
     'they': 'they',
     'themself': 'themself',

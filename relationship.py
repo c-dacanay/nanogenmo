@@ -351,7 +351,7 @@ class Relationship:
         logging.debug(
             f"Meeting began, Alex has confidence f{self.a['confidence']} and interest level {self.a['interest']})"
         )
-        if binary_roll([self.a['confidence'], self.a['interest'], 0.6]):
+        if binary_roll([self.a['confidence'], self.a['interest']]):
             logging.debug("Meeting succeded! Alex initiates contact")
             delta = random.gauss(self.b['interest'], 0.2)
             return {
@@ -365,7 +365,7 @@ class Relationship:
             }
         logging.debug(
             f"Alex didn't initiate contact. {self.b['name']} has an opportunity to")
-        if binary_roll([self.b['confidence'], self.b['interest'], 0.6]):
+        if binary_roll([self.b['confidence'], self.b['interest']]):
             logging.debug(
                 f"Meeting succeded! {self.b['name']} initiates contact")
             delta = random.gauss(self.a['interest'], 0.2)
