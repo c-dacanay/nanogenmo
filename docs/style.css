@@ -104,11 +104,13 @@ a:hover {
 #bar {
   display: inline-block;
   position: absolute;
+  left: 1em;
+  bottom: 1em;
+  text-align: left;
   z-index: 10;
   width: 10%;
   padding: 20px;
   color: #888;
-  bottom: 10px;
   font-size: 0.9em;
 }
 
@@ -134,11 +136,11 @@ a:hover {
 
 @media (max-width: 768px) {
   #wrapper {
-    width: 100%;
+    width: 90%;
   }
-  #box {
-    margin-left: 1em;
-    margin-right: 1em;
+  #bar {
+    display: block;
+    position: relative;
   }
 }
 
